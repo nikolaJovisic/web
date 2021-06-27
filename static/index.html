@@ -2,24 +2,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JAX-RS demo</title>
+<title>Donesi</title>
 <script src="jquery.min.js"></script>
 <script type="text/javascript">
-function getFormData($form){
-    var unindexed_array = $form.serializeArray();
-    var indexed_array = {};
-
-    $.map(unindexed_array, function(n, i){
-        indexed_array[n['name']] = n['value'];
-    });
-
-    return indexed_array;
-}
-
 
 </script>
 </head>
 <body>
-Test
+
+	<form action="login.html">
+    	<input type="submit" value="Uloguj se" />
+	</form>
+	
+	<form action="registracija.html">
+    	<input type="submit" value="Registruj se" />
+	</form>
+
 </body>
 </html>
