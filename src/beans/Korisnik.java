@@ -11,14 +11,7 @@ public class Korisnik {
 	protected Date datumRodjenja;
 	protected Uloga uloga; //kr�enje SOLID principa
 	protected TipKupca tip;
-	protected boolean isDeleted;
 	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
 	public String getKorisnickoIme() {
 		return korisnickoIme;
 	}

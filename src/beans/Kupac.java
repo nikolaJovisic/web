@@ -20,7 +20,6 @@ public class Kupac extends Korisnik {
 		svePorudzbine = new ArrayList();
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
-		isDeleted = false;
 	}
 	
 }
