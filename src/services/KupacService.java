@@ -16,4 +16,8 @@ public class KupacService {
 		return kupacRepository.getAll();
 	}
 	
+	public Kupac FindByID(String korisnickoIme) {
+		return kupacRepository.getOne(korisnickoIme);
+	}
+	
 }

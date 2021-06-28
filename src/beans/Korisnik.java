@@ -45,7 +45,12 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 	
-	
+	public String getUlogaString() {
+		return uloga.name();
+	}
+	public String getLozinka() {
+		return lozinka;
+	}
 	
 	
 	

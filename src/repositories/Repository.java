@@ -12,49 +12,41 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
-
+import java.lang.reflect.Type;
 public abstract class Repository<Entity, Key> {
-	
-	class LogicalEntity {
-		public LogicalEntity(Entity entity) {
-			this.entity = entity;
-			this.deleted = false;
-		}
-		public Entity entity;
-		public boolean deleted;
-	}
 	
 	private Gson gson = new Gson();
 	private String filePath = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + this.getClass().getSimpleName() + ".json";
-	protected abstract Key getKey(Entity entity);
+	protected abstract String getKey(Entity entity);
+	protected abstract Type getTokenType();
 	
-	private List<LogicalEntity> getAllLogical() {
+	private List<LogicalEntity<Entity>> getAllLogical() {
 		Reader reader;
-		List<LogicalEntity> entites;
+		ArrayList<LogicalEntity<Entity>> entites;
 		try {
 			reader = Files.newBufferedReader(Paths.get(filePath));
-			entites = gson.fromJson(reader, new TypeToken<List<LogicalEntity>>() {}.getType());
+			entites = gson.fromJson(reader, getTokenType());
 		    reader.close();
 		    if (entites == null)
-		    	entites = new ArrayList<LogicalEntity>();
+		    	entites = new ArrayList<LogicalEntity<Entity>>();
 			return entites;
 		} catch (IOException e) {
-			return new ArrayList<LogicalEntity>();
+			return new ArrayList<LogicalEntity<Entity>>();
 		}
 	}
 	
 	public List<Entity> getAll()
 	{
 		List<Entity> filtriraniKupci = new ArrayList<Entity>();
-		for (LogicalEntity entity : getAllLogical())
+		for (LogicalEntity<Entity> entity : getAllLogical())
 			if (!entity.deleted)
 				filtriraniKupci.add(entity.entity);
 		return filtriraniKupci;
 	}
 	
 	public void addOne(Entity newEntity) {
-		List<LogicalEntity> logicalEntites = getAllLogical();
-		logicalEntites.add(new LogicalEntity(newEntity));
+		List<LogicalEntity<Entity>> logicalEntites = getAllLogical();
+		logicalEntites.add(new LogicalEntity<Entity>(newEntity));
 		save(logicalEntites);
 	}
 	
@@ -71,13 +63,13 @@ public abstract class Repository<Entity, Key> {
 	
 	public void update(Key key, Entity newEntity)
 	{
-		List<LogicalEntity> entites;
+		List<LogicalEntity<Entity>> entites;
 		entites = getAllLogical();
 		for (int i = 0; i < entites.size(); i++)
 		{
 			if (getKey(entites.get(i).entity).equals(key))
 			{
-				entites.set(i, new LogicalEntity(newEntity));
+				entites.set(i, new LogicalEntity<Entity>(newEntity));
 			}
 		}
 		save(entites);
@@ -85,13 +77,13 @@ public abstract class Repository<Entity, Key> {
 	
 	public void delete(Key key)
 	{
-		List<LogicalEntity> entites;
+		List<LogicalEntity<Entity>> entites;
 		entites = getAllLogical();
 		for (int i = 0; i < entites.size(); i++)
 		{
 			if (getKey(entites.get(i).entity).equals(key))
 			{
-				LogicalEntity tmp = entites.get(i);
+				LogicalEntity<Entity> tmp = entites.get(i);
 				tmp.deleted = true;
 				entites.set(i, tmp);
 			}
@@ -99,7 +91,7 @@ public abstract class Repository<Entity, Key> {
 		save(entites);
 	}
 	
-	private void save(List<LogicalEntity> entites)
+	private void save(List<LogicalEntity<Entity>> entites)
 	{
 		try {
 			FileWriter fw = new FileWriter(filePath);
