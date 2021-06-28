@@ -5,19 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 public class Kupac extends Korisnik {
+	
 	private List<Porudzbina> svePorudzbine;
 	private Korpa korpa;
 	private int sakupljeniBodovi;
+	private TipKupca tip;
 	
 	public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja) {
-		super();
-		this.korisnickoIme = korisnickoIme;
-		this.lozinka = lozinka;
-		this.ime = ime;
-		this.prezime = prezime;
-		this.pol = pol;
-		this.datumRodjenja = datumRodjenja;
-		svePorudzbine = new ArrayList();
+		super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, Uloga.Kupac);
+		svePorudzbine = new ArrayList<Porudzbina>();
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
 	}

@@ -1,5 +1,12 @@
 package beans;
 
+import java.util.Date;
+
 public class Menadzer extends Korisnik {
-	Restoran restoran;
+	private Restoran restoran;
+	
+	public Menadzer(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja) {
+		super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, Uloga.Menadzer);
+	}
+
 }

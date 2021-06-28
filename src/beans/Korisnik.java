@@ -10,7 +10,6 @@ public class Korisnik {
 	protected Pol pol;
 	protected Date datumRodjenja;
 	protected Uloga uloga; //kr�enje SOLID principa
-	protected TipKupca tip;
 	
 	public String getKorisnickoIme() {
 		return korisnickoIme;
@@ -33,6 +32,20 @@ public class Korisnik {
 	          
 	        return korisnickoIme.equals(korisnik.korisnickoIme);
 	}
+	
+	protected Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja,
+			Uloga uloga) {
+		super();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+	}
+	
+	
 	
 	
 	
