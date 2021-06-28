@@ -13,12 +13,14 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import beans.Administrator;
 import beans.Korisnik;
 import beans.Kupac;
 import beans.Pol;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import repositories.AdministratorRepository;
 import services.KorisnikService;
 import services.KupacService;
 import java.security.Key;
@@ -30,18 +32,21 @@ public class SparkAppMain {
 	private static KupacService kupacService = new KupacService();
 	private static KorisnikService korisnikService = new KorisnikService();
 	private static KupacValidation kupacValidation = new KupacValidation();
+	private static AdministratorRepository adminRep = new AdministratorRepository();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static void main(String[] args) throws Exception {
 		port(8081);
 
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
+		//adminRep.addOne(new Administrator("pera", "perica", "pera", "perica", Pol.Muski, new Date()));
 
 		post("logovanjeForma", (req, res) -> {
 			String korisnickoIme  = req.queryParams("korisnickoIme");
 			String lozinka = req.queryParams("lozinka");
 			String jws = null;
 			List<String> response = new ArrayList<String>();
+			
 			
 			Korisnik korisnik = korisnikService.FindByID(korisnickoIme);
 			

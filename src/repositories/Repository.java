@@ -6,16 +6,18 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 public abstract class Repository<Entity, Key> {
 	
-	private Gson gson = new Gson();
+	private Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
 	private String filePath = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + this.getClass().getSimpleName() + ".json";
 	protected abstract String getKey(Entity entity);
 	protected abstract Type getTokenType();
