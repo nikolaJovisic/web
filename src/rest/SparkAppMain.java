@@ -32,35 +32,31 @@ public class SparkAppMain {
 	private static KupacService kupacService = new KupacService();
 	private static KorisnikService korisnikService = new KorisnikService();
 	private static KupacValidation kupacValidation = new KupacValidation();
-	private static AdministratorRepository adminRep = new AdministratorRepository();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static void main(String[] args) throws Exception {
 		port(8081);
 
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
-		//adminRep.addOne(new Administrator("pera", "perica", "pera", "perica", Pol.Muski, new Date()));
-
 		post("logovanjeForma", (req, res) -> {
-			String korisnickoIme  = req.queryParams("korisnickoIme");
+			String korisnickoIme = req.queryParams("korisnickoIme");
 			String lozinka = req.queryParams("lozinka");
 			String jws = null;
 			List<String> response = new ArrayList<String>();
-			
-			
+
 			Korisnik korisnik = korisnikService.FindByID(korisnickoIme);
-			
-			if(korisnik != null && korisnik.getLozinka().equals(lozinka)) {
-				jws = Jwts.builder().setSubject(korisnickoIme).setExpiration(new Date(new Date().getTime() + 100000*10L)).setIssuedAt(new Date()).signWith(key).compact();
+
+			if (korisnik != null && korisnik.getLozinka().equals(lozinka)) {
+				jws = Jwts.builder().setSubject(korisnickoIme)
+						.setExpiration(new Date(new Date().getTime() + 100000 * 10L)).setIssuedAt(new Date())
+						.signWith(key).compact();
 				response.add(jws);
 				response.add(korisnik.getUlogaString());
-			}
-			else
-			{
+			} else {
 				jws = "-1";
 				response.add(jws);
 			}
-				
+
 			return gson.toJson(response);
 		});
 

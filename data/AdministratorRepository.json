@@ -1,1 +1,1 @@
-[{"entity":{"korisnickoIme":"pera","lozinka":"perica","ime":"pera","prezime":"perica","pol":"Muski","datumRodjenja":"Monday, June 28, 2021 6:29:59 PM CEST","uloga":"Administrator"},"deleted":false}]
+[{"entity":{"korisnickoIme":"admin","lozinka":"pass","ime":"Momcilo","prezime":"Bajagic","pol":"Muski","datumRodjenja":"2021-06-28T19:54:07","uloga":"Administrator"},"deleted":false},{"entity":{"korisnickoIme":"admin2","lozinka":"pass2","ime":"Bajagica","prezime":"Momcilovic","pol":"Zenski","datumRodjenja":"2021-06-28T19:54:07","uloga":"Administrator"},"deleted":false}]
