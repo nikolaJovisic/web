@@ -9,11 +9,11 @@ public class KupacService {
 	private KupacRepository kupacRepository = new KupacRepository();
 	
 	public void register(Kupac kupac) {
-		kupacRepository.Create(kupac);
+		kupacRepository.addOne(kupac);
 	}
 	
 	public List<Kupac> getAll() {
-		return kupacRepository.ReadAll();
+		return kupacRepository.getAll();
 	}
 	
 }

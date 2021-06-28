@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class Korpa {
 	private Map<Artikal, Integer> artikli;
-	private Korisnik korisnik;
+	private transient Korisnik korisnik;
 	private BigDecimal cena;
 	
 	public Korpa(Korisnik korisnik) {

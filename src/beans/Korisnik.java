@@ -9,6 +9,38 @@ public class Korisnik {
 	protected String prezime;
 	protected Pol pol;
 	protected Date datumRodjenja;
-	protected Uloga uloga; //kršenje SOLID principa
+	protected Uloga uloga; //krï¿½enje SOLID principa
 	protected TipKupca tip;
+	protected boolean isDeleted;
+	
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	public String getKorisnickoIme() {
+		return korisnickoIme;
+	}
+	public void setKorisnickoIme(String korisnickoIme) {
+		this.korisnickoIme = korisnickoIme;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		
+		 if (obj == this) {
+	            return true;
+		 }
+
+	        if (!(obj instanceof Korisnik)) {
+	            return false;
+	        }
+	          
+	        Korisnik korisnik = (Korisnik) obj;
+	          
+	        return korisnickoIme.equals(korisnik.korisnickoIme);
+	}
+	
+	
+	
 }
