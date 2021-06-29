@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import beans.Administrator;
 import beans.Korisnik;
@@ -61,18 +64,31 @@ public class SparkAppMain {
 		});
 
 		post("/registracija", (req, res) -> {
-			String korisnickoIme = req.queryParams("korisnickoIme");
-			String lozinka = req.queryParams("lozinka");
-			String ime = req.queryParams("ime");
-			String prezime = req.queryParams("prezime");
-			Pol pol = Pol.valueOf(req.queryParams("pol"));
-			Date datumRodjenja = new SimpleDateFormat("yyyy-mm-dd").parse(req.queryParams("datumRodjenja"));
+			
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Kupac kupac = gsonReg.fromJson(req.body(), Kupac.class);
 
-			Kupac noviKupac = new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja);
+			/*JsonParser parser = new JsonParser();
+			JsonObject jobj = parser.parse(req.body()).getAsJsonObject();
+			
 
-			if (kupacValidation.isValid(noviKupac)) {
-				kupacService.register(noviKupac);
-				return "Kupac sa korisničkim imenom " + korisnickoIme + " registrovan";
+			String korisnickoIme = jobj.get("korisnickoIme").toString().replaceAll("\"", "");
+			String lozinka = jobj.get("lozinka").toString().replaceAll("\"", "");
+			String ime = jobj.get("ime").toString().replaceAll("\"", "");
+			String prezime = jobj.get("prezime").toString().replaceAll("\"", "");
+			String polVal = jobj.get("pol").toString().replaceAll("\"", "");
+			Pol pol;
+			if (polVal.equals("Muški"))
+				pol = Pol.Muski;
+			else
+				pol = Pol.Zenski;
+			Date datumRodjenja = new SimpleDateFormat("yyyy-mm-dd").parse(jobj.get("datumRodjenja").toString().replaceAll("\"", ""));*/
+			
+			//Kupac noviKupac = new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja);
+
+			if (kupacValidation.isValid(kupac)) {
+				kupacService.register(kupac);
+				return "Kupac sa korisničkim imenom " + kupac.getKorisnickoIme() + " registrovan";
 			} else {
 				return "Kupac nije registrovan.";
 			}

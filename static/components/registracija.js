@@ -1,40 +1,70 @@
 Vue.component('registracija', {
 	data: function() {
 		return {
-			ime: null
+			korisnickoIme: null,
+			lozinka: null,
+			ime: null,
+			prezime: null,
+			pol: null,
+			datumRodjenja: null
 		}
 	},
 	methods: {
+	
+	checkForm: function(e) {
+			e.preventDefault();
+			if(!this.korisnickoIme || !this.lozinka || !this.ime || !this.prezime ||
+					!this.pol || !this.datumRodjenja)
+			{
+				alert("Morate popuniti sva polja")
+				e.preventDefault();
+			}
+			else
+			{
+			axios
+	          	.post('/registracija', {korisnickoIme: this.korisnickoIme, 
+	        	  					  lozinka: this.lozinka,
+	        	  					  ime : this.ime,
+	        	  					  prezime: this.prezime,
+	        	  					  pol : this.pol,
+	        	  					  datumRodjenja : this.datumRodjenja
+	        	  					  })
+				.then(response => (this.checkResponse(response, e)));
+			}
+
+		}
 
 	},
 	template: `
-	<form action="/registracija" method="post">
+	<form action="#/" method="post" @submit="checkForm">
 		<table>
 			<tr>
 				<td>Korisničko ime</td>
-				<td><input type="text" name="korisnickoIme"></td>
+				<td><input v-model="korisnickoIme" type="text" name="korisnickoIme"></td>
 			</tr>
 			<tr>
 				<td>Lozinka</td>
-				<td><input type="text" name="lozinka"></td>
+				<td><input v-model="lozinka" type="text" name="lozinka"></td>
 			</tr>
 			<tr>
 				<td>Ime</td>
-				<td><input type="text" name="ime"></td>
+				<td><input v-model="ime" type="text" name="ime"></td>
 			</tr>
 			<tr>
 				<td>Prezime</td>
-				<td><input type="text" name="prezime"></td>
+				<td><input v-model="prezime" type="text" name="prezime"></td>
 			</tr>
 			<tr>
 				<td>Pol</td>
-				<td><select name="pol">
+				<td><select v-model="pol" name="pol">
 						<option value="Muski">Muški</option>
-						<option value="Zenski">Ženski</option></td>
+						<option value="Zenski">Ženski</option>
+						</select>
+				</td>
 			</tr>
 			<tr>
 				<td>Datum rođenja</td>
-				<td><input type="date" name="datumRodjenja"></td>
+				<td><input v-model="datumRodjenja" type="date" name="datumRodjenja"></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="Registruj se"></td>
