@@ -10,6 +10,15 @@ Vue.component('registracija', {
 		}
 	},
 	methods: {
+	checkResponse : function(response, event){
+			if(!response.data){
+				alert("Neuspešna registracija.");
+			}
+			else{
+				alert("Uspešno registrovan korisnik.");
+				event.target.submit();
+			}
+		},
 	
 	checkForm: function(e) {
 			e.preventDefault();

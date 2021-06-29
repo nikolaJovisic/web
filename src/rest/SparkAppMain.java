@@ -88,9 +88,9 @@ public class SparkAppMain {
 
 			if (kupacValidation.isValid(kupac)) {
 				kupacService.register(kupac);
-				return "Kupac sa korisničkim imenom " + kupac.getKorisnickoIme() + " registrovan";
+				return true;
 			} else {
-				return "Kupac nije registrovan.";
+				return false;
 			}
 		});
 

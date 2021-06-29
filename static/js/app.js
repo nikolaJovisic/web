@@ -1,6 +1,6 @@
 const Home = {template : '<home></home>'}
 const Admin = {template : '<admin></admin>'}
-const Registracija = {template : '<registracija/>>'}
+const Registracija = {template : '<registracija/>'}
 
 const router = new VueRouter({
 	mode: 'hash',
