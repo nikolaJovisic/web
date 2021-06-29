@@ -1,10 +1,13 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Registruj se</title>
-</head>
-<body>
+Vue.component('registracija', {
+	data: function() {
+		return {
+			ime: null
+		}
+	},
+	methods: {
 
+	},
+	template: `
 	<form action="/registracija" method="post">
 		<table>
 			<tr>
@@ -37,6 +40,6 @@
 				<td><input type="submit" value="Registruj se"></td>
 			</tr>
 		</table>
-	</form>
-</body>
-</html>
+	</form>             
+`
+})

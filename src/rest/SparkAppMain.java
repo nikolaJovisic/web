@@ -38,7 +38,7 @@ public class SparkAppMain {
 		port(8081);
 
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
-		post("logovanjeForma", (req, res) -> {
+		post("/logovanje", (req, res) -> {
 			String korisnickoIme = req.queryParams("korisnickoIme");
 			String lozinka = req.queryParams("lozinka");
 			String jws = null;
@@ -60,7 +60,7 @@ public class SparkAppMain {
 			return gson.toJson(response);
 		});
 
-		post("registracijaForma", (req, res) -> {
+		post("/registracija", (req, res) -> {
 			String korisnickoIme = req.queryParams("korisnickoIme");
 			String lozinka = req.queryParams("lozinka");
 			String ime = req.queryParams("ime");
