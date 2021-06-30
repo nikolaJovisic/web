@@ -2,6 +2,7 @@ package rest;
 
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.get;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
@@ -20,6 +21,8 @@ import beans.Administrator;
 import beans.Korisnik;
 import beans.Kupac;
 import beans.Pol;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -67,25 +70,6 @@ public class SparkAppMain {
 			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Kupac kupac = gsonReg.fromJson(req.body(), Kupac.class);
-
-			/*JsonParser parser = new JsonParser();
-			JsonObject jobj = parser.parse(req.body()).getAsJsonObject();
-			
-
-			String korisnickoIme = jobj.get("korisnickoIme").toString().replaceAll("\"", "");
-			String lozinka = jobj.get("lozinka").toString().replaceAll("\"", "");
-			String ime = jobj.get("ime").toString().replaceAll("\"", "");
-			String prezime = jobj.get("prezime").toString().replaceAll("\"", "");
-			String polVal = jobj.get("pol").toString().replaceAll("\"", "");
-			Pol pol;
-			if (polVal.equals("Muški"))
-				pol = Pol.Muski;
-			else
-				pol = Pol.Zenski;
-			Date datumRodjenja = new SimpleDateFormat("yyyy-mm-dd").parse(jobj.get("datumRodjenja").toString().replaceAll("\"", ""));*/
-			
-			//Kupac noviKupac = new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja);
-
 			if (kupacValidation.isValid(kupac)) {
 				kupacService.register(kupac);
 				return true;
@@ -93,6 +77,26 @@ public class SparkAppMain {
 				return false;
 			}
 		});
+		
+		get("/checkJWT", (req, res)->{
+			
+			String auth = req.headers("Authorization");
+			String username = getUsername(auth);
+			if(username.equals(""))
+				return false;
+			return true;
+			
+		});
+		
 
+	}
+
+	private static String getUsername(String auth) {
+		if (auth == null)
+			return "";
+		String jwt = auth;
+		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+		return claims.getBody().getSubject();
+		
 	}
 }

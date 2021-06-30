@@ -1,13 +1,16 @@
 const Home = {template : '<home></home>'}
 const Admin = {template : '<admin></admin>'}
 const Registracija = {template : '<registracija/>'}
+const MainPage = {template : '<mainPage></mainPage>'}
 
 const router = new VueRouter({
 	mode: 'hash',
 	  routes: [
-		{path: '/', component: Home},
+		
 		{path: '/admin', component: Admin},
-		{path: '/registracija', component: Registracija}
+		{path: '/mainPage', component: MainPage},
+		{path: '/registracija', component: Registracija},
+		{path: '/', component: Home}
 	  ]
 });
 
