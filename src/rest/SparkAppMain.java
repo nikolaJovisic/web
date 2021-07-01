@@ -1,43 +1,31 @@
 package rest;
 
+import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
-import static spark.Spark.get;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import beans.Administrator;
 import beans.Korisnik;
-import beans.Kupac;
-import beans.Pol;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import repositories.AdministratorRepository;
 import services.KorisnikService;
-import services.KupacService;
-import java.security.Key;
-import validations.KupacValidation;
 
 public class SparkAppMain {
 
 	private static Gson gson = new Gson();
-	private static KupacService kupacService = new KupacService();
 	private static KorisnikService korisnikService = new KorisnikService();
-	private static KupacValidation kupacValidation = new KupacValidation();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static void main(String[] args) throws Exception {
@@ -67,25 +55,22 @@ public class SparkAppMain {
 		});
 
 		post("/registracija", (req, res) -> {
-			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			Kupac kupac = gsonReg.fromJson(req.body(), Kupac.class);
-			if (kupacValidation.isValid(kupac)) {
-				kupacService.register(kupac);
-				return true;
-			} else {
-				return false;
-			}
+			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
+			korisnikService.register(korisnik);
+			return true;
+		});
+		
+		get("sviKorisnici", (req, res) -> {
+			return gson.toJson(korisnikService.getAll());
 		});
 		
 		get("/checkJWT", (req, res)->{
-			
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			if(username.equals(""))
 				return false;
 			return true;
-			
 		});
 		
 

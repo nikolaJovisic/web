@@ -1,1 +1,26 @@
-[{"entity":{"korisnickoIme":"admin","lozinka":"pass","ime":"Momcilo","prezime":"Bajagic","pol":"Muski","datumRodjenja":"2021-06-28T19:54:07","uloga":"Administrator"},"deleted":false},{"entity":{"korisnickoIme":"admin2","lozinka":"pass2","ime":"Bajagica","prezime":"Momcilovic","pol":"Zenski","datumRodjenja":"2021-06-28T19:54:07","uloga":"Administrator"},"deleted":false}]
+[
+	{
+		"entity": {
+			"korisnickoIme": "admin",
+			"lozinka": "pass",
+			"ime": "Momcilo",
+			"prezime": "Bajagic",
+			"pol": "Muski",
+			"datumRodjenja": "2021-06-28T19:54:07",
+			"uloga": "Administrator"
+		},
+		"deleted": false
+	},
+	{
+		"entity": {
+			"korisnickoIme": "admin2",
+			"lozinka": "pass2",
+			"ime": "Bajagica",
+			"prezime": "Momcilovic",
+			"pol": "Zenski",
+			"datumRodjenja": "2021-06-28T19:54:07",
+			"uloga": "Administrator"
+		},
+		"deleted": false
+	}
+]

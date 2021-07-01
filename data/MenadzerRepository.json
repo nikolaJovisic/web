@@ -1,0 +1,14 @@
+[
+	{
+		"entity": {
+			"korisnickoIme": "menadzer",
+			"lozinka": "m",
+			"ime": "m",
+			"prezime": "m",
+			"pol": "Muski",
+			"datumRodjenja": "2021-07-01T00:00:00",
+			"uloga": "Menadzer"
+		},
+		"deleted": false
+	}
+]

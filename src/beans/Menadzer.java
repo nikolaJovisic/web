@@ -8,5 +8,9 @@ public class Menadzer extends Korisnik {
 	public Menadzer(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja) {
 		super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, Uloga.Menadzer);
 	}
+	
+	public Menadzer(Korisnik korisnik) {
+		super(korisnik);
+	}
 
 }

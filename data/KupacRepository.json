@@ -1,62 +1,22 @@
 [
-  {
-    "entity": {
-      "svePorudzbine": [
-      ],
-      "korpa": {
-        "artikli": {
-        },
-        "cena": 0
-      },
-      "sakupljeniBodovi": 0,
-      "korisnickoIme": "req",
-      "lozinka": "adfsd",
-      "ime": "afg",
-      "prezime": "sadga",
-      "pol": "Muski",
-      "datumRodjenja": "2021-01-02T00:06:00",
-      "uloga": "Kupac"
-    },
-    "deleted": false
-  },
-  {
-    "entity": {
-      "svePorudzbine": [
-      ],
-      "korpa": {
-        "artikli": {
-        },
-        "cena": 0
-      },
-      "sakupljeniBodovi": 0,
-      "korisnickoIme": "qwe",
-      "lozinka": "qwe",
-      "ime": "qweqwe",
-      "prezime": "qew",
-      "pol": "Muski",
-      "datumRodjenja": "2021-01-03T00:06:00",
-      "uloga": "Kupac"
-    },
-    "deleted": false
-  },
-  {
-    "entity": {
-      "svePorudzbine": [
-      ],
-      "korpa": {
-        "artikli": {
-        },
-        "cena": 0
-      },
-      "sakupljeniBodovi": 0,
-      "korisnickoIme": "Neko",
-      "lozinka": "nekic",
-      "ime": "neko",
-      "prezime": "123",
-      "pol": "Muski",
-      "datumRodjenja": "2021-01-17T00:06:00",
-      "uloga": "Kupac"
-    },
-    "deleted": false
-  }
+	{
+		"entity": {
+			"svePorudzbine": [],
+			"korpa": {
+				"artikli": {
+					
+				},
+				"cena": 0
+			},
+			"sakupljeniBodovi": 0,
+			"korisnickoIme": "kupac",
+			"lozinka": "k",
+			"ime": "k",
+			"prezime": "k",
+			"pol": "Muski",
+			"datumRodjenja": "2021-07-01T00:00:00",
+			"uloga": "Kupac"
+		},
+		"deleted": false
+	}
 ]

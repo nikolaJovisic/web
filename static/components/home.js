@@ -5,6 +5,8 @@ Vue.component('home', {
 			lozinka: null
 		}
 	},
+	
+	
 	methods: {
 		checkResponse: function(response, event) {
 			if (JSON.parse(JSON.stringify(response.data))[0] === "-1") {
@@ -25,6 +27,11 @@ Vue.component('home', {
 
 		}
 	},
+	
+	mounted() {
+		localStorage.setItem("role", 'Kupac');
+	},
+	
 	template: `
 	<div>
 		<h1>Dobro došli!</h1>

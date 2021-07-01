@@ -12,4 +12,8 @@ public class Dostavljac extends Korisnik {
 		porudzbineZaDostavu = new ArrayList<Porudzbina>();
 	}
 
+	public Dostavljac(Korisnik korisnik) {
+		super(korisnik);
+		porudzbineZaDostavu = new ArrayList<Porudzbina>();
+	}
 }

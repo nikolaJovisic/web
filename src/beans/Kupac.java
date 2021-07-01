@@ -18,4 +18,11 @@ public class Kupac extends Korisnik {
 		korpa = new Korpa(this);
 	}
 	
+	public Kupac(Korisnik korisnik) {
+		super(korisnik);
+		svePorudzbine = new ArrayList<Porudzbina>();
+		sakupljeniBodovi = 0;
+		korpa = new Korpa(this);
+	}
+	
 }

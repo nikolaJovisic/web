@@ -2,7 +2,7 @@ Vue.component('mainPage', {
 	data: function() {
 		return {
 			logged: false,
-			role : window.localStorage.getItem('role')
+			role : window.localStorage.getItem("role")
 		}
 	},
 	methods: {
@@ -22,25 +22,26 @@ Vue.component('mainPage', {
 			  })
 			.then(response => {
 				if(response.data)
+				{ 
 					this.logged=true;
+					if(window.localStorage.getItem("role")==='Administrator')
+					{
+					 	this.$router.push('/admin');						
+					}
+					else if (window.localStorage.getItem("role")==='Menadzer'){
+					 	this.$router.push('/menadzer');					
+					}
+					else if (window.localStorage.getItem("role")==='Dostavljac'){
+					 	this.$router.push('/dostavljac');					
+					}
+					else if (window.localStorage.getItem("role")==='Kupac'){
+					 	this.$router.push('/kupac');					
+					}
+				}
 			})
 		},
 		
 	template: `
-	<div>
-	<h1>Main!</h1>
-	<div v-if="role=='Administrator'">
-		<h1> Admin </h2>
-	</div> 
-	<div v-if="role=='Menadzer'">
-		<h1> Menadzer </h2>
-	</div> 
-	<div v-if="role=='Dostavljac'">
-		<h1> Dostavljac </h2>
-	</div> 
-	<div v-if="role=='Kupac'">
-		<h1> Kupac </h2>
-	</div> 
-	</div>          
-`
+	     
+	`
 })

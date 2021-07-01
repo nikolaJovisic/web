@@ -45,11 +45,25 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 	
+	public Korisnik (Korisnik korisnik) {
+		this.korisnickoIme = korisnik.korisnickoIme;
+		this.lozinka = korisnik.lozinka;
+		this.ime = korisnik.ime;
+		this.prezime = korisnik.prezime;
+		this.pol = korisnik.pol;
+		this.datumRodjenja = korisnik.datumRodjenja;
+		this.uloga = korisnik.uloga;
+	}
+	
+	
 	public String getUlogaString() {
 		return uloga.name();
 	}
 	public String getLozinka() {
 		return lozinka;
+	}
+	public Uloga getUloga() {
+		return uloga;
 	}
 	
 	
