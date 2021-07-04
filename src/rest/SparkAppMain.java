@@ -73,6 +73,12 @@ public class SparkAppMain {
 			return true;
 		});
 		
+		post("/izmenaPodataka", (req, res)->{
+			String username = getUsername(req.queryParams("jwt"));
+			Korisnik korisnik = korisnikService.FindByID(username);
+			return gson.toJson(korisnik);
+		});
+		
 
 	}
 

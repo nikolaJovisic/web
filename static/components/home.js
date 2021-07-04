@@ -30,6 +30,8 @@ Vue.component('home', {
 	
 	mounted() {
 		localStorage.setItem("role", 'Kupac');
+		localStorage.setItem("jwt", '-1');
+		localStorage.setItem("registracijaNovog", true);
 	},
 	
 	template: `

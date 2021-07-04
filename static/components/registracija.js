@@ -8,44 +8,67 @@ Vue.component('registracija', {
 			pol: null,
 			datumRodjenja: null,
 			uloga: 'Kupac',
-			role: localStorage.getItem('role')
+			role: localStorage.getItem('role'),
+			jwt: localStorage.getItem('jwt')
 		}
 	},
 	methods: {
-	checkResponse : function(response, event){
-			if(!response.data){
+		checkResponse: function(response, event) {
+			if (!response.data) {
 				alert("Neuspešna registracija.");
 			}
-			else{
+			else {
 				alert("Uspešno registrovan korisnik.");
 				event.target.submit();
 			}
 		},
-	
-	checkForm: function(e) {
+
+		checkForm: function(e) {
 			e.preventDefault();
-			if(!this.korisnickoIme || !this.lozinka || !this.ime || !this.prezime ||
-					!this.pol || !this.datumRodjenja || !this.uloga)
-			{
+			if (!this.korisnickoIme || !this.lozinka || !this.ime || !this.prezime ||
+				!this.pol || !this.datumRodjenja || !this.uloga) {
 				alert("Morate popuniti sva polja")
 				e.preventDefault();
 			}
-			else
-			{
-			axios
-	          	.post('/registracija', {korisnickoIme: this.korisnickoIme, 
-	        	  					  lozinka: this.lozinka,
-	        	  					  ime : this.ime,
-	        	  					  prezime: this.prezime,
-	        	  					  pol : this.pol,
-	        	  					  datumRodjenja : this.datumRodjenja,
-	        	  					  uloga : this.uloga
-	        	  					  })
-				.then(response => (this.checkResponse(response, e)));
+			else {
+				axios
+					.post('/registracija', {
+						korisnickoIme: this.korisnickoIme,
+						lozinka: this.lozinka,
+						ime: this.ime,
+						prezime: this.prezime,
+						pol: this.pol,
+						datumRodjenja: this.datumRodjenja,
+						uloga: this.uloga
+					})
+					.then(response => (this.checkResponse(response, e)));
 			}
 
+		},
+
+		izmenaResponse: function(response) {
+			this.korisnickoIme = response.data.korisnickoIme;
+			this.lozinka = response.data.lozinka;
+			this.ime = response.data.ime;
+			this.prezime = response.data.prezime;
+			this.pol = response.data.pol;
+			this.datumRodjenja = response.data.datumRodjenja;
+			this.uloga = response.data.uloga;
+		},
+		
+		renderAll: function() {
+			return localStorage.getItem('role')==='Administrator' && localStorage.getItem('registracijaNovog')==="true";
 		}
 	},
+
+	mounted() {
+		if (localStorage.getItem('registracijaNovog') === "false") {
+			axios
+				.post('/izmenaPodataka', {}, { params: { jwt: this.jwt } })
+				.then(response => (this.izmenaResponse(response)));
+		}
+	},
+
 	template: `
 	<form action="#/" method="post" @submit="checkForm">
 		<table>
@@ -77,7 +100,7 @@ Vue.component('registracija', {
 				<td>Datum rođenja</td>
 				<td><input v-model="datumRodjenja" type="date" name="datumRodjenja"></td>
 			</tr>
-			<div v-if="role==='Administrator'">
+			<div v-if="renderAll()">
 			<tr>
 				<td>Uloga</td>
 				<td><select v-model="uloga" name="uloga">

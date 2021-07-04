@@ -18,7 +18,8 @@ const router = new VueRouter({
 		{path: '/mainPage', component: MainPage},
 		{path: '/registracija', component: Registracija},
 		{path: '/', component: Home},
-		{path: '/sviKorisnici', component: SviKorisnici}
+		{path: '/sviKorisnici', component: SviKorisnici},
+		{path: '/izmenaPodataka', component: Registracija}
 	  ]
 });
 
