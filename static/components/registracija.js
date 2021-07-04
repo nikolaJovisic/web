@@ -65,6 +65,11 @@ Vue.component('registracija', {
 						pol: this.pol,
 						datumRodjenja: this.datumRodjenja,
 						uloga: this.uloga
+					},
+					{
+						headers: {
+						  jwt: this.jwt
+						}
 					})
 					.then(response => (this.checkEditResponse(response, e)));
 			}

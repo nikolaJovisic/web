@@ -81,8 +81,12 @@ public class SparkAppMain {
 		});
 		
 		post("/izmenaProfila", (req, res) -> {
+			String jwt = req.headers("jwt");
+			String username = getUsername(jwt);
+			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
+			korisnik.setKorisnickoIme(username);
 			korisnikService.update(korisnik);
 			return true;
 		});
