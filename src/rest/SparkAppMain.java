@@ -61,7 +61,7 @@ public class SparkAppMain {
 			return true;
 		});
 		
-		get("sviKorisnici", (req, res) -> {
+		get("/sviKorisnici", (req, res) -> {
 			return gson.toJson(korisnikService.getAll());
 		});
 		
@@ -82,6 +82,5 @@ public class SparkAppMain {
 		String jwt = auth;
 		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
 		return claims.getBody().getSubject();
-		
 	}
 }
