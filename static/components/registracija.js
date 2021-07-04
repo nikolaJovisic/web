@@ -7,19 +7,30 @@ Vue.component('registracija', {
 			prezime: null,
 			pol: null,
 			datumRodjenja: null,
+			editMode: false,
 			uloga: 'Kupac',
 			role: localStorage.getItem('role'),
 			jwt: localStorage.getItem('jwt')
 		}
 	},
 	methods: {
-		checkResponse: function(response, event) {
+		checkRegistrationResponse: function(response, event) {
 			if (!response.data) {
 				alert("Neuspešna registracija.");
 			}
 			else {
 				alert("Uspešno registrovan korisnik.");
 				event.target.submit();
+			}
+		},
+
+		checkEditResponse: function(response, event) {
+			if (!response.data) {
+				alert("Neuspešna izmena.");
+			}
+			else {
+				alert("Uspešna izmena.");
+				this.$router.push('/mainPage');
 			}
 		},
 
@@ -30,7 +41,7 @@ Vue.component('registracija', {
 				alert("Morate popuniti sva polja")
 				e.preventDefault();
 			}
-			else {
+			else if (localStorage.getItem('registracijaNovog') === "true"){
 				axios
 					.post('/registracija', {
 						korisnickoIme: this.korisnickoIme,
@@ -41,7 +52,21 @@ Vue.component('registracija', {
 						datumRodjenja: this.datumRodjenja,
 						uloga: this.uloga
 					})
-					.then(response => (this.checkResponse(response, e)));
+					.then(response => (this.checkRegistrationResponse(response, e)));
+			}
+			else
+			{
+				axios
+					.post('/izmenaProfila', {
+						korisnickoIme: this.korisnickoIme,
+						lozinka: this.lozinka,
+						ime: this.ime,
+						prezime: this.prezime,
+						pol: this.pol,
+						datumRodjenja: this.datumRodjenja,
+						uloga: this.uloga
+					})
+					.then(response => (this.checkEditResponse(response, e)));
 			}
 
 		},
@@ -63,6 +88,7 @@ Vue.component('registracija', {
 
 	mounted() {
 		if (localStorage.getItem('registracijaNovog') === "false") {
+			this.editMode = true
 			axios
 				.post('/izmenaPodataka', {}, { params: { jwt: this.jwt } })
 				.then(response => (this.izmenaResponse(response)));
@@ -74,7 +100,7 @@ Vue.component('registracija', {
 		<table>
 			<tr>
 				<td>Korisničko ime</td>
-				<td><input v-model="korisnickoIme" type="text" name="korisnickoIme"></td>
+				<td><input v-model="korisnickoIme" :disabled="editMode" type="text" name="korisnickoIme"></td>
 			</tr>
 			<tr>
 				<td>Lozinka</td>

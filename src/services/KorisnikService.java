@@ -58,6 +58,25 @@ public class KorisnikService {
 		}
 	}
 
+	
+	public void update(Korisnik korisnik) {
+		switch(korisnik.getUloga()) {
+		case Administrator:
+			administratorRepository.update(korisnik.getKorisnickoIme(), new Administrator(korisnik));
+			break;
+		case Dostavljac:
+			dostavljacRepository.update(korisnik.getKorisnickoIme(), new Dostavljac(korisnik));
+			break;
+		case Kupac:
+			kupacRepository.update(korisnik.getKorisnickoIme(), new Kupac(korisnik));
+			break;
+		case Menadzer:
+			menadzerRepository.update(korisnik.getKorisnickoIme(), new Menadzer(korisnik));
+			break;
+		default:
+			break;
+		}
+	}
 	public List<Korisnik> getAll() {
 		List<Korisnik> retVal = new ArrayList<Korisnik>();
 		for(Administrator administrator: administratorRepository.getAll()) {
