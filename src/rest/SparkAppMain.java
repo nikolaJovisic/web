@@ -14,6 +14,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import beans.Artikal;
 import beans.Korisnik;
 import beans.Menadzer;
 import beans.Restoran;
@@ -68,6 +69,15 @@ public class SparkAppMain {
 			return true;
 		});
 		
+		post("/registracijaArtikla", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);
+			String jwt = req.queryParams("jwt");
+			String username = getUsername(jwt);
+			menadzerRepository.addArtikal(username, artikal);
+			return true;
+		});
+		
 		get("/sviKorisnici", (req, res) -> {
 			return gson.toJson(korisnikService.getAll());
 		});
@@ -107,6 +117,23 @@ public class SparkAppMain {
 			
 			korisnikService.update(korisnik);
 			return true;
+		});
+		
+		post("/izmenaArtikla", (req, res) -> {
+			String jwt = req.queryParams("jwt");
+			String username = getUsername(jwt);
+			
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);
+			menadzerRepository.editArtikal(username, artikal);
+			return true;
+		});
+		post("/izmenaPodatakaArtikla", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			String username = getUsername(req.queryParams("jwt"));
+			String nazivArtikla = req.queryParams("naziv");
+			Artikal artikal = menadzerRepository.getArtikal(username, nazivArtikla);
+			return gsonReg.toJson(artikal);
 		});
 		
 		post("/noviRestoran", (req, res) -> {
