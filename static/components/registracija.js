@@ -10,7 +10,9 @@ Vue.component('registracija', {
 			editMode: false,
 			uloga: 'Kupac',
 			role: localStorage.getItem('role'),
-			jwt: localStorage.getItem('jwt')
+			jwt: localStorage.getItem('jwt'),
+			registracijaNovog: localStorage.getItem('registracijaNovog'),
+			aktuelniRestoran: localStorage.getItem("aktuelniRestoran")
 		}
 	},
 	methods: {
@@ -42,6 +44,10 @@ Vue.component('registracija', {
 				e.preventDefault();
 			}
 			else if (localStorage.getItem('registracijaNovog') === "true"){
+				if(localStorage.getItem("aktuelniRestoran") !== "null") {
+					this.uloga = "Menadzer";
+				}
+			
 				axios
 					.post('/registracija', {
 						korisnickoIme: this.korisnickoIme,
@@ -51,8 +57,10 @@ Vue.component('registracija', {
 						pol: this.pol,
 						datumRodjenja: this.datumRodjenja,
 						uloga: this.uloga
-					})
+					}, {params: {restoran: this.aktuelniRestoran}})
 					.then(response => (this.checkRegistrationResponse(response, e)));
+					
+					
 			}
 			else
 			{
@@ -87,11 +95,12 @@ Vue.component('registracija', {
 		},
 		
 		renderAll: function() {
-			return localStorage.getItem('role')==='Administrator' && localStorage.getItem('registracijaNovog')==="true";
+			return localStorage.getItem("aktuelniRestoran") === "null" && localStorage.getItem('role')==='Administrator' && localStorage.getItem('registracijaNovog')==="true";
 		}
 	},
 
 	mounted() {
+	
 		if (localStorage.getItem('registracijaNovog') === "false") {
 			this.editMode = true
 			axios
@@ -131,8 +140,7 @@ Vue.component('registracija', {
 				<td>Datum rođenja</td>
 				<td><input v-model="datumRodjenja" type="date" name="datumRodjenja"></td>
 			</tr>
-			<div v-if="renderAll()">
-			<tr>
+			<tr v-if="renderAll()" >
 				<td>Uloga</td>
 				<td><select v-model="uloga" name="uloga">
 						<option value="Kupac">Kupac</option>
@@ -141,10 +149,9 @@ Vue.component('registracija', {
 						</select>
 				</td>
 			</tr>
-			</div>
 			
 			<tr>
-				<td><input type="submit" value="Registruj se"></td>
+				<td><input type="submit" value="Registruj"></td>
 			</tr>
 		</table>
 	</form>             

@@ -6,6 +6,7 @@ const Kupac = {template : '<kupac/>'}
 const Registracija = {template : '<registracija/>'}
 const MainPage = {template : '<mainPage></mainPage>'}
 const SviKorisnici = {template : '<sviKorisnici/>'}
+const NoviRestoran = {template : '<noviRestoran/>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -19,9 +20,12 @@ const router = new VueRouter({
 		{path: '/registracija', component: Registracija},
 		{path: '/', component: Home},
 		{path: '/sviKorisnici', component: SviKorisnici},
-		{path: '/izmenaPodataka', component: Registracija}
+		{path: '/izmenaPodataka', component: Registracija},
+		{path: '/noviRestoran', component: NoviRestoran}
 	  ]
 });
+
+
 
 var app =  new Vue({
     router,
