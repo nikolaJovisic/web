@@ -81,6 +81,15 @@ public class SparkAppMain {
 		get("/sviKorisnici", (req, res) -> {
 			return gson.toJson(korisnikService.getAll());
 		});
+		get("/sviRestorani", (req, res) -> {
+			String nameSearch = req.queryParams("nameSearch");
+			String locationSearch = req.queryParams("locationSearch");
+			String tipSearch = req.queryParams("tipSearch");
+			String ocenaSearch = req.queryParams("ocenaSearch");
+			
+			//System.out.println(nameSearch + locationSearch + tipSearch + ocenaSearch);
+			return gson.toJson(restoranRepository.getAll());
+		});
 		
 		get("/checkJWT", (req, res)->{
 			String auth = req.headers("Authorization");
