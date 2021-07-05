@@ -15,17 +15,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Korisnik;
+import beans.Menadzer;
+import beans.Restoran;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import repositories.MenadzerRepository;
+import repositories.RestoranRepository;
 import services.KorisnikService;
 
 public class SparkAppMain {
 
 	private static Gson gson = new Gson();
 	private static KorisnikService korisnikService = new KorisnikService();
+	private static RestoranRepository restoranRepository = new RestoranRepository();
+	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static void main(String[] args) throws Exception {
@@ -58,6 +64,7 @@ public class SparkAppMain {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
 			korisnikService.register(korisnik);
+			menadzerRepository.setRestoranForMenadzerUsername(req.queryParams("restoran"), menadzerRepository.getOne(korisnik.getKorisnickoIme()));
 			return true;
 		});
 		
@@ -71,6 +78,10 @@ public class SparkAppMain {
 			if(username.equals(""))
 				return false;
 			return true;
+		});
+		
+		get("/slobodniMenadzeri", (req, res)->{
+			return gson.toJson(menadzerRepository.getSlobodniMenadzeriUsernames());
 		});
 		
 		post("/izmenaPodataka", (req, res)->{
@@ -95,6 +106,13 @@ public class SparkAppMain {
 			korisnik.setPrezime(izmenjeniKorisnik.getPrezime());
 			
 			korisnikService.update(korisnik);
+			return true;
+		});
+		
+		post("/noviRestoran", (req, res) -> {
+			Restoran restoran = new GsonBuilder().create().fromJson(req.body(), Restoran.class);
+			restoranRepository.addOne(restoran);
+			menadzerRepository.setRestoranForMenadzerUsername(restoran, req.queryParams("menadzer"));
 			return true;
 		});
 		
