@@ -3,6 +3,7 @@ package beans;
 import java.util.Date;
 
 public class Korisnik {
+	
 	protected String korisnickoIme;
 	protected String lozinka;
 	protected String ime;
@@ -64,6 +65,36 @@ public class Korisnik {
 	}
 	public Uloga getUloga() {
 		return uloga;
+	}
+	public String getIme() {
+		return ime;
+	}
+	public void setIme(String ime) {
+		this.ime = ime;
+	}
+	public String getPrezime() {
+		return prezime;
+	}
+	public void setPrezime(String prezime) {
+		this.prezime = prezime;
+	}
+	public Pol getPol() {
+		return pol;
+	}
+	public void setPol(Pol pol) {
+		this.pol = pol;
+	}
+	public Date getDatumRodjenja() {
+		return datumRodjenja;
+	}
+	public void setDatumRodjenja(Date datumRodjenja) {
+		this.datumRodjenja = datumRodjenja;
+	}
+	public void setLozinka(String lozinka) {
+		this.lozinka = lozinka;
+	}
+	public void setUloga(Uloga uloga) {
+		this.uloga = uloga;
 	}
 	
 	

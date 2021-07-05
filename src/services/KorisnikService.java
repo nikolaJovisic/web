@@ -62,16 +62,16 @@ public class KorisnikService {
 	public void update(Korisnik korisnik) {
 		switch(korisnik.getUloga()) {
 		case Administrator:
-			administratorRepository.update(korisnik.getKorisnickoIme(), new Administrator(korisnik));
+			administratorRepository.update(korisnik.getKorisnickoIme(), (Administrator) korisnik);
 			break;
 		case Dostavljac:
-			dostavljacRepository.update(korisnik.getKorisnickoIme(), new Dostavljac(korisnik));
+			dostavljacRepository.update(korisnik.getKorisnickoIme(), (Dostavljac) korisnik);
 			break;
 		case Kupac:
-			kupacRepository.update(korisnik.getKorisnickoIme(), new Kupac(korisnik));
+			kupacRepository.update(korisnik.getKorisnickoIme(), (Kupac) korisnik);
 			break;
 		case Menadzer:
-			menadzerRepository.update(korisnik.getKorisnickoIme(), new Menadzer(korisnik));
+			menadzerRepository.update(korisnik.getKorisnickoIme(), (Menadzer) korisnik);
 			break;
 		default:
 			break;

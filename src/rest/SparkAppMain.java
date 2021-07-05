@@ -85,8 +85,15 @@ public class SparkAppMain {
 			String username = getUsername(jwt);
 			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
-			korisnik.setKorisnickoIme(username);
+			Korisnik izmenjeniKorisnik = gsonReg.fromJson(req.body(), Korisnik.class);
+			Korisnik korisnik = korisnikService.FindByID(username);
+			
+			korisnik.setDatumRodjenja(izmenjeniKorisnik.getDatumRodjenja());
+			korisnik.setIme(izmenjeniKorisnik.getIme());
+			korisnik.setLozinka(izmenjeniKorisnik.getLozinka());
+			korisnik.setPol(izmenjeniKorisnik.getPol());
+			korisnik.setPrezime(izmenjeniKorisnik.getPrezime());
+			
 			korisnikService.update(korisnik);
 			return true;
 		});
