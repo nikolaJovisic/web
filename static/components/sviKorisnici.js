@@ -6,9 +6,21 @@ Vue.component('sviKorisnici', {
 			korisnici: null,
 			ascending: false,
 			sortColumn: '',
+			ulogaFilter: 'Kupac',
 			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }]
 		}
 	},
+	computed: {
+		filtriraniKorisnici: function () {
+			if (this.korisnici == null) return null;
+			searchTerm = this.ulogaFilter
+			return this.korisnici.filter(function(row){
+				uloga = row.uloga
+				return uloga.includes(searchTerm)        
+			});
+	}
+	},
+	
 	methods: {
 
 		"sortTable": function sortTable(col) {
@@ -20,7 +32,6 @@ Vue.component('sviKorisnici', {
 			  }
 		
 			  var ascending = this.ascending;
-			console.log(col)
 			this.korisnici.sort(function(a, b) {
 				if (a[col] > b[col]) {
 				  return ascending ? 1 : -1
@@ -52,6 +63,16 @@ Vue.component('sviKorisnici', {
 		
 	template: `
 	<div>
+		<div>
+			Filter:
+			<select name="uloga" v-model="ulogaFilter">
+			<option></option>
+			<option>Kupac</option>
+			<option>Administrator</option>
+			<option>Menadzer</option>
+			<option>Dostavljac</option>
+			</select>
+		</div>
 		 <table id="table">
 		 <thead>
 		   <tr>
@@ -61,10 +82,10 @@ Vue.component('sviKorisnici', {
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="korisnik in korisnici">
-		   	<td>{{ korisnik.korisnickoIme }}</td>
-			<td>{{ korisnik.ime }}</td>
-			<td>{{ korisnik.prezime }}</td>
+		   <tr v-for="korisnik in filtriraniKorisnici">
+		   	<td v-for="col in columns">
+			   {{ korisnik[col.name] }}
+			</td>
 		   </tr>
 		 </tbody>
 	   </table>
