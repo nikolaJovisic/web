@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import beans.TipKupca.TipoviKupaca;
+
 public class Kupac extends Korisnik {
 	
 	private List<Porudzbina> svePorudzbine;
@@ -16,6 +18,7 @@ public class Kupac extends Korisnik {
 		svePorudzbine = new ArrayList<Porudzbina>();
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
+		tip = new TipKupca(TipoviKupaca.Bronzani);
 	}
 	
 	public Kupac(Korisnik korisnik) {
@@ -23,6 +26,7 @@ public class Kupac extends Korisnik {
 		svePorudzbine = new ArrayList<Porudzbina>();
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
+		tip = new TipKupca(TipoviKupaca.Bronzani);
 	}
 	
 }
