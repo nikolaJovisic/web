@@ -42,20 +42,10 @@ public class MenadzerRepository extends Repository<Menadzer, String> {
 		menadzer.setRestoran(restoran);
 		update(menadzer.getKorisnickoIme(), menadzer);
 	}
-	public void addArtikal(String username, Artikal artikal) {
-		Menadzer menadzer = getOne(username);
-		menadzer.getRestoran().addArtikal(artikal);
-		update(menadzer.getKorisnickoIme(), menadzer);
-	}
 	
-	public void editArtikal(String username, Artikal artikal) {
+	public String getNazivRestorana(String username) {
 		Menadzer menadzer = getOne(username);
-		menadzer.getRestoran().editArtikal(artikal);
-		update(menadzer.getKorisnickoIme(), menadzer);
-	}
-	public Artikal getArtikal(String username, String nazivArtikla) {
-		Menadzer menadzer = getOne(username);
-		return menadzer.getRestoran().getArtikal(nazivArtikla);
+		return menadzer.getRestoran().getNaziv();
 	}
 	
 }

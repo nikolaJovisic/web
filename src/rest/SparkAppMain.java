@@ -74,7 +74,8 @@ public class SparkAppMain {
 			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);
 			String jwt = req.queryParams("jwt");
 			String username = getUsername(jwt);
-			menadzerRepository.addArtikal(username, artikal);
+			String nazivRestorana = menadzerRepository.getNazivRestorana(username);
+			restoranRepository.addArtikal(nazivRestorana, artikal);
 			return true;
 		});
 		
@@ -135,14 +136,16 @@ public class SparkAppMain {
 			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);
-			menadzerRepository.editArtikal(username, artikal);
+			String nazivRestorana = menadzerRepository.getNazivRestorana(username);
+			restoranRepository.editArtikal(nazivRestorana, artikal);
 			return true;
 		});
 		post("/izmenaPodatakaArtikla", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String username = getUsername(req.queryParams("jwt"));
 			String nazivArtikla = req.queryParams("naziv");
-			Artikal artikal = menadzerRepository.getArtikal(username, nazivArtikla);
+			String nazivRestorana = menadzerRepository.getNazivRestorana(username);
+			Artikal artikal = restoranRepository.getArtikal(nazivRestorana, nazivArtikla);
 			return gsonReg.toJson(artikal);
 		});
 		
