@@ -5,9 +5,8 @@ Vue.component('prikazRestorana', {
 			ascending: false,
 			sortColumn: '',
 			artikal: null,
-			artikliZaPorucivanje: {},
 			role: localStorage.getItem("role"),
-			columns: [{ name: "naziv" }, { name: "tip" }, { name: "kolicina" }, { name: "cena" }]
+			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
 		}
 	},
 	methods: {
@@ -27,6 +26,14 @@ Vue.component('prikazRestorana', {
 				}
 				return 0;
 			  })
+		  },
+		  
+		  getUkupnaCena() {
+		  let sum = 0;
+		  	for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
+		  		sum += this.restoran.dostupniArtikli[i].kolicina * this.restoran.dostupniArtikli[i].cena;
+		  	}
+		  	return sum;
 		  }
 
 	},
@@ -60,14 +67,14 @@ Vue.component('prikazRestorana', {
 			   		{{ artikal[col.name] }}
 			</td>
 			<td v-if="role === 'Kupac'">
-				Kolicina: <input type="number" v-model="artikliZaPorucivanje[artikal.naziv]" min="0"/>
+				Kolicina: <input type="number" v-model="artikal.kolicina" min="0"/>
 			</td>
 		   </tr>
 		 </tbody>
 	   </table>
-		<div v-for="artk in artikliZaPorucivanje""> 
-				{{artk}}
-		  </div>	   
+	   <div v-if="role === 'Kupac'">
+	   Ukupna cena: {{getUkupnaCena()}}
+    </div>
     </div>
 	`
 })
