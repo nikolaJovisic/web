@@ -7,6 +7,9 @@ Vue.component('sviKorisnici', {
 			ascending: false,
 			sortColumn: '',
 			ulogaFilter: '',
+			nameSearch: '',
+			surnameSearch: '',
+			usernameSearch: '',
 			tipFilter: '',
 			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}]
 		}
@@ -19,12 +22,23 @@ Vue.component('sviKorisnici', {
 			return this.korisnici.filter(function(row) {
 				uloga = row.uloga
 				tip = uloga === 'Kupac' ? row.tip.tip : null
-				return uloga.includes(uloga_filter) && (tip == null || (tip == tip_filter || tip_filter == ''))
+				return uloga.includes(uloga_filter) && (tip == tip_filter || tip_filter == '')
 			});
 		}
 	},
 
 	methods: {
+		"pretraga": function(e)
+		{
+			axios.get("/sviKorisnici",
+			{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
+				.then(response => {
+					if(response.data)
+					{ 
+						this.korisnici = response.data;
+					}
+				})
+		},
 
 		"sortTable": function sortTable(col) {
 			if (this.sortColumn === col) {
@@ -70,6 +84,12 @@ Vue.component('sviKorisnici', {
 	template: `
 	<div>
 		<div>
+		<div>
+			<input type="text" v-model="nameSearch">
+			<input type="text" v-model="surnameSearch">
+			<input type="text" v-model="usernameSearch">
+			<button v-on:click="pretraga">Pretraga</button>
+		</div>
 			Filter:
 			<select name="uloga" v-model="ulogaFilter">
 			<option></option>

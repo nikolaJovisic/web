@@ -93,4 +93,22 @@ public class KorisnikService {
 		}
 		return retVal;
 	}
+
+	public List<Korisnik> filterUsers(List<Korisnik> unfiltered, String nameSearch, String surnameSearch,
+			String usernameSearch) {
+		List<Korisnik> filtered = new ArrayList<Korisnik>();
+		for (Korisnik korisnik : unfiltered)
+		{
+			if (korisnik.getIme().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
+					korisnik.getPrezime().toLowerCase().startsWith(surnameSearch.toLowerCase())&&
+					korisnik.getKorisnickoIme().toLowerCase().startsWith(usernameSearch.toLowerCase()))
+			{
+				filtered.add(korisnik);
+			}
+		}
+		return filtered;
+	}
+	
+	
+	
 }
