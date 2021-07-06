@@ -6,17 +6,20 @@ Vue.component('sviKorisnici', {
 			korisnici: null,
 			ascending: false,
 			sortColumn: '',
-			ulogaFilter: 'Kupac',
+			ulogaFilter: '',
+			tipFilter: '',
 			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}]
 		}
 	},
 	computed: {
 		filtriraniKorisnici: function() {
 			if (this.korisnici == null) return null;
-			searchTerm = this.ulogaFilter
+			uloga_filter = this.ulogaFilter
+			tip_filter = this.tipFilter
 			return this.korisnici.filter(function(row) {
 				uloga = row.uloga
-				return uloga.includes(searchTerm)
+				tip = uloga === 'Kupac' ? row.tip.tip : null
+				return uloga.includes(uloga_filter) && (tip == null || (tip == tip_filter || tip_filter == ''))
 			});
 		}
 	},
@@ -74,6 +77,12 @@ Vue.component('sviKorisnici', {
 			<option>Administrator</option>
 			<option>Menadzer</option>
 			<option>Dostavljac</option>
+			</select>
+			<select name="tip" v-model="tipFilter">
+			<option></option>
+			<option>Bronzani</option>
+			<option>Srebrni</option>
+			<option>Zlatni</option>
 			</select>
 		</div>
 		 <table id="table">
