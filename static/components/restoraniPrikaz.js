@@ -57,6 +57,11 @@ Vue.component('restoraniPrikaz', {
 				}
 				return 0;
 			  })
+		  },
+		  "prikazRestorana": function prikazRestorana(naziv) {
+
+			this.$router.push('/prikazRestorana/' + naziv)
+			
 		  }
 	},
 	
@@ -125,7 +130,7 @@ Vue.component('restoraniPrikaz', {
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="restoran in filtriraniRestorani">
+		   <tr v-for="restoran in filtriraniRestorani" v-on:click="prikazRestorana(restoran.naziv)">
 		   	<td>
 			   {{restoran.naziv}}
 			</td>
