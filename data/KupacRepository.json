@@ -1,1 +1,52 @@
-[{"entity":{"svePorudzbine":[],"korpa":{"artikli":{},"cena":0},"sakupljeniBodovi":1000,"tip":{"tip":"Srebrni","popust":5.0,"trazeniBrojBodova":1000},"korisnickoIme":"kupac","lozinka":"k","ime":"ka","prezime":"kaa","pol":"Muski","datumRodjenja":"2021-07-01T00:00:00","uloga":"Kupac"},"deleted":false}]
+[
+	{
+		"entity": {
+			"svePorudzbine": [],
+			"korpa": {
+				"artikli": {
+					
+				},
+				"cena": 0
+			},
+			"sakupljeniBodovi": 1000,
+			"tip": {
+				"tip": "Srebrni",
+				"popust": 5.0,
+				"trazeniBrojBodova": 1000
+			},
+			"korisnickoIme": "kupac",
+			"lozinka": "k",
+			"ime": "ka",
+			"prezime": "kaa",
+			"pol": "Muski",
+			"datumRodjenja": "2021-07-01T00:00:00",
+			"uloga": "Kupac"
+		},
+		"deleted": false
+	},
+	{
+		"entity": {
+			"svePorudzbine": [],
+			"korpa": {
+				"artikli": {
+					
+				},
+				"cena": 0
+			},
+			"sakupljeniBodovi": 12000,
+			"tip": {
+				"tip": "Srebrni",
+				"popust": 5.0,
+				"trazeniBrojBodova": 1000
+			},
+			"korisnickoIme": "kupac2",
+			"lozinka": "k",
+			"ime": "ka",
+			"prezime": "kaa",
+			"pol": "Muski",
+			"datumRodjenja": "2021-07-01T00:00:00",
+			"uloga": "Kupac"
+		},
+		"deleted": false
+	}
+]
