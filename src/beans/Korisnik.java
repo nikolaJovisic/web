@@ -10,7 +10,7 @@ public class Korisnik {
 	protected String prezime;
 	protected Pol pol;
 	protected Date datumRodjenja;
-	protected Uloga uloga; //kr�enje SOLID principa
+	protected Uloga uloga;
 	
 	public String getKorisnickoIme() {
 		return korisnickoIme;

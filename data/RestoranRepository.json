@@ -3,7 +3,14 @@
 		"entity": {
 			"naziv": "Vidikovac",
 			"tip": "Rostilj",
-			"dostupniArtikli": [],
+			"dostupniArtikli": [
+				{
+					"naziv": "Tiramisu",
+					"cena": 300,
+					"tip": "Jelo",
+					"kolicina": 0
+				}
+			],
 			"status": false,
 			"lokacija": {
 				"geografskaDuzina": 12.0,
