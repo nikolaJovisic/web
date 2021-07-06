@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "entity": {
+      "restoran": {
+        "naziv": "Vidikovac",
+        "tip": "Rostilj",
+        "dostupniArtikli": [
+        ],
+        "status": false,
+        "lokacija": {
+          "geografskaDuzina": 12.0,
+          "geografskaSirina": 12.0,
+          "adresa": "Kralja Petra I 45",
+          "grad": "Novi Sad",
+          "drzava": "Srbija"
+        },
+        "prosecnaOcena": 0.0
+      },
+      "korisnickoIme": "menadzer",
+      "lozinka": "m",
+      "ime": "m",
+      "prezime": "m",
+      "pol": "Muski",
+      "datumRodjenja": "2021-07-18T00:00:00",
+      "uloga": "Menadzer"
+    },
+    "deleted": false
+  }
+]

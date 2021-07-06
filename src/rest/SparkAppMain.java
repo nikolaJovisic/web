@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jetty.server.LocalConnector;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -26,6 +28,7 @@ import io.jsonwebtoken.security.Keys;
 import repositories.MenadzerRepository;
 import repositories.RestoranRepository;
 import services.KorisnikService;
+import services.RestoranService;
 
 public class SparkAppMain {
 
@@ -33,6 +36,7 @@ public class SparkAppMain {
 	private static KorisnikService korisnikService = new KorisnikService();
 	private static RestoranRepository restoranRepository = new RestoranRepository();
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
+	private static RestoranService restoranService = new RestoranService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static void main(String[] args) throws Exception {
@@ -83,13 +87,14 @@ public class SparkAppMain {
 			return gson.toJson(korisnikService.getAll());
 		});
 		get("/sviRestorani", (req, res) -> {
+			List<Restoran> unfiltered = restoranRepository.getAll();
 			String nameSearch = req.queryParams("nameSearch");
 			String locationSearch = req.queryParams("locationSearch");
 			String tipSearch = req.queryParams("tipSearch");
 			String ocenaSearch = req.queryParams("ocenaSearch");
 			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null)
-				return gson.toJson(restoranRepository.getAll());
-			return null;
+				return gson.toJson(unfiltered);
+			return gson.toJson(restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch));
 			
 		});
 		

@@ -11,9 +11,11 @@ public class Restoran {
 	private boolean status;
 	private Lokacija lokacija;
 	private Image slika;
+	private double prosecnaOcena;
 	
 	private Restoran() {
 		dostupniArtikli = new ArrayList<Artikal>();
+		prosecnaOcena = 0.0;
 	}
 
 	public String getNaziv() {
@@ -67,4 +69,13 @@ public class Restoran {
 		}
 		return null;
 	}
+
+	public double getProsecnaOcena() {
+		return prosecnaOcena;
+	}
+
+	public void setProsecnaOcena(double prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
+	}
+	
 }

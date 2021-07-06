@@ -114,22 +114,22 @@ Vue.component('home', {
 			</form>
 		</div>
 		<div>
-		<input type="text" v:model="nameSearch">
-		<input type="text" v:model="locationSearch">
-		<select name="ocenaSearch" v-model="tipSearch">
-				<option></option>
-				<option>Italijanski</option>
-				<option>Kineski</option>
-				<option>Rostilj</option>
-		</select>
-		<select name="ocenaSearch" v-model="ocenaSearch">
-				<option></option>
-				<option>4-5</option>
-				<option>3-5</option>
-				<option>2-5</option>
-				<option>1-5</option>
-		</select>
-		<button v-on:click="pretraga">Pretraga</button>
+			<input type="text" v-model="nameSearch">
+			<input type="text" v-model="locationSearch">
+			<select name="ocenaSearch" v-model="tipSearch">
+					<option></option>
+					<option>Italijanski</option>
+					<option>Kineski</option>
+					<option>Rostilj</option>
+			</select>
+			<select name="ocenaSearch" v-model="ocenaSearch">
+					<option></option>
+					<option>4-5</option>
+					<option>3-5</option>
+					<option>2-5</option>
+					<option>1-5</option>
+			</select>
+			<button v-on:click="pretraga">Pretraga</button>
 		</div>
 		<div>
 			Tip restorana:
