@@ -110,6 +110,11 @@ public class SparkAppMain {
 			return gson.toJson(menadzerRepository.getSlobodniMenadzeriUsernames());
 		});
 		
+		
+		get("/restoranPoNazivu", (req, res)->{
+			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));
+		});
+		
 		post("/izmenaPodataka", (req, res)->{
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String username = getUsername(req.queryParams("jwt"));

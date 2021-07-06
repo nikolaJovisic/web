@@ -30,7 +30,7 @@ Vue.component('login', {
 	},
 	
 	mounted() {
-		localStorage.setItem("role", 'Kupac');
+		localStorage.setItem("role", '');
 		localStorage.setItem("jwt", '-1');
 		localStorage.setItem("registracijaNovog", true);
 		localStorage.setItem("aktuelniRestoran", "null");

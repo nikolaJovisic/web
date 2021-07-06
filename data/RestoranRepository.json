@@ -1,20 +1,33 @@
 [
-  {
-    "entity": {
-      "naziv": "Vidikovac",
-      "tip": "Rostilj",
-      "dostupniArtikli": [
-      ],
-      "status": false,
-      "lokacija": {
-        "geografskaDuzina": 12.0,
-        "geografskaSirina": 12.0,
-        "adresa": "Kralja Petra I 45",
-        "grad": "Novi Sad",
-        "drzava": "Srbija"
-      },
-      "prosecnaOcena": 0.0
-    },
-    "deleted": false
-  }
+	{
+		"entity": {
+			"naziv": "Vidikovac",
+			"tip": "Rostilj",
+			"dostupniArtikli": [
+				{
+					"naziv": "Mjesano mjeso",
+					"cena": 420,
+					"tip": "Jelo",
+					"kolicina": 0
+				},
+				{
+					"naziv": "Voda",
+					"cena": 13,
+					"tip": "Pice",
+					"kolicina": 0,
+					"opis": "Dobra voda."
+				}
+			],
+			"status": false,
+			"lokacija": {
+				"geografskaDuzina": 12.0,
+				"geografskaSirina": 12.0,
+				"adresa": "Kralja Petra I 45",
+				"grad": "Novi Sad",
+				"drzava": "Srbija"
+			},
+			"prosecnaOcena": 0.0
+		},
+		"deleted": false
+	}
 ]
