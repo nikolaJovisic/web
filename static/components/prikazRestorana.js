@@ -6,6 +6,7 @@ Vue.component('prikazRestorana', {
 			sortColumn: '',
 			artikal: null,
 			role: localStorage.getItem("role"),
+			jwt: localStorage.getItem("jwt"),
 			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
 		}
 	},
@@ -34,6 +35,14 @@ Vue.component('prikazRestorana', {
 		  		sum += this.restoran.dostupniArtikli[i].kolicina * this.restoran.dostupniArtikli[i].cena;
 		  	}
 		  	return sum;
+		  },
+		  
+		  posaljiPorudzbinu() {
+		  
+		  axios
+					.post('/novaPorudzbina', {
+						restoran: this.restoran
+					}, {params: {jwt: this.jwt}});
 		  }
 
 	},
@@ -74,6 +83,7 @@ Vue.component('prikazRestorana', {
 	   </table>
 	   <div v-if="role === 'Kupac'">
 	   Ukupna cena: {{getUkupnaCena()}}
+	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
     </div>
     </div>
 	`

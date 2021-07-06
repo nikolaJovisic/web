@@ -122,6 +122,14 @@ public class SparkAppMain {
 			return gsonReg.toJson(korisnik);
 		});
 		
+		post("/novaPorudzbina", (req, res)->{
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			String username = getUsername(req.queryParams("jwt"));
+			Restoran restoran = gsonReg.fromJson(req.body(), Restoran.class);
+			//TODO logika za pravljenje porudzbine
+			return true;
+		});
+		
 		post("/izmenaProfila", (req, res) -> {
 			String jwt = req.headers("jwt");
 			String username = getUsername(jwt);
