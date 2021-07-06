@@ -1,16 +1,19 @@
 [
-	{
-		"entity": {
-			"naziv": "Vidikovac",
-			"tip": "Rostilj",
-			"dostupniArtikli": [],
-			"status": false,
-			"lokacija": {
-				"geografskaDuzina": 12.0,
-				"geografskaSirina": 12.0,
-				"adresa": "Ledinci 1"
-			}
-		},
-		"deleted": false
-	}
+  {
+    "entity": {
+      "naziv": "Vidikovac",
+      "tip": "Rostilj",
+      "dostupniArtikli": [
+      ],
+      "status": false,
+      "lokacija": {
+        "geografskaDuzina": 12.0,
+        "geografskaSirina": 12.0,
+        "adresa": "Kralja Petra I 45",
+        "grad": "Novi Sad",
+        "drzava": "Srbija"
+      }
+    },
+    "deleted": false
+  }
 ]

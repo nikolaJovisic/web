@@ -86,9 +86,10 @@ public class SparkAppMain {
 			String locationSearch = req.queryParams("locationSearch");
 			String tipSearch = req.queryParams("tipSearch");
 			String ocenaSearch = req.queryParams("ocenaSearch");
+			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null)
+				return gson.toJson(restoranRepository.getAll());
+			return null;
 			
-			//System.out.println(nameSearch + locationSearch + tipSearch + ocenaSearch);
-			return gson.toJson(restoranRepository.getAll());
 		});
 		
 		get("/checkJWT", (req, res)->{

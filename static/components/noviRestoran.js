@@ -23,7 +23,7 @@ Vue.component('noviRestoran', {
 		checkForm: function(e) {
 			e.preventDefault();
 			if (!this.naziv || !this.tip || !this.lokacija || !this.lokacija.geografskaDuzina || !this.lokacija.geografskaSirina ||
-				!this.lokacija.adresa || !this.slika) {
+				!this.lokacija.adresa || !this.lokacija.grad || !this.lokacija.drzava || !this.slika) {
 				alert("Morate popuniti sva polja")
 				e.preventDefault();
 			}
@@ -50,6 +50,8 @@ Vue.component('noviRestoran', {
 		this.lokacija.geografskaDuzina = null;
 		this.lokacija.geografskaSirina = null;
 		this.lokacija.adresa = null;
+		this.lokacija.grad = null;
+		this.lokacija.drzava = null;
 
 
 		axios.get("/slobodniMenadzeri", {
@@ -93,6 +95,14 @@ Vue.component('noviRestoran', {
 			<tr>
 				<td>Adresa</td>
 				<td><input v-model="lokacija.adresa" type="text" name="adresa"></td>
+			</tr>
+			<tr>
+				<td>Grad</td>
+				<td><input v-model="lokacija.grad" type="text" name="grad"></td>
+			</tr>
+			<tr>
+				<td>Drzava</td>
+				<td><input v-model="lokacija.drzava" type="text" name="drzava"></td>
 			</tr>
 			<tr v-if="this.menadzeri.length !== 0">
 					<td>Menadzer</td>
