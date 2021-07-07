@@ -11,6 +11,7 @@ public class Korisnik {
 	protected Pol pol;
 	protected Date datumRodjenja;
 	protected Uloga uloga;
+	protected boolean blokiran;
 	
 	public String getKorisnickoIme() {
 		return korisnickoIme;
@@ -44,6 +45,7 @@ public class Korisnik {
 		this.pol = pol;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
+		this.blokiran = false;
 	}
 	
 	public Korisnik (Korisnik korisnik) {
@@ -54,6 +56,7 @@ public class Korisnik {
 		this.pol = korisnik.pol;
 		this.datumRodjenja = korisnik.datumRodjenja;
 		this.uloga = korisnik.uloga;
+		this.blokiran = false;
 	}
 	
 	

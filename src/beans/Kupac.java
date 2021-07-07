@@ -11,7 +11,6 @@ public class Kupac extends Korisnik {
 	private Korpa korpa;
 	private int sakupljeniBodovi;
 	private TipKupca tip;
-	private boolean blokiran;
 	
 	
 	
@@ -21,7 +20,6 @@ public class Kupac extends Korisnik {
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
 		this.tip = new TipKupca(tip.getTip());
-		this.blokiran = false;
 	}
 	
 	public Kupac(Korisnik korisnik) {
@@ -29,7 +27,6 @@ public class Kupac extends Korisnik {
 		svePorudzbine = new ArrayList<Porudzbina>();
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
-		this.blokiran = false;
 	}
 
 	public List<Porudzbina> getSvePorudzbine() {

@@ -10,7 +10,7 @@ public class Artikal {
 	private Restoran restoran;
 	private int kolicina;
 	private String opis;
-	private Image slika;
+	private String slika;
 	public String getNaziv() {
 		return naziv;
 	}
@@ -47,10 +47,10 @@ public class Artikal {
 	public void setOpis(String opis) {
 		this.opis = opis;
 	}
-	public Image getSlika() {
+	public String getSlika() {
 		return slika;
 	}
-	public void setSlika(Image slika) {
+	public void setSlika(String slika) {
 		this.slika = slika;
 	}
 }
