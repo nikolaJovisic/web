@@ -2,6 +2,7 @@ package beans;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,14 +67,18 @@ public class Porudzbina {
 	private String imePrezimeKupca;
 	private StatusPorudzbine status;
 	
-	public Porudzbina(Integer ID, Restoran restoran, double cena, Korpa korpa) {
+	public Porudzbina(String ID, Restoran restoran, double cena, Korpa korpa) {
 		KupacRepository kupacRepository = new KupacRepository();
 		
-		this.ID = ID.toString();
+		this.ID = ID;
 		this.restoran = restoran;
 		this.datumVreme = LocalDateTime.now();
 		this.cena = cena;
-		
+		this.artikli = new HashMap<Artikal, Integer>();
+		for (String nazivArtikla : korpa.getArtikli().keySet())
+		{
+			artikli.put(restoran.getArtikal(nazivArtikla), korpa.getArtikli().get(nazivArtikla));
+		}
 		Kupac kupac = korpa.getKupac();
 		
 		this.imePrezimeKupca = kupac.getIme() + " " + kupac.getPrezime();

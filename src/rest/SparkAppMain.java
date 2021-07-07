@@ -61,7 +61,6 @@ public class SparkAppMain {
 			List<String> response = new ArrayList<String>();
 
 			Korisnik korisnik = korisnikService.FindByID(korisnickoIme);
-
 			if (korisnik == null || !korisnik.getLozinka().equals(lozinka)) {
 				jws = "-1";
 				response.add(jws);
@@ -195,22 +194,26 @@ public class SparkAppMain {
 			String nazivRestorana = req.queryParams("restoran");
 			double cena = Double.parseDouble(req.queryParams("cena"));
 			Korpa korpa = new Korpa(null, kupacRepository.getOne(username), cena); // umesto null staviti mapu
-			Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoranRepository.getOne(nazivRestorana), cena, korpa);
-			porudzbineRepository.addOne(porudzbina);
-			kupacRepository.dodajPorudzbinu(username, porudzbina);
+			//Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoranRepository.getOne(nazivRestorana), cena, korpa);
+			//porudzbineRepository.addOne(porudzbina);
+			//kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;
 		});
 		
 		post("/mojaNovaPorudzbina", (req, res) -> {
 			String username = getUsername(req.queryParams("jwt"));
-			String nazivRestorana = req.queryParams("restoran");
+			String nazivRestorana = req.queryParams("nazivRestorana");
+			System.out.println(nazivRestorana);
+			Restoran restoran = restoranRepository.getOne(nazivRestorana);
 			Kupac kupac = (Kupac) korisnikService.FindByID(username);
 			System.out.println(req.body());
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
+			
 			korpa.setKupac(kupac);
-			//Porudzbina porudzbina = new Porudzbina(porudzbineRepository, null, porudzbineID, korpa)
+
 			//TODO: korpa ima mapu imena artikala i ukupnu cenu, konstruisati porudzbinu na osnovu ovog.
 			//tvoj staticki counter za porudzbine nije vrednost od 10 karaktera
+			//staticki counter je uvek 0 na pocetku izvrsavanja programa, ako se restartuje nije vise unikatna vrednost
 			return true;
 		});
 
