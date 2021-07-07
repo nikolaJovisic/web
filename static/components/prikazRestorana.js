@@ -58,11 +58,11 @@ Vue.component('prikazRestorana', {
 	},
 
 	template: `
-    <div>
+    <div class="center">
     {{restoran.naziv}} <br/>
     {{restoran.tip}} <br/>
     {{restoran.status}} <br/>
-    <table>
+    <table class="center">
 		 <thead>
 		   <tr>
 			<th v-for="col in columns" v-on:click="sortTable(col.name)"> 
@@ -84,7 +84,7 @@ Vue.component('prikazRestorana', {
 	   <div v-if="role === 'Kupac'">
 	   Ukupna cena: {{getUkupnaCena()}}
 	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
-    </div>
+    	</div>
     </div>
 	`
 })

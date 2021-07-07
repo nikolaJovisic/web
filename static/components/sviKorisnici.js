@@ -11,7 +11,7 @@ Vue.component('sviKorisnici', {
 			surnameSearch: '',
 			usernameSearch: '',
 			tipFilter: '',
-			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}]
+			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}, {name: "blokiran"}]
 		}
 	},
 	computed: {
@@ -57,6 +57,15 @@ Vue.component('sviKorisnici', {
 				}
 				return 0;
 			})
+		},
+
+		blokiraj(korisnik) {
+			alert("Blokiran " + korisnik.korisnickoIme);
+			korisnik.blokiran = true;
+		},
+
+		moguceBlokirati(korisnik) {
+			return korisnik.uloga !== 'Administrator' && !korisnik.blokiran;
 		},
 		
 		renderSakupljeniBodovi: function(colName) {
@@ -121,6 +130,9 @@ Vue.component('sviKorisnici', {
 				<div v-if="renderSakupljeniBodovi(col.name)">
 			   		{{ korisnik[col.name] }}
 				</div> 
+			</td>
+			<td v-if="moguceBlokirati(korisnik)">
+				<button v-on:click="blokiraj(korisnik)"> Blokiraj </button>
 			</td>
 		   </tr>
 		 </tbody>

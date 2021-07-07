@@ -1,0 +1,20 @@
+
+html {
+    color: #421e00;
+    font-family: 'Georgia', serif;
+}
+
+a {
+    font-family: 'Georgia', serif;
+    font-weight: 600;
+    color: #0088d6;
+    transition: .3s;
+}
+
+a:hover,
+a:active,
+a:focus {
+    color: #004770;
+    outline: none;
+    text-decoration: none;
+}
