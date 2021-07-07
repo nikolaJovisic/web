@@ -17,6 +17,7 @@ Vue.component('menadzer', {
 		<h1>Dobro došli menadzeru!</h1>
 		<a href="/#/registracija" v-on:click="novi(false)">Pregled i izmena ličnih podataka</a> <br/>
 		<a href="/#/noviArtikal" v-on:click="noviArtikal(true)">Dodavanje artikla</a>
+		<prikazPorudzbina/><br/>
 		 </div>                   
 `
 })

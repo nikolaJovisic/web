@@ -124,7 +124,7 @@ public class SparkAppMain {
 		});
 		
 		get("/svePorudzbine", (req, res) -> {
-			
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			Korisnik korisnik = korisnikService.FindByID(username);
@@ -157,7 +157,7 @@ public class SparkAppMain {
 			{
 				unfiltered = porudzbineRepository.getAll();
 			}
-			return gson.toJson(unfiltered);
+			return gsonReg.toJson(unfiltered);
 			
 		});
 		

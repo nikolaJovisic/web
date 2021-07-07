@@ -10,6 +10,12 @@ Vue.component('prikazPorudzbina', {
 	},
 	computed: {
 
+		filtriranePorudzbine: function () {
+			if (this.porudzbine == null) return null;
+			return this.porudzbine.filter(function(row){
+				return true;    
+			});
+		}
 	},
 	
 	
@@ -54,7 +60,41 @@ Vue.component('prikazPorudzbina', {
 	
 	template: `
 	<div>
-	Hello
+	<table id="table">
+		 <thead>
+		   <tr>
+		   <th>
+		   		Restoran
+		   </th>
+		   <th>
+		   		Datum i vreme
+	  		</th>
+		   <th>
+				Cena
+		   </th>
+		   <th>
+				Kupac
+		   </th>
+		   </tr>
+		 </thead>
+		 <tbody>
+		   <tr v-for="porudzbina in filtriranePorudzbine">
+		   	<td>
+			   {{porudzbina.restoran.naziv}}
+			</td>
+			<td>
+			   	{{porudzbina.datumVreme.date.day}}/{{porudzbina.datumVreme.date.month}}/{{porudzbina.datumVreme.date.year}}<br/>
+				   {{porudzbina.datumVreme.time.hour}}:{{porudzbina.datumVreme.time.minute}}
+			</td>
+			<td>
+			   {{porudzbina.cena}}
+			</td>
+			<td>
+			   {{porudzbina.imePrezimeKupca}}
+			</td>
+		   </tr>
+		 </tbody>
+	   </table>
 	</div>
 `
 })

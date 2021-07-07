@@ -13,6 +13,7 @@ novi: function(val) {
 	<div>
 		<h1>Dobro došli dostavljacu!</h1>                      
 		
-		<a href="/#/registracija" v-on:click="novi(false)">Pregled i izmena ličnih podataka</a> </div>        
+		<a href="/#/registracija" v-on:click="novi(false)">Pregled i izmena ličnih podataka</a> </div>
+		<prikazPorudzbina/><br/>        
 `
 })
