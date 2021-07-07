@@ -16,4 +16,13 @@ public class Dostavljac extends Korisnik {
 		super(korisnik);
 		porudzbineZaDostavu = new ArrayList<Porudzbina>();
 	}
+
+	public List<Porudzbina> getPorudzbineZaDostavu() {
+		return porudzbineZaDostavu;
+	}
+
+	public void setPorudzbineZaDostavu(List<Porudzbina> porudzbineZaDostavu) {
+		this.porudzbineZaDostavu = porudzbineZaDostavu;
+	}
+	
 }

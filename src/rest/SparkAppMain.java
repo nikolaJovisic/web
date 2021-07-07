@@ -15,14 +15,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Artikal;
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Porudzbina;
 import beans.Restoran;
+import beans.StatusPorudzbine;
+import beans.Uloga;
+import beans.Kupac;
+import beans.Menadzer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import repositories.KupacRepository;
 import repositories.MenadzerRepository;
 import repositories.PorudzbineRepository;
 import repositories.RestoranRepository;
@@ -34,6 +40,7 @@ public class SparkAppMain {
 	private static Gson gson = new Gson();
 	private static KorisnikService korisnikService = new KorisnikService();
 	private static RestoranRepository restoranRepository = new RestoranRepository();
+	private static KupacRepository kupacRepository = new KupacRepository();
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
 	private static PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
 	private static RestoranService restoranService = new RestoranService();
@@ -117,6 +124,45 @@ public class SparkAppMain {
 					restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch));
 
 		});
+		
+		get("/svePorudzbine", (req, res) -> {
+			
+			String auth = req.headers("Authorization");
+			String username = getUsername(auth);
+			Korisnik korisnik = korisnikService.FindByID(username);
+			Uloga uloga = korisnik.getUloga();
+			List<Porudzbina> unfiltered = new ArrayList<Porudzbina>();
+			if (uloga == Uloga.Kupac)
+			{
+				Kupac k = (Kupac) korisnik;
+				unfiltered = k.getSvePorudzbine();
+			}
+			else if (uloga == Uloga.Dostavljac)
+			{
+				Dostavljac d = (Dostavljac) korisnik;
+				unfiltered = d.getPorudzbineZaDostavu();
+				for (Porudzbina p : porudzbineRepository.getAll())
+				{
+					if (p.getStatus() == StatusPorudzbine.CekaDostavljaca)
+						unfiltered.add(p);
+				}
+			} else if (uloga == Uloga.Menadzer)
+			{
+				Menadzer m = (Menadzer) korisnik;
+				for (Porudzbina p : porudzbineRepository.getAll())
+				{
+					if (p.getRestoran().getNaziv().equals(m.getRestoran().getNaziv()))
+						unfiltered.add(p);
+				}
+			}
+			else
+			{
+				unfiltered = porudzbineRepository.getAll();
+			}
+			return gson.toJson(unfiltered);
+			
+		});
+		
 
 		get("/checkJWT", (req, res) -> {
 			String auth = req.headers("Authorization");
@@ -147,6 +193,7 @@ public class SparkAppMain {
 			Restoran restoran = gsonReg.fromJson(req.queryParams("restoran"), Restoran.class);
 			Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoran, username);
 			porudzbineRepository.addOne(porudzbina);
+			kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;
 		});
 

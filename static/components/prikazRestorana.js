@@ -5,6 +5,7 @@ Vue.component('prikazRestorana', {
 			ascending: false,
 			sortColumn: '',
 			artikal: null,
+			mapa: {},
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
 			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
@@ -38,6 +39,10 @@ Vue.component('prikazRestorana', {
 		  },
 		  
 		  posaljiPorudzbinu() {
+		  
+		  alert("Porudzbina poslata!");
+
+		  alert(this.mapa);
 		  
 		  axios
 					.post('/novaPorudzbina', 
@@ -73,7 +78,7 @@ Vue.component('prikazRestorana', {
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-bind:artikal="artikal">
+		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-bind:artikal="mapa[index]">
 		   	<td v-for="col in columns">
 			   		{{ artikal[col.name] }} 
 			</td>
