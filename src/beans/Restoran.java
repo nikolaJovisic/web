@@ -1,6 +1,5 @@
 package beans;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,7 @@ public class Restoran {
 	private List<Artikal> dostupniArtikli;
 	private boolean status;
 	private Lokacija lokacija;
-	private Image slika;
+	private String slika;
 	private double prosecnaOcena;
 	
 	private Restoran() {
@@ -38,7 +37,7 @@ public class Restoran {
 		return lokacija;
 	}
 
-	public Image getSlika() {
+	public String getSlika() {
 		return slika;
 	}
 

@@ -76,6 +76,7 @@ public class SparkAppMain {
 		
 		post("/registracijaArtikla", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			System.out.println(req.body());
 			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);
 			String jwt = req.queryParams("jwt");
 			String username = getUsername(jwt);
@@ -160,6 +161,7 @@ public class SparkAppMain {
 		post("/izmenaArtikla", (req, res) -> {
 			String jwt = req.queryParams("jwt");
 			String username = getUsername(jwt);
+			
 			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);

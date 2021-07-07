@@ -8,6 +8,7 @@ Vue.component('noviArtikal', {
 			opis: null,
 			kolicina: null,
 			editMode: false,
+			file: null,
 			jwt: localStorage.getItem('jwt'),
 			registracijaNovogArtikla: localStorage.getItem('registracijaNovogArtikla')
 		}
@@ -22,6 +23,19 @@ Vue.component('noviArtikal', {
 				event.target.submit();
 			}
 		},
+		onChangeFileUpload ($event) {
+			this.file = this.$refs.file.files[0];
+			this.encodeImage(this.file)
+		  },
+		  encodeImage (input) {
+			if (input) {
+			  const reader = new FileReader()
+			  reader.onload = (e) => {
+				this.slika = e.target.result
+			  }
+			  reader.readAsDataURL(input)
+			}
+		  },
 
 		checkEditResponse: function(response, event) {
 			if (!response.data) {
@@ -45,7 +59,7 @@ Vue.component('noviArtikal', {
 						naziv: this.naziv,
 						cena: this.cena,
 						tip: this.tip,
-						//slika: this.slika,
+						slika: this.slika,
 						opis: this.opis,
 						kolicina: this.kolicina,
 					}, {params: {
@@ -61,7 +75,7 @@ Vue.component('noviArtikal', {
 						naziv: this.naziv,
 						cena: this.cena,
 						tip: this.tip,
-						//slika: this.slika,
+						slika: this.this.slika,
 						opis: this.opis,
 						kolicina: this.kolicina,
 					},
@@ -79,7 +93,7 @@ Vue.component('noviArtikal', {
 			this.naziv = response.data.naziv;
 			this.cena = response.data.cena;
 			this.tip = response.data.tip;
-			//this.slika = response.data.slika;
+			this.slika = response.data.slika;
 			this.opis = response.data.opis;
 			this.kolicina = response.data.kolicina;
 		}
@@ -96,6 +110,7 @@ Vue.component('noviArtikal', {
 	},
 
 	template: `
+	<div>
 	<form action="#/" method="post" @submit="checkForm">
 		<table>
 			<tr>
@@ -116,7 +131,7 @@ Vue.component('noviArtikal', {
 			</tr>
 			<tr>
 				<td>Slika</td>
-				<td><input v-model="slika" type="file"></td>
+				<input type="file" id="file" ref="file" v-on:change="onChangeFileUpload()"/>
 			</tr>
 			<tr>
 				<td>Opis</td>
@@ -131,6 +146,8 @@ Vue.component('noviArtikal', {
 				<td><input type="submit" value="Registruj"></td>
 			</tr>
 		</table>
-	</form>             
+	</form>
+	</div>
+	            
 `
 })
