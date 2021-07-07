@@ -13,6 +13,12 @@ public class Korisnik {
 	protected Uloga uloga;
 	protected boolean blokiran;
 	
+	public boolean isBlokiran() {
+		return blokiran;
+	}
+	public void setBlokiran(boolean blokiran) {
+		this.blokiran = blokiran;
+	}
 	public String getKorisnickoIme() {
 		return korisnickoIme;
 	}

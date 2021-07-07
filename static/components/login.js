@@ -5,12 +5,15 @@ Vue.component('login', {
 			lozinka: null
 		}
 	},
-	
-	
+
+
 	methods: {
 		checkResponse: function(response, event) {
 			if (JSON.parse(JSON.stringify(response.data))[0] === "-1") {
 				alert("Pogrešni kredencijali.")
+			}
+			else if (JSON.parse(JSON.stringify(response.data))[0] === "-2") {
+				alert("Korisnik blokiran.")
 			}
 			else {
 				localStorage.setItem('jwt', JSON.parse(JSON.stringify(response.data))[0]);
@@ -25,17 +28,17 @@ Vue.component('login', {
 				)
 				.then(response => (this.checkResponse(response, e)));
 
-				
+
 		}
 	},
-	
+
 	mounted() {
 		localStorage.setItem("role", '');
 		localStorage.setItem("jwt", '-1');
 		localStorage.setItem("registracijaNovog", true);
 		localStorage.setItem("aktuelniRestoran", "null");
 	},
-	
+
 	template: `
 	<div>
 		<h1>Dobro došli!</h1>

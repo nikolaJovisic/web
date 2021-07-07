@@ -62,6 +62,11 @@ Vue.component('sviKorisnici', {
 		blokiraj(korisnik) {
 			alert("Blokiran " + korisnik.korisnickoIme);
 			korisnik.blokiran = true;
+			axios
+					.post('/blokiraj', {
+					}, {params: {
+						korisnickoIme: korisnik.korisnickoIme
+							}});
 		},
 
 		moguceBlokirati(korisnik) {
