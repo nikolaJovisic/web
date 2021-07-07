@@ -57,15 +57,18 @@ public class SparkAppMain {
 
 			Korisnik korisnik = korisnikService.FindByID(korisnickoIme);
 
-			if (korisnik != null && korisnik.getLozinka().equals(lozinka)) {
+			if (korisnik == null || !korisnik.getLozinka().equals(lozinka)) {
+				jws = "-1";
+				response.add(jws);
+			} else if (korisnik.isBlokiran()) {
+				jws = "-2";
+				response.add(jws);
+			} else {
 				jws = Jwts.builder().setSubject(korisnickoIme)
 						.setExpiration(new Date(new Date().getTime() + 100000 * 10L)).setIssuedAt(new Date())
 						.signWith(key).compact();
 				response.add(jws);
 				response.add(korisnik.getUlogaString());
-			} else {
-				jws = "-1";
-				response.add(jws);
 			}
 
 			return gson.toJson(response);
@@ -75,10 +78,11 @@ public class SparkAppMain {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
 			korisnikService.register(korisnik);
-			menadzerRepository.setRestoranForMenadzerUsername(req.queryParams("restoran"), menadzerRepository.getOne(korisnik.getKorisnickoIme()));
+			menadzerRepository.setRestoranForMenadzerUsername(req.queryParams("restoran"),
+					menadzerRepository.getOne(korisnik.getKorisnickoIme()));
 			return true;
 		});
-		
+
 		post("/registracijaArtikla", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			System.out.println(req.body());
@@ -89,7 +93,13 @@ public class SparkAppMain {
 			restoranRepository.addArtikal(nazivRestorana, artikal);
 			return true;
 		});
-		
+
+		post("/blokiraj", (req, res) -> {
+			String korisnickoIme = req.queryParams("korisnickoIme");
+			korisnikService.blokiraj(korisnickoIme);
+			return true;
+		});
+
 		get("/sviKorisnici", (req, res) -> {
 			List<Korisnik> unfiltered = korisnikService.getAll();
 			String nameSearch = req.queryParams("nameSearch");
@@ -108,8 +118,9 @@ public class SparkAppMain {
 			String ocenaSearch = req.queryParams("ocenaSearch");
 			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null)
 				return gson.toJson(unfiltered);
-			return gson.toJson(restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch));
-			
+			return gson.toJson(
+					restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch));
+
 		});
 		
 		get("/svePorudzbine", (req, res) -> {
@@ -150,32 +161,31 @@ public class SparkAppMain {
 			
 		});
 		
-		
-		get("/checkJWT", (req, res)->{
+
+		get("/checkJWT", (req, res) -> {
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
-			if(username.equals(""))
+			if (username.equals(""))
 				return false;
 			return true;
 		});
-		
-		get("/slobodniMenadzeri", (req, res)->{
+
+		get("/slobodniMenadzeri", (req, res) -> {
 			return gson.toJson(menadzerRepository.getSlobodniMenadzeriUsernames());
 		});
-		
-		
-		get("/restoranPoNazivu", (req, res)->{
+
+		get("/restoranPoNazivu", (req, res) -> {
 			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));
 		});
-		
-		post("/izmenaPodataka", (req, res)->{
+
+		post("/izmenaPodataka", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String username = getUsername(req.queryParams("jwt"));
 			Korisnik korisnik = korisnikService.FindByID(username);
 			return gsonReg.toJson(korisnik);
 		});
-		
-		post("/novaPorudzbina", (req, res)->{
+
+		post("/novaPorudzbina", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String username = getUsername(req.queryParams("jwt"));
 			Restoran restoran = gsonReg.fromJson(req.queryParams("restoran"), Restoran.class);
@@ -183,30 +193,29 @@ public class SparkAppMain {
 			porudzbineRepository.addOne(porudzbina);
 			return true;
 		});
-		
+
 		post("/izmenaProfila", (req, res) -> {
 			String jwt = req.headers("jwt");
 			String username = getUsername(jwt);
-			
+
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik izmenjeniKorisnik = gsonReg.fromJson(req.body(), Korisnik.class);
 			Korisnik korisnik = korisnikService.FindByID(username);
-			
+
 			korisnik.setDatumRodjenja(izmenjeniKorisnik.getDatumRodjenja());
 			korisnik.setIme(izmenjeniKorisnik.getIme());
 			korisnik.setLozinka(izmenjeniKorisnik.getLozinka());
 			korisnik.setPol(izmenjeniKorisnik.getPol());
 			korisnik.setPrezime(izmenjeniKorisnik.getPrezime());
-			
+
 			korisnikService.update(korisnik);
 			return true;
 		});
-		
+
 		post("/izmenaArtikla", (req, res) -> {
 			String jwt = req.queryParams("jwt");
 			String username = getUsername(jwt);
-			
-			
+
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Artikal artikal = gsonReg.fromJson(req.body(), Artikal.class);
 			String nazivRestorana = menadzerRepository.getNazivRestorana(username);
@@ -221,14 +230,13 @@ public class SparkAppMain {
 			Artikal artikal = restoranRepository.getArtikal(nazivRestorana, nazivArtikla);
 			return gsonReg.toJson(artikal);
 		});
-		
+
 		post("/noviRestoran", (req, res) -> {
 			Restoran restoran = new GsonBuilder().create().fromJson(req.body(), Restoran.class);
 			restoranRepository.addOne(restoran);
 			menadzerRepository.setRestoranForMenadzerUsername(restoran, req.queryParams("menadzer"));
 			return true;
 		});
-		
 
 	}
 

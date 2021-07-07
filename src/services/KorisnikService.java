@@ -108,6 +108,12 @@ public class KorisnikService {
 		}
 		return filtered;
 	}
+
+	public void blokiraj(String korisnickoIme) {
+		Korisnik korisnik = FindByID(korisnickoIme);
+		korisnik.setBlokiran(true);
+		update(korisnik);
+	}
 	
 	
 	
