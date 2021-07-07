@@ -1,5 +1,7 @@
 package services;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,16 +12,20 @@ import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Kupac;
 import beans.Menadzer;
+import beans.Porudzbina;
+import beans.StatusPorudzbine;
 import repositories.AdministratorRepository;
 import repositories.DostavljacRepository;
 import repositories.KupacRepository;
 import repositories.MenadzerRepository;
+import repositories.PorudzbineRepository;
 
 public class KorisnikService {
 	private AdministratorRepository administratorRepository = new AdministratorRepository();
 	private DostavljacRepository dostavljacRepository = new DostavljacRepository();
 	private KupacRepository kupacRepository = new KupacRepository();
 	private MenadzerRepository menadzerRepository = new MenadzerRepository();
+	private PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
 
 	public Korisnik FindByID(String korisnickoIme) {
 		Korisnik retVal;
@@ -113,6 +119,41 @@ public class KorisnikService {
 		Korisnik korisnik = FindByID(korisnickoIme);
 		korisnik.setBlokiran(true);
 		update(korisnik);
+	}
+	
+	public List<Kupac> getSumnjiviKupci() {
+		List<Kupac> kupci = kupacRepository.getAll();
+		List<Kupac> sumnjiviKupci = new ArrayList<>();
+		for (Kupac kupac: kupci) {
+			if(sumnjiv(kupac)) {
+				sumnjiviKupci.add(kupac);
+			}
+		}
+		return sumnjiviKupci;
+	}
+
+	private boolean sumnjiv(Kupac kupac) {
+		List<Porudzbina> otkazanePorudzbine = getOtkazanePorudzbine(kupac.getSvePorudzbine());
+		for (int i = 0; i < otkazanePorudzbine.size() - 5; ++i) {
+			if(manjeOdPetDanaIzmedju(otkazanePorudzbine.get(i + 5).getDatumVreme(), otkazanePorudzbine.get(i).getDatumVreme())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean manjeOdPetDanaIzmedju(LocalDateTime pocetak, LocalDateTime kraj) {
+		return pocetak.until(kraj, ChronoUnit.DAYS) < 5;
+	}
+
+	private List<Porudzbina> getOtkazanePorudzbine(List<Porudzbina> svePorudzbine) {
+		List<Porudzbina> otkazanePordzbine = new ArrayList<>();
+		for (Porudzbina porudzbina: svePorudzbine) {
+			if (porudzbina.getStatus() == StatusPorudzbine.Otkazana) {
+				otkazanePordzbine.add(porudzbina);
+			}
+		}
+		return otkazanePordzbine;
 	}
 	
 	

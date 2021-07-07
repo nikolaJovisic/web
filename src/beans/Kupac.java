@@ -60,5 +60,9 @@ public class Kupac extends Korisnik {
 	public void setTip(TipKupca tip) {
 		this.tip = tip;
 	}
+
+	public void dodajPorudzbinu(Porudzbina porudzbina) {
+		svePorudzbine.add(porudzbina);
+	}
 	
 }
