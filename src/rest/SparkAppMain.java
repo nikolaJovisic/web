@@ -205,6 +205,7 @@ public class SparkAppMain {
 			String nazivRestorana = req.queryParams("nazivRestorana");
 			System.out.println(nazivRestorana);
 			Restoran restoran = restoranRepository.getOne(nazivRestorana);
+			System.out.println(nazivRestorana);
 			Kupac kupac = (Kupac) korisnikService.FindByID(username);
 			System.out.println(req.body());
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
@@ -214,6 +215,10 @@ public class SparkAppMain {
 			//TODO: korpa ima mapu imena artikala i ukupnu cenu, konstruisati porudzbinu na osnovu ovog.
 			//tvoj staticki counter za porudzbine nije vrednost od 10 karaktera
 			//staticki counter je uvek 0 na pocetku izvrsavanja programa, ako se restartuje nije vise unikatna vrednost
+			
+			Porudzbina porudzbina = new Porudzbina(porudzbineRepository.GetNewID(), restoran, korpa.getCena(), korpa);
+			porudzbineRepository.addOne(porudzbina);
+			kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;
 		});
 

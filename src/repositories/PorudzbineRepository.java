@@ -17,6 +17,12 @@ public class PorudzbineRepository extends Repository<Porudzbina, String> {
 	protected Type getTokenType() {
 		return new TypeToken<ArrayList<LogicalEntity<Porudzbina>>>() {}.getType();
 	}
-	
+	public String GetNewID()
+	{
+		String ID =String.valueOf(getAll().size());
+		while (ID.length() != 10)
+			ID = "0" + ID;
+		return ID;
+	}
 
 }
