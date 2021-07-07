@@ -6,6 +6,7 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import beans.Artikal;
 import beans.Dostavljac;
 import beans.Korisnik;
+import beans.Korpa;
 import beans.Porudzbina;
 import beans.Restoran;
 import beans.StatusPorudzbine;
@@ -188,10 +190,11 @@ public class SparkAppMain {
 		});
 
 		post("/novaPorudzbina", (req, res) -> {
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String username = getUsername(req.queryParams("jwt"));
-			Restoran restoran = gsonReg.fromJson(req.queryParams("restoran"), Restoran.class);
-			Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoran, username);
+			String nazivRestorana = req.queryParams("restoran");
+			BigDecimal cena = new BigDecimal(req.queryParams("cena"));
+			Korpa korpa = new Korpa(null, kupacRepository.getOne(username), cena); // umesto null staviti mapu
+			Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoranRepository.getOne(nazivRestorana), cena, korpa);
 			porudzbineRepository.addOne(porudzbina);
 			kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;

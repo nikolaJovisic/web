@@ -2,10 +2,10 @@ Vue.component('prikazRestorana', {
 	data: function() {
 		return {
 			restoran: null,
+			mapa: null,
 			ascending: false,
 			sortColumn: '',
 			artikal: null,
-			mapa: {},
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
 			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
@@ -40,14 +40,10 @@ Vue.component('prikazRestorana', {
 		  
 		  posaljiPorudzbinu() {
 		  
-		  alert("Porudzbina poslata!");
-
-		  alert(this.mapa);
-		  
 		  axios
 					.post('/novaPorudzbina', 
-						{}
-					, {params: {restoran: this.restoran, jwt: this.jwt}});
+						{mapa: this.mapa}
+					, {params: {nazivRestorana: this.restoran.naziv, jwt: this.jwt}});
 		  }
 
 	},
@@ -78,7 +74,7 @@ Vue.component('prikazRestorana', {
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-bind:artikal="mapa[index]">
+		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-model:artikal="mapa[index].artikal">
 		   	<td v-for="col in columns">
 			   		{{ artikal[col.name] }} 
 			</td>
@@ -86,7 +82,7 @@ Vue.component('prikazRestorana', {
 			<img :src="artikal.slika" /> 
 			</td>
 			<td v-if="role === 'Kupac'">
-				Kolicina: <input type="number" v-model="artikal.kolicina" min="0"/>
+				Kolicina: <input type="number" v-model="mapa[index].kolicina" min="0"/>
 			</td>
 		   </tr>
 		 </tbody>

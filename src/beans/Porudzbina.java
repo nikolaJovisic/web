@@ -3,6 +3,7 @@ package beans;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import repositories.KupacRepository;
 import services.KorisnikService;
@@ -16,13 +17,6 @@ public class Porudzbina {
 		ID = iD;
 	}
 
-	public List<Artikal> getArtikli() {
-		return artikli;
-	}
-
-	public void setArtikli(List<Artikal> artikli) {
-		this.artikli = artikli;
-	}
 
 	public Restoran getRestoran() {
 		return restoran;
@@ -65,30 +59,36 @@ public class Porudzbina {
 	}
 
 	private String ID;
-	private List<Artikal> artikli;
+	private Map<Artikal, Integer> artikli;
 	private Restoran restoran;
 	private LocalDateTime datumVreme;
 	private BigDecimal cena;
 	private String imePrezimeKupca;
 	private StatusPorudzbine status;
 	
-	public Porudzbina(Integer ID, Restoran restoran, String username) {
+	public Porudzbina(Integer ID, Restoran restoran, BigDecimal cena, Korpa korpa) {
 		KupacRepository kupacRepository = new KupacRepository();
 		
 		this.ID = ID.toString();
-		this.artikli = restoran.getDostupniArtikli();
 		this.restoran = restoran;
 		this.datumVreme = LocalDateTime.now();
-		this.cena = BigDecimal.ZERO;
-		for(Artikal artikal: artikli) {
-			this.cena = this.cena.add(artikal.getCena().multiply(BigDecimal.valueOf(artikal.getKolicina())));
-		}
+		this.cena = cena;
 		
-		Kupac kupac = kupacRepository.getOne(username);
+		Kupac kupac = korpa.getKupac();
+		
 		this.imePrezimeKupca = kupac.getIme() + " " + kupac.getPrezime();
 		this.status = StatusPorudzbine.UPripremi;
 		
 		kupac.setSakupljeniBodovi((int)(kupac.getSakupljeniBodovi() + this.cena.floatValue()/1000*133));
 		kupacRepository.update(kupac.getKorisnickoIme(), kupac);
+	}
+
+
+	public Map<Artikal, Integer> getArtikli() {
+		return artikli;
+	}
+
+	public void setArtikli(Map<Artikal, Integer> artikli) {
+		this.artikli = artikli;
 	}
 }
