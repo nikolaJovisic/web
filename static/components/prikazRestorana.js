@@ -40,9 +40,9 @@ Vue.component('prikazRestorana', {
 		  posaljiPorudzbinu() {
 		  
 		  axios
-					.post('/novaPorudzbina', {
-						restoran: this.restoran
-					}, {params: {jwt: this.jwt}});
+					.post('/novaPorudzbina', 
+						{}
+					, {params: {restoran: this.restoran, jwt: this.jwt}});
 		  }
 
 	},
@@ -71,9 +71,9 @@ Vue.component('prikazRestorana', {
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="artikal in this.restoran.dostupniArtikli" v-bind:artikal="artikal">
+		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-bind:artikal="artikal">
 		   	<td v-for="col in columns">
-			   		{{ artikal[col.name] }}
+			   		{{ artikal[col.name] }} 
 			</td>
 			<td v-if="role === 'Kupac'">
 				Kolicina: <input type="number" v-model="artikal.kolicina" min="0"/>

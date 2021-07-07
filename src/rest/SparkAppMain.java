@@ -11,14 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.jetty.server.LocalConnector;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Artikal;
 import beans.Korisnik;
-import beans.Menadzer;
+import beans.Porudzbina;
 import beans.Restoran;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -26,6 +24,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import repositories.MenadzerRepository;
+import repositories.PorudzbineRepository;
 import repositories.RestoranRepository;
 import services.KorisnikService;
 import services.RestoranService;
@@ -36,8 +35,10 @@ public class SparkAppMain {
 	private static KorisnikService korisnikService = new KorisnikService();
 	private static RestoranRepository restoranRepository = new RestoranRepository();
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
+	private static PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
 	private static RestoranService restoranService = new RestoranService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+	private static int porudzbineID = 0;
 
 	public static void main(String[] args) throws Exception {
 		port(8081);
@@ -132,8 +133,9 @@ public class SparkAppMain {
 		post("/novaPorudzbina", (req, res)->{
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String username = getUsername(req.queryParams("jwt"));
-			Restoran restoran = gsonReg.fromJson(req.body(), Restoran.class);
-			//TODO logika za pravljenje porudzbine
+			Restoran restoran = gsonReg.fromJson(req.queryParams("restoran"), Restoran.class);
+			Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoran, username);
+			porudzbineRepository.addOne(porudzbina);
 			return true;
 		});
 		
