@@ -58,7 +58,8 @@ Vue.component('prikazRestorana', {
 	},
 
 	template: `
-    <div class="center">
+    <div>
+	<img :src="restoran.slika"> <br/>
     {{restoran.naziv}} <br/>
     {{restoran.tip}} <br/>
     {{restoran.status}} <br/>
@@ -68,12 +69,16 @@ Vue.component('prikazRestorana', {
 			<th v-for="col in columns" v-on:click="sortTable(col.name)"> 
 				{{col.name}}
 		   </th>
+		   <th>Slika</th>
 		   </tr>
 		 </thead>
 		 <tbody>
 		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-bind:artikal="artikal">
 		   	<td v-for="col in columns">
 			   		{{ artikal[col.name] }} 
+			</td>
+			<td>
+			<img :src="artikal.slika" /> 
 			</td>
 			<td v-if="role === 'Kupac'">
 				Kolicina: <input type="number" v-model="artikal.kolicina" min="0"/>

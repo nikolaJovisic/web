@@ -19,6 +19,20 @@ Vue.component('noviRestoran', {
 				event.target.submit();
 			}
 		},
+		
+		onChangeFileUpload ($event) {
+			this.file = this.$refs.file.files[0];
+			this.encodeImage(this.file)
+		  },
+		  encodeImage (input) {
+			if (input) {
+			  const reader = new FileReader()
+			  reader.onload = (e) => {
+				this.slika = e.target.result
+			  }
+			  reader.readAsDataURL(input)
+			}
+		  },
 
 		checkForm: function(e) {
 			e.preventDefault();
@@ -33,7 +47,7 @@ Vue.component('noviRestoran', {
 						naziv: this.naziv,
 						tip: this.tip,
 						lokacija: this.lokacija,
-						//slika: this.slika
+						slika: this.slika
 					}, { params: { menadzer: this.menadzer } })
 					.then(response => (this.checkResponse(response, e)));
 				if (this.menadzeri.length === 0) {
@@ -113,7 +127,7 @@ Vue.component('noviRestoran', {
 			</tr>
 			<tr>
 				<td>Slika</td>
-				<td><input v-model="slika" type="file" ></td>
+				<input type="file" id="file" ref="file" v-on:change="onChangeFileUpload()"/>
 			</tr>
 			<tr>
 				<td><input type="submit" value="Registruj"></td>

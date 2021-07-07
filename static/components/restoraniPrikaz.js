@@ -118,6 +118,9 @@ Vue.component('restoraniPrikaz', {
 		 <table id="table">
 		 <thead>
 		   <tr>
+		   <th>
+		   		Logo
+		   </th>
 		   <th v-on:click="sortTable('naziv')">
 		   		Naziv
 	  		</th>
@@ -131,6 +134,9 @@ Vue.component('restoraniPrikaz', {
 		 </thead>
 		 <tbody>
 		   <tr v-for="restoran in filtriraniRestorani" v-on:click="prikazRestorana(restoran.naziv)">
+		   <td>
+		   <img :src="restoran.slika" /> 
+		   </td>
 		   	<td>
 			   {{restoran.naziv}}
 			</td>
