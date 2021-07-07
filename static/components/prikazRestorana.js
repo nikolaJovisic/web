@@ -5,7 +5,6 @@ Vue.component('prikazRestorana', {
 			mapa: null,
 			ascending: false,
 			sortColumn: '',
-			artikal: null,
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
 			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
@@ -33,22 +32,39 @@ Vue.component('prikazRestorana', {
 		  getUkupnaCena() {
 		  let sum = 0;
 		  	for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
-		  		sum += this.restoran.dostupniArtikli[i].kolicina * this.restoran.dostupniArtikli[i].cena;
+		  		sum += this.restoran.dostupniArtikli[i].count * this.restoran.dostupniArtikli[i].cena;
 		  	}
 		  	return sum;
 		  },
 		  
 		  posaljiPorudzbinu() {
-		  
+		  let mapa = 0;
+		  for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
+			mapa = Object()
+			mapa[this.restoran.dostupniArtikli[i].naziv] = this.restoran.dostupniArtikli[i].count !== null ? this.restoran.dostupniArtikli[i].count : 0
+			console.log(mapa)
+		}
 		  axios
-					.post('/novaPorudzbina', 
-						{mapa: this.mapa}
+					.post('/mojaNovaPorudzbina', 
+						{
+							artikli: mapa,
+							cena: this.UkupnaCena
+						}
 					, {params: {nazivRestorana: this.restoran.naziv, jwt: this.jwt}});
-		  }
 
+	}},
+	computed: {
+		UkupnaCena: function () {
+			let sum = 0;
+		  	for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
+		  		sum += this.restoran.dostupniArtikli[i].count * this.restoran.dostupniArtikli[i].cena;
+		  	}
+		  	return sum;
+	}
 	},
 
 	mounted() {
+		
 		axios.get("/restoranPoNazivu",
 			{ params: { naziv: this.$route.params.naziv } })
 			.then(response => {
@@ -56,7 +72,14 @@ Vue.component('prikazRestorana', {
 					this.restoran = response.data;
 				}
 			})
+			console.log(this)
+			for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
+				restoran.dostupniArtikli[i].count = 0;
+			}
+
+			
 	},
+	
 
 	template: `
     <div>
@@ -74,7 +97,7 @@ Vue.component('prikazRestorana', {
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="(artikal, index) in this.restoran.dostupniArtikli" v-model:artikal="mapa[index].artikal">
+		   <tr v-for="artikal in this.restoran.dostupniArtikli">
 		   	<td v-for="col in columns">
 			   		{{ artikal[col.name] }} 
 			</td>
@@ -82,15 +105,15 @@ Vue.component('prikazRestorana', {
 			<img :src="artikal.slika" /> 
 			</td>
 			<td v-if="role === 'Kupac'">
-				Kolicina: <input type="number" v-model="mapa[index].kolicina" min="0"/>
+				Kolicina: <input type="number" v-model="artikal.count" min="0"/>
 			</td>
 		   </tr>
 		 </tbody>
 	   </table>
 	   <div v-if="role === 'Kupac'">
-	   Ukupna cena: {{getUkupnaCena()}}
+	   Ukupna cena: {{UkupnaCena}}
 	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
     	</div>
     </div>
 	`
-})
+	})

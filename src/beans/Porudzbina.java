@@ -34,11 +34,11 @@ public class Porudzbina {
 		this.datumVreme = datumVreme;
 	}
 
-	public BigDecimal getCena() {
+	public double getCena() {
 		return cena;
 	}
 
-	public void setCena(BigDecimal cena) {
+	public void setCena(double cena) {
 		this.cena = cena;
 	}
 
@@ -62,11 +62,11 @@ public class Porudzbina {
 	private Map<Artikal, Integer> artikli;
 	private Restoran restoran;
 	private LocalDateTime datumVreme;
-	private BigDecimal cena;
+	private double cena;
 	private String imePrezimeKupca;
 	private StatusPorudzbine status;
 	
-	public Porudzbina(Integer ID, Restoran restoran, BigDecimal cena, Korpa korpa) {
+	public Porudzbina(Integer ID, Restoran restoran, double cena, Korpa korpa) {
 		KupacRepository kupacRepository = new KupacRepository();
 		
 		this.ID = ID.toString();
@@ -79,7 +79,7 @@ public class Porudzbina {
 		this.imePrezimeKupca = kupac.getIme() + " " + kupac.getPrezime();
 		this.status = StatusPorudzbine.UPripremi;
 		
-		kupac.setSakupljeniBodovi((int)(kupac.getSakupljeniBodovi() + this.cena.floatValue()/1000*133));
+		kupac.setSakupljeniBodovi((int)(kupac.getSakupljeniBodovi() + this.cena/1000*133));
 		kupacRepository.update(kupac.getKorisnickoIme(), kupac);
 	}
 

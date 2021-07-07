@@ -4,6 +4,11 @@ Vue.component('prikazPorudzbina', {
 			porudzbine: null,
 			ascending: false,
 			uloga: null,
+			nameSearch: '',
+			odSearch: '',
+			doSearch: '',
+			odDatumPorudzbine: '',
+			doDatumPorudzbine: '',
 			sortColumn: ''
 
 		}
@@ -20,6 +25,17 @@ Vue.component('prikazPorudzbina', {
 	
 	
 	methods: {
+		"pretraga": function(e)
+		{
+			axios.get("/svePorudzbine",
+			{ params: {nameSearch: this.nameSearch}})
+				.then(response => {
+					if(response.data)
+					{ 
+						this.porudzbine = response.data;
+					}
+				})
+		},
 		"sortTable": function sortTable(col) {
 			if (this.sortColumn === col) {
 				this.ascending = !this.ascending;
@@ -60,10 +76,18 @@ Vue.component('prikazPorudzbina', {
 	
 	template: `
 	<div>
+	<div>
+			<input type="text" v-model="nameSearch" v-if="uloga !== 'Menadzer'" >
+			<input type="text" v-model="odSearch">
+			<input type="text" v-model="doSearch">
+			<input v-model="odDatumPorudzbine" type="date">
+			<input v-model="doDatumPorudzbine" type="date">
+			<button v-on:click="pretraga">Pretraga</button>
+		</div>
 	<table id="table">
 		 <thead>
 		   <tr>
-		   <th>
+		   <th v-if="uloga !== 'Menadzer'">
 		   		Restoran
 		   </th>
 		   <th>
@@ -79,7 +103,7 @@ Vue.component('prikazPorudzbina', {
 		 </thead>
 		 <tbody>
 		   <tr v-for="porudzbina in filtriranePorudzbine">
-		   	<td>
+		   	<td v-if="uloga !== 'Menadzer'">
 			   {{porudzbina.restoran.naziv}}
 			</td>
 			<td>

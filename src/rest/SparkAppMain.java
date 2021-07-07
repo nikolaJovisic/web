@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -192,13 +193,27 @@ public class SparkAppMain {
 		post("/novaPorudzbina", (req, res) -> {
 			String username = getUsername(req.queryParams("jwt"));
 			String nazivRestorana = req.queryParams("restoran");
-			BigDecimal cena = new BigDecimal(req.queryParams("cena"));
+			double cena = Double.parseDouble(req.queryParams("cena"));
 			Korpa korpa = new Korpa(null, kupacRepository.getOne(username), cena); // umesto null staviti mapu
 			Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoranRepository.getOne(nazivRestorana), cena, korpa);
 			porudzbineRepository.addOne(porudzbina);
 			kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;
 		});
+		
+		post("/mojaNovaPorudzbina", (req, res) -> {
+			String username = getUsername(req.queryParams("jwt"));
+			String nazivRestorana = req.queryParams("restoran");
+			Kupac kupac = (Kupac) korisnikService.FindByID(username);
+			System.out.println(req.body());
+			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
+			korpa.setKupac(kupac);
+			//Porudzbina porudzbina = new Porudzbina(porudzbineRepository, null, porudzbineID, korpa)
+			//TODO: korpa ima mapu imena artikala i ukupnu cenu, konstruisati porudzbinu na osnovu ovog.
+			//tvoj staticki counter za porudzbine nije vrednost od 10 karaktera
+			return true;
+		});
+
 
 		post("/izmenaProfila", (req, res) -> {
 			String jwt = req.headers("jwt");
