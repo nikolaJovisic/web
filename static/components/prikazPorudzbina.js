@@ -11,6 +11,7 @@ Vue.component('prikazPorudzbina', {
 			doDatumPorudzbine: '',
 			sortColumn: '',
 			tipFilter: '',
+			res: null,
 			statusFilter: ''
 
 		}
@@ -78,7 +79,8 @@ Vue.component('prikazPorudzbina', {
 				})
 		},
 
-		nijeZatrazena(porudzbina) {
+		"nijeZatrazena": function nijeZatrazena(porudzbina) {
+			sjwt = window.localStorage.getItem('jwt');
 			axios.get("/porudzbinaZatrazena",
 				{
 					headers: {
@@ -92,8 +94,7 @@ Vue.component('prikazPorudzbina', {
 					}
 				})
 				.then(response => {
-					alert(!response.data);
-					return !response.data;
+					this.res = !response.data
 				})
 				
 		},
@@ -110,7 +111,9 @@ Vue.component('prikazPorudzbina', {
 		},
 		
 		moguceZatraziti(porudzbina) {
-			return porudzbina.status === 'CekaDostavljaca' && this.uloga === 'Dostavljac';
+
+			this.nijeZatrazena(porudzbina)
+			return porudzbina.status === 'CekaDostavljaca' && this.uloga === 'Dostavljac' && this.res;
 		},
 		
 		

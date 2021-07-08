@@ -207,6 +207,7 @@ public class SparkAppMain {
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			String porudzbinaID = req.queryParams("porudzbinaID");
+			System.out.println(ponudaRepository.contains(username+porudzbinaID));
 			return ponudaRepository.contains(username+porudzbinaID);
 		});
 
