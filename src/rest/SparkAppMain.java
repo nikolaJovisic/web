@@ -203,13 +203,36 @@ public class SparkAppMain {
 			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));
 		});
 		
+		get("/svePonude", (req, res) -> {
+			return gson.toJson(ponudaRepository.getAll());
+		});
+		
 		get("/porudzbinaZatrazena", (req, res) -> {
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			String porudzbinaID = req.queryParams("porudzbinaID");
-			System.out.println(ponudaRepository.contains(username+porudzbinaID));
 			return ponudaRepository.contains(username+porudzbinaID);
 		});
+		
+		post("/odobriPonudu", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().create();
+			System.out.println(req.body());
+			Ponuda ponuda = gsonReg.fromJson(req.body(), Ponuda.class);
+			ponudaRepository.delete(ponuda.getKey());
+			Porudzbina porudzbina = porudzbineRepository.getOne(ponuda.getPorudzbinaID());
+			porudzbina.setStatus(StatusPorudzbine.UTransportu);
+			porudzbineRepository.update(porudzbina.getID(), porudzbina);
+			porudzbinaService.updateKupci(porudzbineRepository.getOne(ponuda.getPorudzbinaID()));
+			return true;
+		});
+		
+		post("/odbijPonudu", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().create();
+			Ponuda ponuda = gsonReg.fromJson(req.body(), Ponuda.class);
+			ponudaRepository.delete(ponuda.getKey());
+			return true;
+		});
+		
 
 		post("/izmenaPodataka", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -269,16 +292,18 @@ public class SparkAppMain {
 			String username = getUsername(req.queryParams("jwt"));
 			String ID = req.queryParams("IDPorudzbine");
 			Korisnik korisnik = korisnikService.FindByID(username);
-			if (korisnik.getUloga() != Uloga.Menadzer)
+			if (korisnik.getUloga() != Uloga.Dostavljac)
 				return false;
-			Porudzbina p = porudzbineRepository.getOne(ID);
-			if (p.getStatus() != StatusPorudzbine.UPripremi)
+			Porudzbina porudzbina = porudzbineRepository.getOne(ID);
+			if (porudzbina.getStatus() != StatusPorudzbine.UTransportu)
 				return false;
-			p.setStatus(StatusPorudzbine.CekaDostavljaca);
-			porudzbinaService.updateKupci(p);
-			porudzbineRepository.update(ID, p);
+			porudzbina.setStatus(StatusPorudzbine.Dostavljena);
+			porudzbinaService.updateKupci(porudzbina);
+			porudzbineRepository.update(ID, porudzbina);
 			return true;
 		});
+		
+		
 		
 		
 		post("/otkazi", (req, res) -> {

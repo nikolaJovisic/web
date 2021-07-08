@@ -108,6 +108,7 @@ Vue.component('prikazPorudzbina', {
 					jwt: sjwt
 				}
 			})
+			this.$router.go();
 		},
 		
 		moguceZatraziti(porudzbina) {
