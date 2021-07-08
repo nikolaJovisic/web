@@ -62,6 +62,10 @@ public abstract class Repository<Entity, Key> {
 		}
 		return null;
 	}
+	
+	public boolean contains(Key key) {
+		return getOne(key) != null;
+	}
 
 	public void update(Key key, Entity newEntity) {
 		List<LogicalEntity<Entity>> entites;

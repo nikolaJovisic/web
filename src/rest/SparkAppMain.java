@@ -34,6 +34,7 @@ import beans.StatusPorudzbine;
 import beans.Uloga;
 import beans.Kupac;
 import beans.Menadzer;
+import beans.Ponuda;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -41,6 +42,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import repositories.KupacRepository;
 import repositories.MenadzerRepository;
+import repositories.PonudaRepository;
 import repositories.PorudzbineRepository;
 import repositories.RestoranRepository;
 import services.KorisnikService;
@@ -58,11 +60,11 @@ public class SparkAppMain {
 	private static KupacRepository kupacRepository = new KupacRepository();
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
 	private static PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
+	private static PonudaRepository ponudaRepository = new PonudaRepository();
 	private static RestoranService restoranService = new RestoranService();
 	private static PorudzbinaService porudzbinaService = new PorudzbinaService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-	private static int porudzbineID = 0;
-
+	
 	public static void main(String[] args) throws Exception {
 		port(8081);
 
@@ -161,7 +163,7 @@ public class SparkAppMain {
 				Dostavljac d = (Dostavljac) korisnik;
 				unfiltered = d.getPorudzbineZaDostavu();
 				for (Porudzbina p : porudzbineRepository.getAll()) {
-					if (p.getStatus() == StatusPorudzbine.CekaDostavljaca)
+					if (p.getStatus() == StatusPorudzbine.CekaDostavljaca || p.getStatus() == StatusPorudzbine.UTransportu)
 						unfiltered.add(p);
 				}
 			} else if (uloga == Uloga.Menadzer) {
@@ -200,6 +202,13 @@ public class SparkAppMain {
 		get("/restoranPoNazivu", (req, res) -> {
 			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));
 		});
+		
+		get("/porudzbinaZatrazena", (req, res) -> {
+			String auth = req.headers("Authorization");
+			String username = getUsername(auth);
+			String porudzbinaID = req.queryParams("porudzbinaID");
+			return ponudaRepository.contains(username+porudzbinaID);
+		});
 
 		post("/izmenaPodataka", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -237,6 +246,40 @@ public class SparkAppMain {
 			porudzbineRepository.update(ID, p);
 			return true;
 		});
+		
+		post("/zatraziPorudzbinu", (req, res) -> {
+
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("IDPorudzbine");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Dostavljac)
+				return false;
+			Porudzbina porudzbina = porudzbineRepository.getOne(ID);
+			if (porudzbina.getStatus() != StatusPorudzbine.CekaDostavljaca)
+				return false;
+			
+			Ponuda ponuda = new Ponuda(username, porudzbina.getID());
+			ponudaRepository.addOne(ponuda);
+			return true;
+		});
+		
+		post("/dostaviPorudzbinu", (req, res) -> {
+
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("IDPorudzbine");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return false;
+			Porudzbina p = porudzbineRepository.getOne(ID);
+			if (p.getStatus() != StatusPorudzbine.UPripremi)
+				return false;
+			p.setStatus(StatusPorudzbine.CekaDostavljaca);
+			porudzbinaService.updateKupci(p);
+			porudzbineRepository.update(ID, p);
+			return true;
+		});
+		
+		
 		post("/otkazi", (req, res) -> {
 
 			String username = getUsername(req.queryParams("jwt"));

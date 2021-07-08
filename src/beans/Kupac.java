@@ -50,7 +50,7 @@ public class Kupac extends Korisnik {
 	}
 
 	public void setSakupljeniBodovi(double sakupljeniBodovi) {
-		this.sakupljeniBodovi = sakupljeniBodovi;
+		this.sakupljeniBodovi = (sakupljeniBodovi > 0 ? sakupljeniBodovi : 0);
 		setTip(new TipKupca(sakupljeniBodovi));
 	}
 
