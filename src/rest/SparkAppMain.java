@@ -82,8 +82,13 @@ public class SparkAppMain {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
 			korisnikService.register(korisnik);
-			menadzerRepository.setRestoranForMenadzerUsername(req.queryParams("restoran"),
-					menadzerRepository.getOne(korisnik.getKorisnickoIme()));
+			String nazivRestorana = req.queryParams("restoran");
+			System.out.println(nazivRestorana);
+			if (!nazivRestorana.equals("null")) {
+				menadzerRepository.setRestoranForMenadzerUsername(nazivRestorana,
+						menadzerRepository.getOne(korisnik.getKorisnickoIme()));
+
+			}
 			return true;
 		});
 
@@ -126,7 +131,7 @@ public class SparkAppMain {
 					restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch));
 
 		});
-		
+
 		get("/svePorudzbine", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			String auth = req.headers("Authorization");
@@ -134,37 +139,28 @@ public class SparkAppMain {
 			Korisnik korisnik = korisnikService.FindByID(username);
 			Uloga uloga = korisnik.getUloga();
 			List<Porudzbina> unfiltered = new ArrayList<Porudzbina>();
-			if (uloga == Uloga.Kupac)
-			{
+			if (uloga == Uloga.Kupac) {
 				Kupac k = (Kupac) korisnik;
 				unfiltered = k.getSvePorudzbine();
-			}
-			else if (uloga == Uloga.Dostavljac)
-			{
+			} else if (uloga == Uloga.Dostavljac) {
 				Dostavljac d = (Dostavljac) korisnik;
 				unfiltered = d.getPorudzbineZaDostavu();
-				for (Porudzbina p : porudzbineRepository.getAll())
-				{
+				for (Porudzbina p : porudzbineRepository.getAll()) {
 					if (p.getStatus() == StatusPorudzbine.CekaDostavljaca)
 						unfiltered.add(p);
 				}
-			} else if (uloga == Uloga.Menadzer)
-			{
+			} else if (uloga == Uloga.Menadzer) {
 				Menadzer m = (Menadzer) korisnik;
-				for (Porudzbina p : porudzbineRepository.getAll())
-				{
+				for (Porudzbina p : porudzbineRepository.getAll()) {
 					if (p.getRestoran().getNaziv().equals(m.getRestoran().getNaziv()))
 						unfiltered.add(p);
 				}
-			}
-			else
-			{
+			} else {
 				unfiltered = porudzbineRepository.getAll();
 			}
 			return gsonReg.toJson(unfiltered);
-			
+
 		});
-		
 
 		get("/checkJWT", (req, res) -> {
 			String auth = req.headers("Authorization");
@@ -194,12 +190,13 @@ public class SparkAppMain {
 			String nazivRestorana = req.queryParams("restoran");
 			double cena = Double.parseDouble(req.queryParams("cena"));
 			Korpa korpa = new Korpa(null, kupacRepository.getOne(username), cena); // umesto null staviti mapu
-			//Porudzbina porudzbina = new Porudzbina(porudzbineID++, restoranRepository.getOne(nazivRestorana), cena, korpa);
-			//porudzbineRepository.addOne(porudzbina);
-			//kupacRepository.dodajPorudzbinu(username, porudzbina);
+			// Porudzbina porudzbina = new Porudzbina(porudzbineID++,
+			// restoranRepository.getOne(nazivRestorana), cena, korpa);
+			// porudzbineRepository.addOne(porudzbina);
+			// kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;
 		});
-		
+
 		post("/mojaNovaPorudzbina", (req, res) -> {
 			String username = getUsername(req.queryParams("jwt"));
 			String nazivRestorana = req.queryParams("nazivRestorana");
@@ -209,19 +206,20 @@ public class SparkAppMain {
 			Kupac kupac = (Kupac) korisnikService.FindByID(username);
 			System.out.println(req.body());
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
-			
+
 			korpa.setKupac(kupac);
 
-			//TODO: korpa ima mapu imena artikala i ukupnu cenu, konstruisati porudzbinu na osnovu ovog.
-			//tvoj staticki counter za porudzbine nije vrednost od 10 karaktera
-			//staticki counter je uvek 0 na pocetku izvrsavanja programa, ako se restartuje nije vise unikatna vrednost
-			
+			// TODO: korpa ima mapu imena artikala i ukupnu cenu, konstruisati porudzbinu na
+			// osnovu ovog.
+			// tvoj staticki counter za porudzbine nije vrednost od 10 karaktera
+			// staticki counter je uvek 0 na pocetku izvrsavanja programa, ako se restartuje
+			// nije vise unikatna vrednost
+
 			Porudzbina porudzbina = new Porudzbina(porudzbineRepository.GetNewID(), restoran, korpa.getCena(), korpa);
 			porudzbineRepository.addOne(porudzbina);
 			kupacRepository.dodajPorudzbinu(username, porudzbina);
 			return true;
 		});
-
 
 		post("/izmenaProfila", (req, res) -> {
 			String jwt = req.headers("jwt");
