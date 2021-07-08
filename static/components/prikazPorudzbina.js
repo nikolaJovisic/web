@@ -32,8 +32,24 @@ Vue.component('prikazPorudzbina', {
 	
 	
 	methods: {
+		"obradi": function obrada(porudzbina)
+		{
+			sjwt = window.localStorage.getItem('jwt');
+			axios.post('/obrada', {
+					}, {params: {
+								IDPorudzbine: porudzbina.ID,
+								jwt: sjwt
+							}})
+					.then(response => {
+						if(response.data)
+						{ 
+							porudzbina.status = "UPripremi"
+						}
+					})
+		},
 		"pretraga": function(e)
 		{
+			sjwt = window.localStorage.getItem('jwt');
 			axios.get("/svePorudzbine",
 			{
 				headers: {
@@ -146,6 +162,9 @@ Vue.component('prikazPorudzbina', {
 		   <th v-if="uloga !== 'Kupac'">
 				Kupac
 		   </th>
+		   <th>
+				Status
+		   </th>
 		   </tr>
 		 </thead>
 		 <tbody>
@@ -164,6 +183,14 @@ Vue.component('prikazPorudzbina', {
 			</td>
 			<td v-if="uloga !== 'Kupac'">
 			   {{porudzbina.imePrezimeKupca}}
+			</td>
+			<td>
+			   {{porudzbina.status}}
+			</td>
+			<td v-if="porudzbina.status === 'Obrada' && uloga === 'Menadzer'">
+			<button v-on:click="obradi(porudzbina)">
+				Obradi
+			</button>
 			</td>
 		   </tr>
 		 </tbody>

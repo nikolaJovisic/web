@@ -82,7 +82,7 @@ public class Porudzbina {
 		Kupac kupac = korpa.getKupac();
 		
 		this.imePrezimeKupca = kupac.getIme() + " " + kupac.getPrezime();
-		this.status = StatusPorudzbine.UPripremi;
+		this.status = StatusPorudzbine.Obrada;
 		
 		kupac.setSakupljeniBodovi((int)(kupac.getSakupljeniBodovi() + this.cena/1000*133));
 		kupacRepository.update(kupac.getKorisnickoIme(), kupac);

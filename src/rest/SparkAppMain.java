@@ -179,12 +179,6 @@ public class SparkAppMain {
 			String doSearch = req.queryParams("doSearch");
 			String odDatumPorudzbine = req.queryParams("odDatumPorudzbine");
 			String doDatumPorudzbine = req.queryParams("doDatumPorudzbine");
-			System.out.println(nameSearch);
-			System.out.println(odSearch);
-			System.out.println(doSearch);
-			System.out.println(odDatumPorudzbine);
-			System.out.println(doDatumPorudzbine);
-			
 			
 			if (nameSearch == null || odSearch == null || doSearch == null || odDatumPorudzbine == null || doDatumPorudzbine == null)
 				return gsonReg.toJson(unfiltered);
@@ -212,6 +206,22 @@ public class SparkAppMain {
 			String username = getUsername(req.queryParams("jwt"));
 			Korisnik korisnik = korisnikService.FindByID(username);
 			return gsonReg.toJson(korisnik);
+		});
+		
+		post("/obrada", (req, res) -> {
+			Gson gsonReg = new GsonBuilder()
+	                .setPrettyPrinting()
+	                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter()).create();
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("IDPorudzbine");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return false;
+			Menadzer m = (Menadzer) korisnik;
+			Porudzbina p = porudzbineRepository.getOne(ID);
+			p.setStatus(StatusPorudzbine.UPripremi);
+			porudzbineRepository.update(ID, p);
+			return true;
 		});
 
 		post("/novaPorudzbina", (req, res) -> {
