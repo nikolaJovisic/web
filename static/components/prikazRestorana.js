@@ -73,7 +73,8 @@ Vue.component('prikazRestorana', {
 					this.restoran = response.data;
 				}
 			})
-			console.log(this)
+			
+			console.log(this.restoran)
 			for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
 				restoran.dostupniArtikli[i].count = 0;
 			}

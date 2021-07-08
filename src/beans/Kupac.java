@@ -62,6 +62,8 @@ public class Kupac extends Korisnik {
 	}
 
 	public void dodajPorudzbinu(Porudzbina porudzbina) {
+		if (svePorudzbine == null)
+			svePorudzbine = new ArrayList<Porudzbina>();
 		svePorudzbine.add(porudzbina);
 	}
 	

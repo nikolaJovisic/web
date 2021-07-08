@@ -76,7 +76,7 @@ Vue.component('prikazPorudzbina', {
 	
 	template: `
 	<div>
-	<div>
+		<div>
 			<input type="text" v-model="nameSearch" v-if="uloga !== 'Menadzer'" >
 			<input type="text" v-model="odSearch">
 			<input type="text" v-model="doSearch">
@@ -84,7 +84,7 @@ Vue.component('prikazPorudzbina', {
 			<input v-model="doDatumPorudzbine" type="date">
 			<button v-on:click="pretraga">Pretraga</button>
 		</div>
-	<table id="table">
+		<table id="table">
 		 <thead>
 		   <tr>
 		   <th v-if="uloga !== 'Menadzer'">
@@ -96,7 +96,7 @@ Vue.component('prikazPorudzbina', {
 		   <th>
 				Cena
 		   </th>
-		   <th>
+		   <th v-if="uloga !== 'Kupac'">
 				Kupac
 		   </th>
 		   </tr>
@@ -113,7 +113,7 @@ Vue.component('prikazPorudzbina', {
 			<td>
 			   {{porudzbina.cena}}
 			</td>
-			<td>
+			<td v-if="uloga !== 'Kupac'">
 			   {{porudzbina.imePrezimeKupca}}
 			</td>
 		   </tr>
