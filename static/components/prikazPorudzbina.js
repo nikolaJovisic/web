@@ -32,6 +32,36 @@ Vue.component('prikazPorudzbina', {
 	
 	
 	methods: {
+		"otkazi": function otkazi(porudzbina)
+		{
+			sjwt = window.localStorage.getItem('jwt');
+			axios.post('/otkazi', {
+					}, {params: {
+								IDPorudzbine: porudzbina.ID,
+								jwt: sjwt
+							}})
+					.then(response => {
+						if(response.data)
+						{ 
+							porudzbina.status = "Otkazana"
+						}
+					})
+		},
+		"pripremi": function pripremi(porudzbina)
+		{
+			sjwt = window.localStorage.getItem('jwt');
+			axios.post('/pripremi', {
+					}, {params: {
+								IDPorudzbine: porudzbina.ID,
+								jwt: sjwt
+							}})
+					.then(response => {
+						if(response.data)
+						{ 
+							porudzbina.status = "CekaDostavljaca"
+						}
+					})
+		},
 		"obradi": function obrada(porudzbina)
 		{
 			sjwt = window.localStorage.getItem('jwt');
@@ -192,6 +222,17 @@ Vue.component('prikazPorudzbina', {
 				Obradi
 			</button>
 			</td>
+			<td v-else-if="porudzbina.status === 'Obrada' && uloga === 'Kupac'">
+			<button v-on:click="otkazi(porudzbina)">
+				Otkaži
+			</button>
+			</td>
+			<td v-else-if="porudzbina.status === 'UPripremi' && uloga === 'Menadzer'">
+			<button v-on:click="pripremi(porudzbina)">
+				Pripremi
+			</button>
+			</td>
+			
 		   </tr>
 		 </tbody>
 	   </table>

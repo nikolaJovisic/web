@@ -9,7 +9,7 @@ public class Kupac extends Korisnik {
 	
 	private List<Porudzbina> svePorudzbine;
 	private Korpa korpa;
-	private int sakupljeniBodovi;
+	private double sakupljeniBodovi;
 	private TipKupca tip;
 	
 	
@@ -45,12 +45,13 @@ public class Kupac extends Korisnik {
 		this.korpa = korpa;
 	}
 
-	public int getSakupljeniBodovi() {
+	public double getSakupljeniBodovi() {
 		return sakupljeniBodovi;
 	}
 
-	public void setSakupljeniBodovi(int sakupljeniBodovi) {
+	public void setSakupljeniBodovi(double sakupljeniBodovi) {
 		this.sakupljeniBodovi = sakupljeniBodovi;
+		setTip(new TipKupca(sakupljeniBodovi));
 	}
 
 	public TipKupca getTip() {
@@ -65,6 +66,11 @@ public class Kupac extends Korisnik {
 		if (svePorudzbine == null)
 			svePorudzbine = new ArrayList<Porudzbina>();
 		svePorudzbine.add(porudzbina);
+	}
+
+	public void reducePoints(double cena) {
+		setSakupljeniBodovi((cena/1000 * 133 * 4 > 0) ? (sakupljeniBodovi - cena/1000 * 133 * 4) : 0);
+		
 	}
 	
 }

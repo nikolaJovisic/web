@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import beans.Kupac;
 import beans.Porudzbina;
+import repositories.KupacRepository;
 
 public class PorudzbinaService {
+	KupacRepository kupacRepository = new KupacRepository();
 
 	public List<Porudzbina> filter(List<Porudzbina> unfiltered, String nameSearch, String odSearch, String doSearch,
 			String odDatumPorudzbine, String doDatumPorudzbine) throws ParseException {
@@ -42,6 +45,21 @@ public class PorudzbinaService {
 			}
 		}
 		return filtered;
+	}
+
+	public void updateKupci(Porudzbina p) {
+		for (Kupac k : kupacRepository.getAll())
+		{
+			for (Porudzbina porudzbinaKupca : k.getSvePorudzbine())
+			{
+				if (porudzbinaKupca.getID().equals(p.getID()))
+				{
+					porudzbinaKupca.setStatus(p.getStatus());
+					kupacRepository.update(k.getKorisnickoIme(), k);
+				}
+			}
+		}
+		
 	}
 
 }

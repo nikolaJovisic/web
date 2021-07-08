@@ -209,17 +209,49 @@ public class SparkAppMain {
 		});
 		
 		post("/obrada", (req, res) -> {
-			Gson gsonReg = new GsonBuilder()
-	                .setPrettyPrinting()
-	                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter()).create();
 			String username = getUsername(req.queryParams("jwt"));
 			String ID = req.queryParams("IDPorudzbine");
 			Korisnik korisnik = korisnikService.FindByID(username);
 			if (korisnik.getUloga() != Uloga.Menadzer)
 				return false;
-			Menadzer m = (Menadzer) korisnik;
 			Porudzbina p = porudzbineRepository.getOne(ID);
+			if (p.getStatus() != StatusPorudzbine.Obrada)
+				return false;
 			p.setStatus(StatusPorudzbine.UPripremi);
+			porudzbinaService.updateKupci(p);
+			porudzbineRepository.update(ID, p);
+			return true;
+		});
+		post("/pripremi", (req, res) -> {
+
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("IDPorudzbine");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return false;
+			Porudzbina p = porudzbineRepository.getOne(ID);
+			if (p.getStatus() != StatusPorudzbine.UPripremi)
+				return false;
+			p.setStatus(StatusPorudzbine.CekaDostavljaca);
+			porudzbinaService.updateKupci(p);
+			porudzbineRepository.update(ID, p);
+			return true;
+		});
+		post("/otkazi", (req, res) -> {
+
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("IDPorudzbine");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Kupac)
+				return false;
+			Porudzbina p = porudzbineRepository.getOne(ID);
+			if (p.getStatus() != StatusPorudzbine.Obrada)
+				return false;
+			p.setStatus(StatusPorudzbine.Otkazana);
+			Kupac k = (Kupac) korisnik;
+			k.reducePoints(p.getCena());
+			kupacRepository.update(k.getKorisnickoIme(), k);
+			porudzbinaService.updateKupci(p);
 			porudzbineRepository.update(ID, p);
 			return true;
 		});

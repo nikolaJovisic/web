@@ -41,6 +41,30 @@ public class TipKupca {
 		
 		
 
+	public TipKupca(double sakupljeniBodovi) {
+		if (sakupljeniBodovi >= 2000)
+		{
+			this.tip = TipoviKupaca.Zlatni;
+			this.popust = 10.0;
+			this.trazeniBrojBodova = 2000;
+		} else if (sakupljeniBodovi >= 1000)
+		{
+			this.tip = TipoviKupaca.Srebrni;
+			this.popust = 5.0;
+			this.trazeniBrojBodova = 1000;
+		} else
+		{
+			this.tip = TipoviKupaca.Bronzani;
+			this.popust = 0.0;
+			this.trazeniBrojBodova = 0;
+		}
+	}
+
+
+
+
+
+
 	public TipoviKupaca getTip() {
 		return tip;
 	}
