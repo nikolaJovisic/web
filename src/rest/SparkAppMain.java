@@ -1,13 +1,17 @@
 package rest;
 
 import static spark.Spark.get;
+
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +19,10 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import beans.Artikal;
 import beans.Dostavljac;
@@ -36,9 +44,13 @@ import repositories.MenadzerRepository;
 import repositories.PorudzbineRepository;
 import repositories.RestoranRepository;
 import services.KorisnikService;
+import services.LocalDateAdapter;
+import services.PorudzbinaService;
 import services.RestoranService;
 
+
 public class SparkAppMain {
+	
 
 	private static Gson gson = new Gson();
 	private static KorisnikService korisnikService = new KorisnikService();
@@ -47,6 +59,7 @@ public class SparkAppMain {
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
 	private static PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
 	private static RestoranService restoranService = new RestoranService();
+	private static PorudzbinaService porudzbinaService = new PorudzbinaService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	private static int porudzbineID = 0;
 
@@ -133,7 +146,9 @@ public class SparkAppMain {
 		});
 
 		get("/svePorudzbine", (req, res) -> {
-			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Gson gsonReg = new GsonBuilder()
+	                .setPrettyPrinting()
+	                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter()).create();
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			Korisnik korisnik = korisnikService.FindByID(username);
@@ -158,8 +173,22 @@ public class SparkAppMain {
 			} else {
 				unfiltered = porudzbineRepository.getAll();
 			}
-			return gsonReg.toJson(unfiltered);
-
+			
+			String nameSearch = req.queryParams("nameSearch");
+			String odSearch = req.queryParams("odSearch");
+			String doSearch = req.queryParams("doSearch");
+			String odDatumPorudzbine = req.queryParams("odDatumPorudzbine");
+			String doDatumPorudzbine = req.queryParams("doDatumPorudzbine");
+			System.out.println(nameSearch);
+			System.out.println(odSearch);
+			System.out.println(doSearch);
+			System.out.println(odDatumPorudzbine);
+			System.out.println(doDatumPorudzbine);
+			
+			
+			if (nameSearch == null || odSearch == null || doSearch == null || odDatumPorudzbine == null || doDatumPorudzbine == null)
+				return gsonReg.toJson(unfiltered);
+			return gsonReg.toJson(porudzbinaService.filter(unfiltered, nameSearch, odSearch, doSearch, odDatumPorudzbine, doDatumPorudzbine));
 		});
 
 		get("/checkJWT", (req, res) -> {
@@ -208,12 +237,6 @@ public class SparkAppMain {
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
 
 			korpa.setKupac(kupac);
-
-			// TODO: korpa ima mapu imena artikala i ukupnu cenu, konstruisati porudzbinu na
-			// osnovu ovog.
-			// tvoj staticki counter za porudzbine nije vrednost od 10 karaktera
-			// staticki counter je uvek 0 na pocetku izvrsavanja programa, ako se restartuje
-			// nije vise unikatna vrednost
 
 			Porudzbina porudzbina = new Porudzbina(porudzbineRepository.GetNewID(), restoran, korpa.getCena(), korpa);
 			porudzbineRepository.addOne(porudzbina);
@@ -274,4 +297,5 @@ public class SparkAppMain {
 		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
 		return claims.getBody().getSubject();
 	}
+	
 }
