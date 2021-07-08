@@ -60,7 +60,7 @@ public class Porudzbina {
 	}
 
 	private String ID;
-	private Map<Artikal, Integer> artikli;
+	private Map<String, Integer> artikli;
 	private Restoran restoran;
 	private LocalDateTime datumVreme;
 	private double cena;
@@ -74,10 +74,10 @@ public class Porudzbina {
 		this.restoran = restoran;
 		this.datumVreme = LocalDateTime.now();
 		this.cena = cena;
-		this.artikli = new HashMap<Artikal, Integer>();
+		this.artikli = new HashMap<String, Integer>();
 		for (String nazivArtikla : korpa.getArtikli().keySet())
 		{
-			artikli.put(restoran.getArtikal(nazivArtikla), korpa.getArtikli().get(nazivArtikla));
+			artikli.put(nazivArtikla, korpa.getArtikli().get(nazivArtikla));
 		}
 		Kupac kupac = korpa.getKupac();
 		
@@ -89,11 +89,11 @@ public class Porudzbina {
 	}
 
 
-	public Map<Artikal, Integer> getArtikli() {
+	public Map<String, Integer> getArtikli() {
 		return artikli;
 	}
 
-	public void setArtikli(Map<Artikal, Integer> artikli) {
+	public void setArtikli(Map<String, Integer> artikli) {
 		this.artikli = artikli;
 	}
 }

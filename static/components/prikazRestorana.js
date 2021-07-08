@@ -51,7 +51,8 @@ Vue.component('prikazRestorana', {
 							cena: this.UkupnaCena
 						}
 					, {params: {nazivRestorana: this.restoran.naziv, jwt: this.jwt}});
-
+					
+		alert("Porudžbina uspešno registrovana!");
 	}},
 	computed: {
 		UkupnaCena: function () {
