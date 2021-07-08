@@ -11,6 +11,10 @@ Vue.component('prikazRestorana', {
 		}
 	},
 	methods: {
+		"proba": function proba() {
+			console.log("proba")
+			console.log(this.restoran)
+		  },
 		"sortTable": function sortTable(col) {
 			if (this.sortColumn === col) {
 				this.ascending = !this.ascending;
@@ -62,22 +66,26 @@ Vue.component('prikazRestorana', {
 		  	}
 		  	return sum;
 	}
+
 	},
 
 	mounted() {
-		
+		self = this;
 		axios.get("/restoranPoNazivu",
 			{ params: { naziv: this.$route.params.naziv } })
 			.then(response => {
 				if (response.data) {
+					for (let i = 0; i <  response.data.dostupniArtikli.length; ++i) {
+						response.data.dostupniArtikli[i].count = 0;
+					}
 					this.restoran = response.data;
+
 				}
 			})
-			
-			console.log(this.restoran)
-			for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
-				restoran.dostupniArtikli[i].count = 0;
-			}
+
+		for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
+			restoran.dostupniArtikli[i].count = 0;
+		}
 
 			
 	},
