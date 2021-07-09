@@ -259,6 +259,9 @@ Vue.component('prikazPorudzbina', {
 		<table id="table">
 		 <thead>
 		   <tr>
+		   <th>
+				ID
+		   </th>
 		   <th v-if="uloga !== 'Menadzer'" v-on:click="sortTable('restoran.naziv')">
 		   		Restoran
 		   </th>
@@ -278,6 +281,9 @@ Vue.component('prikazPorudzbina', {
 		 </thead>
 		 <tbody>
 		   <tr v-for="porudzbina in filtriranePorudzbine">
+		   <td >
+			   {{porudzbina.ID}}
+			</td>
 		   	<td v-if="uloga !== 'Menadzer'">
 			   {{porudzbina.restoran.naziv}}
 			</td>
