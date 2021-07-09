@@ -12,13 +12,23 @@ Vue.component('prikazKomentara', {
         {
             axios.post("/komentar",
             {
-                komentar: this.komentar
+                ID: this.komentar.ID,
+                kupac: this.komentar.kupac,
+                restoran: this.komentar.restoran,
+                tekst: this.komentar.tekst,
+                ocena: this.komentar.ocena,
+                odobren: this.komentar.odobren
             },
 			{ params: { ID: this.komentar.ID, jwt: this.jwt } })
 			.then(response => {
 				if (response.data) {
-					
-				}
+                    alert("Uspešno dodat komentar.");
+                    this.$router.push('/mainPage');
+                }
+                else {
+                    alert("Neuspešno dodat komentar.");
+                }
+				
 			})
         }
 	},
@@ -49,7 +59,7 @@ Vue.component('prikazKomentara', {
         </h1>
         <div>
             <label>Komentar:</label>
-            <textarea v-model="komentar.opis">
+            <textarea v-model="komentar.tekst">
             </textarea>
             <label>Ocena:</label>
             <select name="ocena" v-model="komentar.ocena">

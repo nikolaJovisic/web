@@ -2,6 +2,7 @@ package repositories;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -24,6 +25,21 @@ public class KomentarRepository extends Repository<Komentar, String> {
 		while (ID.length() != 10)
 			ID = "0" + ID;
 		return ID;
+	}
+	public List<Komentar> getAllOdobreni(String nazivRestorana)
+	{
+		List<Komentar> odobreni = new ArrayList<Komentar>();
+		for (Komentar k : getAll())
+			if (k.isOdobren() && k.getRestoran().getNaziv().equals(nazivRestorana))
+				odobreni.add(k);
+		return odobreni;
+	}
+	public Object getAll(String nazivRestorana) {
+		List<Komentar> svi = new ArrayList<Komentar>();
+		for (Komentar k : getAll())
+			if (k.getRestoran().getNaziv().equals(nazivRestorana))
+				svi.add(k);
+		return svi;
 	}
 
 }

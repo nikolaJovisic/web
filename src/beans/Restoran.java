@@ -3,6 +3,8 @@ package beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import repositories.KomentarRepository;
+
 public class Restoran {
 	private String naziv;
 	private TipRestorana tip;
@@ -75,6 +77,22 @@ public class Restoran {
 
 	public void setProsecnaOcena(double prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
+	}
+
+	public void updateOcene() {
+		KomentarRepository komentarRepository = new KomentarRepository();
+		double sum = 0;
+		int count = 0;
+		for (Komentar k : komentarRepository.getAll())
+		{
+			if (k.getRestoran().getNaziv().equals(this.naziv) && k.getOcena() != 0 && k.isOdobren())
+			{
+				sum += k.getOcena();
+				count++;
+			}
+		}
+		setProsecnaOcena(count == 0 ? 0 : sum/count);
+		
 	}
 	
 }

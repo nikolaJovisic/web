@@ -6,6 +6,7 @@ public class Komentar {
 	private Restoran restoran;
 	private String tekst;
 	private int ocena;
+	private boolean odobren;
 	
 	
 	
@@ -13,12 +14,22 @@ public class Komentar {
 	
 	public Komentar(String iD, Kupac kupac, Restoran restoran, String tekst, int ocena) {
 		super();
-		ID = iD;
+		this.ID = iD;
 		this.kupac = kupac;
 		this.restoran = restoran;
 		this.tekst = tekst;
 		this.ocena = ocena;
+		this.odobren = false;
 	}
+	
+	public boolean isOdobren() {
+		return odobren;
+	}
+
+	public void setOdobren(boolean odobren) {
+		this.odobren = odobren;
+	}
+
 	public String getID() {
 		return ID;
 	}

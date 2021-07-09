@@ -225,6 +225,23 @@ public class SparkAppMain {
 			
 			return gson.toJson(kupci);
 		});
+		get("/sviKomentari", (req, res) -> {
+			String jwt = req.queryParams("jwt");
+			String nazivRestorana = req.queryParams("naziv");
+			if (jwt == null)
+				return gson.toJson(komentarRepository.getAllOdobreni(nazivRestorana));
+			String username = getUsername(jwt);
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() == Uloga.Administrator)
+				return gson.toJson(komentarRepository.getAll(nazivRestorana));
+			if (korisnik.getUloga() == Uloga.Menadzer)
+			{
+				Menadzer m = (Menadzer) korisnik;
+				if (m.getRestoran().getNaziv().equals(nazivRestorana))
+					return gson.toJson(komentarRepository.getAll(nazivRestorana));
+			}
+			return gson.toJson(komentarRepository.getAllOdobreni(nazivRestorana));
+		});
 
 		get("/restoranPoNazivu", (req, res) -> {
 			
@@ -258,7 +275,6 @@ public class SparkAppMain {
 		
 		post("/odobriPonudu", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().create();
-			System.out.println(req.body());
 			Ponuda ponuda = gsonReg.fromJson(req.body(), Ponuda.class);
 			ponudaRepository.delete(ponuda.getKey());
 			Porudzbina porudzbina = porudzbineRepository.getOne(ponuda.getPorudzbinaID());
@@ -272,6 +288,22 @@ public class SparkAppMain {
 			Gson gsonReg = new GsonBuilder().create();
 			Ponuda ponuda = gsonReg.fromJson(req.body(), Ponuda.class);
 			ponudaRepository.delete(ponuda.getKey());
+			return true;
+		});
+		post("/odobriKomentar", (req, res) -> {
+			String ID = req.queryParams("ID");
+			String username = getUsername(req.queryParams("jwt"));
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return false;
+			Menadzer menadzer = (Menadzer) korisnik;
+			Komentar komentar = komentarRepository.getOne(ID);
+			if (komentar == null)
+				return false;
+			if (!komentar.getRestoran().getNaziv().equals(menadzer.getRestoran().getNaziv()))
+				return false;
+			komentar.setOdobren(true);
+			komentarRepository.update(komentar.getID(), komentar);
 			return true;
 		});
 		
@@ -350,6 +382,7 @@ public class SparkAppMain {
 			Komentar komentar = komentarRepository.getOne(ID);
 			if (komentar == null) 
 				return false;
+			Restoran restoran = komentar.getRestoran();
 			boolean belongsToKupac = false;
 			for (Porudzbina p : kupac.getSvePorudzbine())
 			{
@@ -358,7 +391,17 @@ public class SparkAppMain {
 			}
 			if (!belongsToKupac)
 				return false;
-			return gson.toJson(komentar);
+			Komentar izmenjenKomentar = gson.fromJson(req.body(), Komentar.class);
+			System.out.println(gson.toJson(izmenjenKomentar));
+			if (izmenjenKomentar.getOcena() < 1 || izmenjenKomentar.getOcena() > 5)
+				return false;
+			komentar.setOcena(izmenjenKomentar.getOcena());
+			komentar.setTekst(izmenjenKomentar.getTekst());
+			komentarRepository.update(komentar.getID(), komentar);
+			restoran.updateOcene();
+			restoranRepository.update(restoran.getNaziv(), restoran);
+			
+			return true;
 		});
 		post("/pripremi", (req, res) -> {
 

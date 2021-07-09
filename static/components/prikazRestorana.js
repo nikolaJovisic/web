@@ -130,6 +130,8 @@ Vue.component('prikazRestorana', {
 	   Ukupna cena: {{UkupnaCena}} din
 	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
     	</div>
+		
+		<komentariPrikaz v-bind:restoran="restoran"></komentariPrikaz>
     </div>
 	`
 	})
