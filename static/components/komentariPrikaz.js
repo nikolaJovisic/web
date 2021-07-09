@@ -39,7 +39,23 @@ Vue.component('komentariPrikaz', {
 		},
 		'odbijKomentar': function odbijKomentar(komentar)
 		{
-			
+			axios.post('/odbijKomentar', {
+			}, {
+				params: {
+					ID: komentar.ID,
+					jwt: this.jwt
+				}
+			})
+				.then(response => {
+					if (response.data) {
+						
+						this.$router.go();
+					}
+					else
+					{
+						alert('Greška prilikom odbijanja komentara')
+					}
+				})
 		}
 
 	},

@@ -304,6 +304,24 @@ public class SparkAppMain {
 				return false;
 			komentar.setOdobren(true);
 			komentarRepository.update(komentar.getID(), komentar);
+			Restoran restoran = komentar.getRestoran();
+			restoran.updateOcene();
+			restoranRepository.update(restoran.getNaziv(), restoran);
+			return true;
+		});
+		post("/odbijKomentar", (req, res) -> {
+			String ID = req.queryParams("ID");
+			String username = getUsername(req.queryParams("jwt"));
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return false;
+			Menadzer menadzer = (Menadzer) korisnik;
+			Komentar komentar = komentarRepository.getOne(ID);
+			if (komentar == null)
+				return false;
+			if (!komentar.getRestoran().getNaziv().equals(menadzer.getRestoran().getNaziv()))
+				return false;
+			komentarRepository.delete(komentar.getID());
 			return true;
 		});
 		

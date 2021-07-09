@@ -19,7 +19,7 @@ public class PorudzbineRepository extends Repository<Porudzbina, String> {
 	}
 	public String GetNewID()
 	{
-		String ID =String.valueOf(getAll().size());
+		String ID =String.valueOf(getAllLogical().size());
 		while (ID.length() != 10)
 			ID = "0" + ID;
 		return ID;

@@ -26,7 +26,7 @@ public abstract class Repository<Entity, Key> {
 
 	protected abstract Type getTokenType();
 
-	private List<LogicalEntity<Entity>> getAllLogical() {
+	protected List<LogicalEntity<Entity>> getAllLogical() {
 		Reader reader;
 		ArrayList<LogicalEntity<Entity>> entites;
 		try {
