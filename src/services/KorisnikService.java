@@ -134,16 +134,16 @@ public class KorisnikService {
 
 	private boolean sumnjiv(Kupac kupac) {
 		List<Porudzbina> otkazanePorudzbine = getOtkazanePorudzbine(kupac.getSvePorudzbine());
-		for (int i = 0; i < otkazanePorudzbine.size() - 5; ++i) {
-			if(manjeOdPetDanaIzmedju(otkazanePorudzbine.get(i + 5).getDatumVreme(), otkazanePorudzbine.get(i).getDatumVreme())) {
+		for (int i = 0; i < otkazanePorudzbine.size() - 6; ++i) {
+			if(manjeOdMesecDanaIzmedju(otkazanePorudzbine.get(i + 6).getDatumVreme(), otkazanePorudzbine.get(i).getDatumVreme())) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean manjeOdPetDanaIzmedju(LocalDateTime pocetak, LocalDateTime kraj) {
-		return pocetak.until(kraj, ChronoUnit.DAYS) < 5;
+	private boolean manjeOdMesecDanaIzmedju(LocalDateTime pocetak, LocalDateTime kraj) {
+		return pocetak.until(kraj, ChronoUnit.MONTHS) < 1;
 	}
 
 	private List<Porudzbina> getOtkazanePorudzbine(List<Porudzbina> svePorudzbine) {

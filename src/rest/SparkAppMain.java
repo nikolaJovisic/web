@@ -229,6 +229,10 @@ public class SparkAppMain {
 			return gson.toJson(ponudaRepository.getAll());
 		});
 		
+		get("/sumnjiviKupci", (req, res) -> {
+			return gson.toJson(korisnikService.getSumnjiviKupci());
+		});
+		
 		get("/porudzbinaZatrazena", (req, res) -> {
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);

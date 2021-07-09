@@ -4,22 +4,25 @@ Vue.component('sviKorisnici', {
 			logged: false,
 			role: window.localStorage.getItem("role"),
 			korisnici: null,
+			sumnjiviKupci: null,
+			korisniciPrikaz: null,
 			ascending: false,
 			sortColumn: '',
 			ulogaFilter: '',
 			nameSearch: '',
 			surnameSearch: '',
 			usernameSearch: '',
+			prikazSumnjivih: false,
 			tipFilter: '',
 			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}, {name: "blokiran"}]
 		}
 	},
 	computed: {
 		filtriraniKorisnici: function() {
-			if (this.korisnici == null) return null;
+			if (this.korisniciPrikaz == null) return null;
 			uloga_filter = this.ulogaFilter
 			tip_filter = this.tipFilter
-			return this.korisnici.filter(function(row) {
+			return this.korisniciPrikaz.filter(function(row) {
 				uloga = row.uloga
 				tip = uloga === 'Kupac' ? row.tip.tip : null
 				return uloga.includes(uloga_filter) && (tip == tip_filter || tip_filter == '')
@@ -75,8 +78,17 @@ Vue.component('sviKorisnici', {
 		
 		renderSakupljeniBodovi: function(colName) {
 			return this.ulogaFilter === 'Kupac' || colName !== 'sakupljeniBodovi';
-		}
+		},
 
+		prikaziSumnjive() {
+			this.korisniciPrikaz = this.sumnjiviKupci;
+			this.prikazSumnjivih = true;
+		},
+
+		prikaziSve() {
+			this.korisniciPrikaz = this.korisnici;
+			this.prikazSumnjivih = false;
+		}
 
 	},
 
@@ -90,9 +102,23 @@ Vue.component('sviKorisnici', {
 		})
 			.then(response => {
 				if (response.data) {
+					this.korisniciPrikaz = response.data;
 					this.korisnici = response.data;
 				}
 			})
+			
+		axios.get("/sumnjiviKupci", {
+			headers: {
+			},
+			contentType: "application/json",
+			dataType: "json",
+		})
+			.then(response => {
+				if (response.data) {
+					this.sumnjiviKupci = response.data;
+				}
+			})
+
 	},
 
 	template: `
@@ -118,6 +144,10 @@ Vue.component('sviKorisnici', {
 			<option>Srebrni</option>
 			<option>Zlatni</option>
 			</select>
+		</div>
+		<div>
+			<button v-if="!prikazSumnjivih" v-on:click="prikaziSumnjive()">Prikaži samo sumnjive kupce </button>
+			<button v-else-if="prikazSumnjivih" v-on:click="prikaziSve()">Prikaži sve korisnike </button>
 		</div>
 		 <table id="table">
 		 <thead>
