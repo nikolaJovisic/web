@@ -12,6 +12,7 @@ Vue.component('prikazPorudzbina', {
 			sortColumn: '',
 			tipFilter: '',
 			res: null,
+			restoraniZaKomentarisanje: null,
 			statusFilter: ''
 
 		}
@@ -79,7 +80,7 @@ Vue.component('prikazPorudzbina', {
 					}
 				})
 		},
-		"oceni": function obrada(porudzbina) {
+		"oceni": function oceni(porudzbina) {
 			sjwt = window.localStorage.getItem('jwt');
 			axios.post('/oceni', {
 			}, {
@@ -220,6 +221,18 @@ Vue.component('prikazPorudzbina', {
 					this.porudzbine = response.data;
 				}
 			})
+		axios.get("/sviRestoraniZaKomentarisanje", {
+			params: {
+				jwt: sjwt
+			},
+			contentType: "application/json",
+			dataType: "json",
+		})
+			.then(response => {
+				if (response.data) {
+					this.komentari = response.data;
+				}
+			})
 	},
 
 	template: `
@@ -302,7 +315,7 @@ Vue.component('prikazPorudzbina', {
 				Otkaži
 			</button>
 			</td>
-			<td v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac'">
+			<td v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac' && noComment(porudzbina)">
 			<button v-on:click="oceni(porudzbina)">
 				Oceni
 			</button>

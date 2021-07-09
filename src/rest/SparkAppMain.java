@@ -226,8 +226,11 @@ public class SparkAppMain {
 			return gson.toJson(kupci);
 		});
 		get("/sviKomentari", (req, res) -> {
+			
 			String jwt = req.queryParams("jwt");
 			String nazivRestorana = req.queryParams("naziv");
+			if (nazivRestorana == null)
+				return gson.toJson(komentarRepository.getAll());
 			if (jwt == null)
 				return gson.toJson(komentarRepository.getAllOdobreni(nazivRestorana));
 			String username = getUsername(jwt);
