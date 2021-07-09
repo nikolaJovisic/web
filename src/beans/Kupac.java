@@ -73,4 +73,10 @@ public class Kupac extends Korisnik {
 		
 	}
 	
+	public double getPopust() {
+		return tip.getPopust();
+	}
+	
+	
+	
 }

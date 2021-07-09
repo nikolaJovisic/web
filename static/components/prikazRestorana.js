@@ -4,6 +4,7 @@ Vue.component('prikazRestorana', {
 			restoran: null,
 			mapa: null,
 			ascending: false,
+			popust: null,
 			sortColumn: '',
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
@@ -39,7 +40,7 @@ Vue.component('prikazRestorana', {
 		  	for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
 		  		sum += this.restoran.dostupniArtikli[i].count * this.restoran.dostupniArtikli[i].cena;
 		  	}
-		  	return sum;
+		  	return sum * (1 - this.popust/100);
 		  },
 		  
 		  posaljiPorudzbinu() {
@@ -65,7 +66,7 @@ Vue.component('prikazRestorana', {
 		  	for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
 		  		sum += this.restoran.dostupniArtikli[i].count * this.restoran.dostupniArtikli[i].cena;
 		  	}
-		  	return sum;
+		  	return sum * (1 - this.popust/100);
 	}
 
 	},
@@ -81,6 +82,14 @@ Vue.component('prikazRestorana', {
 					}
 					this.restoran = response.data;
 
+				}
+			})
+			
+		axios.get("/popust",
+			{ params: { jwt: this.jwt } })
+			.then(response => {
+				if (response.data) {
+					this.popust = response.data;
 				}
 			})
 

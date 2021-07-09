@@ -265,6 +265,15 @@ public class SparkAppMain {
 			return gson.toJson(ponudaRepository.getAll());
 		});
 		
+		get("/popust", (req, res) -> {
+			String username = getUsername(req.queryParams("jwt"));
+			System.out.println(username);
+			Kupac kupac = kupacRepository.getOne(username);
+			double popust = kupac.getPopust();
+			System.out.println(popust);
+			return gson.toJson(popust);
+		});
+		
 		get("/sumnjiviKupci", (req, res) -> {
 			return gson.toJson(korisnikService.getSumnjiviKupci());
 		});
@@ -517,6 +526,9 @@ public class SparkAppMain {
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
 
 			korpa.setKupac(kupac);
+			if(!korpa.checkCena(restoran)) {
+				return false;
+			}
 
 			Porudzbina porudzbina = new Porudzbina(porudzbineRepository.GetNewID(), restoran, korpa.getCena(), korpa);
 			porudzbineRepository.addOne(porudzbina);

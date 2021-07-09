@@ -1,5 +1,6 @@
 package beans;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +94,15 @@ public class Restoran {
 		}
 		setProsecnaOcena(count == 0 ? 0 : sum/count);
 		
+	}
+	
+	public BigDecimal getCenaArtikla(String nazivArtikla) {
+		for(Artikal artikal: dostupniArtikli) {
+			if(artikal.getNaziv().equals(nazivArtikla)) {
+				return artikal.getCena();
+			}
+		}
+		return null;
 	}
 	
 }
