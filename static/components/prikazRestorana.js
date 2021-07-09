@@ -11,6 +11,11 @@ Vue.component('prikazRestorana', {
 		}
 	},
 	methods: {
+		izmeni: function(val) {
+			localStorage.setItem('registracijaNovogArtikla', false);
+			localStorage.setItem('nazivArtikla', val);
+			this.$router.push('/noviArtikal/')
+		},
 		"sortTable": function sortTable(col) {
 			if (this.sortColumn === col) {
 				this.ascending = !this.ascending;
@@ -112,6 +117,11 @@ Vue.component('prikazRestorana', {
 			</td>
 			<td v-if="role === 'Kupac'">
 				Kolicina: <input type="number" v-model="artikal.count" min="0"/>
+			</td>
+			<td v-else-if="role === 'Menadzer'">
+				<button v-on:click="izmeni(artikal.naziv)">
+				Izmeni
+				</button>
 			</td>
 		   </tr>
 		 </tbody>

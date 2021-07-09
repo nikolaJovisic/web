@@ -213,7 +213,7 @@ Vue.component('prikazPorudzbina', {
 			<button v-on:click="pretraga">Pretraga</button>
 		</div>
 		<div>
-			Tip restorana:
+			<label v-if="uloga !== 'Menadzer'">Tip restorana:</label>
 			<select name="tip" v-model="tipFilter" v-if="uloga !== 'Menadzer'">
 				<option></option>
 				<option>Italijanski</option>
@@ -228,7 +228,7 @@ Vue.component('prikazPorudzbina', {
 				<option>CekaDostavljaca</option>
 				<option>UTransportu</option>
 				<option v-if="uloga != 'Dostavljac'">Dostavljena</option>
-				<option v-if="uloga != 'Dostavljac'">Okazana</option>
+				<option v-if="uloga != 'Dostavljac'">Otkazana</option>
 			</select>
 		</div>
 		<table id="table">
