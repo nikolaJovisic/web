@@ -79,6 +79,25 @@ Vue.component('prikazPorudzbina', {
 					}
 				})
 		},
+		"oceni": function obrada(porudzbina) {
+			sjwt = window.localStorage.getItem('jwt');
+			axios.post('/oceni', {
+			}, {
+				params: {
+					IDPorudzbine: porudzbina.ID,
+					jwt: sjwt
+				}
+			})
+				.then(response => {
+					if (response.data) {
+						this.$router.push('/prikazKomentara/' + response.data)
+					}
+					else
+					{
+						alert('Greška prilikom ocenjivanja porudžbine')
+					}
+				})
+		},
 
 		"nijeZatrazena": function nijeZatrazena(porudzbina) {
 			sjwt = window.localStorage.getItem('jwt');
@@ -281,6 +300,11 @@ Vue.component('prikazPorudzbina', {
 			<td v-else-if="porudzbina.status === 'Obrada' && uloga === 'Kupac'">
 			<button v-on:click="otkazi(porudzbina)">
 				Otkaži
+			</button>
+			</td>
+			<td v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac'">
+			<button v-on:click="oceni(porudzbina)">
+				Oceni
 			</button>
 			</td>
 			<td v-else-if="porudzbina.status === 'UPripremi' && uloga === 'Menadzer'">

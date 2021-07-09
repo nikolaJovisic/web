@@ -26,6 +26,7 @@ import com.google.gson.JsonSerializer;
 
 import beans.Artikal;
 import beans.Dostavljac;
+import beans.Komentar;
 import beans.Korisnik;
 import beans.Korpa;
 import beans.Porudzbina;
@@ -40,6 +41,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import repositories.KomentarRepository;
 import repositories.KupacRepository;
 import repositories.MenadzerRepository;
 import repositories.PonudaRepository;
@@ -60,6 +62,7 @@ public class SparkAppMain {
 	private static KupacRepository kupacRepository = new KupacRepository();
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
 	private static PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
+	private static KomentarRepository komentarRepository = new KomentarRepository();
 	private static PonudaRepository ponudaRepository = new PonudaRepository();
 	private static RestoranService restoranService = new RestoranService();
 	private static PorudzbinaService porudzbinaService = new PorudzbinaService();
@@ -293,6 +296,69 @@ public class SparkAppMain {
 			porudzbinaService.updateKupci(p);
 			porudzbineRepository.update(ID, p);
 			return true;
+		});
+		post("/oceni", (req, res) -> {
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("IDPorudzbine");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Kupac)
+				return null;
+			Porudzbina p = porudzbineRepository.getOne(ID);
+			if (p.getStatus() != StatusPorudzbine.Dostavljena)
+				return null;
+			Komentar komentar = null;
+			for (Komentar k : komentarRepository.getAll())
+			{
+				if (k.getKupac().getKorisnickoIme().equals(korisnik.getKorisnickoIme()) && k.getRestoran().getNaziv().equals(p.getRestoran().getNaziv()))
+					komentar = k;
+			}
+			if (komentar == null)
+			{
+				String IDKomentar = komentarRepository.GetNewID();
+				komentarRepository.addOne(new Komentar(IDKomentar, (Kupac) korisnik,  p.getRestoran(), "", 0));
+				return IDKomentar;
+			}
+			return gson.toJson(komentar.getID());
+		});
+		get("/komentar", (req, res) -> {
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("ID");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Kupac)
+				return null;
+			Kupac kupac = (Kupac) korisnik;
+			Komentar komentar = komentarRepository.getOne(ID);
+			if (komentar == null) 
+				return false;
+			boolean belongsToKupac = false;
+			for (Porudzbina p : kupac.getSvePorudzbine())
+			{
+				if (p.getRestoran().getNaziv().equals(komentar.getRestoran().getNaziv()))
+					belongsToKupac = true;
+			}
+			if (!belongsToKupac)
+				return false;
+			return gson.toJson(komentar);
+		});
+		post("/komentar", (req, res) -> {
+			String username = getUsername(req.queryParams("jwt"));
+			String ID = req.queryParams("ID");
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Kupac)
+				return null;
+			Kupac kupac = (Kupac) korisnik;
+			Komentar komentar = komentarRepository.getOne(ID);
+			if (komentar == null) 
+				return false;
+			boolean belongsToKupac = false;
+			for (Porudzbina p : kupac.getSvePorudzbine())
+			{
+				if (p.getRestoran().getNaziv().equals(komentar.getRestoran().getNaziv()))
+					belongsToKupac = true;
+			}
+			if (!belongsToKupac)
+				return false;
+			return gson.toJson(komentar);
 		});
 		post("/pripremi", (req, res) -> {
 

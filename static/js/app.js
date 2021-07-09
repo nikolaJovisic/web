@@ -9,6 +9,7 @@ const SviKorisnici = {template : '<sviKorisnici/>'}
 const NoviRestoran = {template : '<noviRestoran/>'}
 const NoviArtikal = {template : '<noviArtikal/>'}
 const PrikazRestorana = {template : '<prikazRestorana/>'}
+const PrikazKomentara = {template : '<prikazKomentara/>'}
 const RestoraniPrikaz = {template : '<restoraniPrikaz/>'}
 
 const router = new VueRouter({
@@ -27,6 +28,7 @@ const router = new VueRouter({
 		{path: '/noviArtikal', component: NoviArtikal},
 		{path: '/noviRestoran', component: NoviRestoran},
 		{path: '/prikazRestorana/:naziv', component: PrikazRestorana},
+		{path: '/prikazKomentara/:id', component: PrikazKomentara},
 		{path: '/restoraniPrikaz', component: RestoraniPrikaz}
 	  ]
 });
