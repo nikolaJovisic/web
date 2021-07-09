@@ -48,7 +48,7 @@ Vue.component('prikazRestorana', {
 		  for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
 			mapa = Object()
 			mapa[this.restoran.dostupniArtikli[i].naziv] = this.restoran.dostupniArtikli[i].count !== null ? this.restoran.dostupniArtikli[i].count : 0
-			console.log(mapa)
+			if (this.UkupnaCena == 0) return
 		}
 		  axios
 					.post('/mojaNovaPorudzbina', 

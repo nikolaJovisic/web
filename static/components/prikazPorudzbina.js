@@ -35,6 +35,14 @@ Vue.component('prikazPorudzbina', {
 
 
 	methods: {
+		"zaKomentarisanje": function zaKomentarisanje(porudzbina) {
+			for (restoran of this.restoraniZaKomentarisanje)
+			{
+				if (porudzbina.restoran.naziv == restoran)
+					return true;
+			}
+			return false;
+		},
 		"otkazi": function otkazi(porudzbina) {
 			sjwt = window.localStorage.getItem('jwt');
 			axios.post('/otkazi', {
@@ -221,6 +229,7 @@ Vue.component('prikazPorudzbina', {
 					this.porudzbine = response.data;
 				}
 			})
+		if (window.localStorage.getItem('role') == 'Kupac')
 		axios.get("/sviRestoraniZaKomentarisanje", {
 			params: {
 				jwt: sjwt
@@ -230,7 +239,7 @@ Vue.component('prikazPorudzbina', {
 		})
 			.then(response => {
 				if (response.data) {
-					this.komentari = response.data;
+					this.restoraniZaKomentarisanje = response.data;
 				}
 			})
 	},
@@ -315,7 +324,7 @@ Vue.component('prikazPorudzbina', {
 				Otkaži
 			</button>
 			</td>
-			<td v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac' && noComment(porudzbina)">
+			<td v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac' && zaKomentarisanje(porudzbina)">
 			<button v-on:click="oceni(porudzbina)">
 				Oceni
 			</button>
