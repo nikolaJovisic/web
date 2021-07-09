@@ -45,6 +45,25 @@ public class Korpa {
 	public void setCena(double cena) {
 		this.cena = cena;
 	}
+	public boolean checkCena(Restoran restoran) {
+
+		double popust = kupac.getPopust();
+		double ukupnaCena = 0;
+		
+		for(Map.Entry<String, Integer> entry : artikli.entrySet())  {
+			String nazivArtikla = entry.getKey();
+			int kolicina = entry.getValue();
+			double cenaArtikla = restoran.getCenaArtikla(nazivArtikla).doubleValue();
+			ukupnaCena += cenaArtikla * kolicina;
+		}
+		
+		ukupnaCena *= (1 - popust/100);
+		
+		System.out.println(cena);
+		System.out.println(ukupnaCena);
+		
+		return Math.abs(ukupnaCena - cena) < 1;
+	}
 	
 	
 }
