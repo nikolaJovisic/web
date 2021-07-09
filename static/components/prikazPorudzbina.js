@@ -2,6 +2,7 @@ Vue.component('prikazPorudzbina', {
 	data: function() {
 		return {
 			porudzbine: null,
+			ponude: null,
 			ascending: false,
 			uloga: null,
 			nameSearch: '',
@@ -109,23 +110,12 @@ Vue.component('prikazPorudzbina', {
 		},
 
 		"nijeZatrazena": function nijeZatrazena(porudzbina) {
-			sjwt = window.localStorage.getItem('jwt');
-			axios.get("/porudzbinaZatrazena",
-				{
-					headers: {
-						'Authorization': sjwt
-					},
-					contentType: "application/json",
-					dataType: "json",
-					params: {
-						porudzbinaID: porudzbina.ID
-
-					}
-				})
-				.then(response => {
-					this.res = !response.data
-				})
-				
+			for (let i = 0; i < this.ponude.length; ++i) {
+				if(this.ponude[i].porudzbinaID === porudzbina.ID) {
+					return false;
+				}
+			}
+			return true;
 		},
 
 		zatrazi(porudzbina) {
@@ -142,8 +132,8 @@ Vue.component('prikazPorudzbina', {
 		
 		moguceZatraziti(porudzbina) {
 
-			this.nijeZatrazena(porudzbina)
-			return porudzbina.status === 'CekaDostavljaca' && this.uloga === 'Dostavljac' && this.res;
+			
+			return porudzbina.status === 'CekaDostavljaca' && this.uloga === 'Dostavljac' && this.nijeZatrazena(porudzbina);
 		},
 		
 		
@@ -240,6 +230,7 @@ Vue.component('prikazPorudzbina', {
 			.then(response => {
 				if (response.data) {
 					this.restoraniZaKomentarisanje = response.data;
+					this.ponude = response.data;
 				}
 			})
 	},
@@ -277,6 +268,9 @@ Vue.component('prikazPorudzbina', {
 		<table id="table">
 		 <thead>
 		   <tr>
+		   <th>
+				ID
+		   </th>
 		   <th v-if="uloga !== 'Menadzer'" v-on:click="sortTable('restoran.naziv')">
 		   		Restoran
 		   </th>
@@ -296,6 +290,9 @@ Vue.component('prikazPorudzbina', {
 		 </thead>
 		 <tbody>
 		   <tr v-for="porudzbina in filtriranePorudzbine">
+		   <td >
+			   {{porudzbina.ID}}
+			</td>
 		   	<td v-if="uloga !== 'Menadzer'">
 			   {{porudzbina.restoran.naziv}}
 			</td>
