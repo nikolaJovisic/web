@@ -7,7 +7,7 @@ Vue.component('prikazRestorana', {
 			sortColumn: '',
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
-			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
+			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }, {name: "kolicina"}]
 		}
 	},
 	methods: {
@@ -116,7 +116,7 @@ Vue.component('prikazRestorana', {
 			<img :src="artikal.slika" /> 
 			</td>
 			<td v-if="role === 'Kupac'">
-				Kolicina: <input type="number" v-model="artikal.count" min="0"/>
+				Broj: <input type="number" v-model="artikal.count" min="0"/>
 			</td>
 			<td v-else-if="role === 'Menadzer'">
 				<button v-on:click="izmeni(artikal.naziv)">
@@ -127,7 +127,7 @@ Vue.component('prikazRestorana', {
 		 </tbody>
 	   </table>
 	   <div v-if="role === 'Kupac'">
-	   Ukupna cena: {{UkupnaCena}}
+	   Ukupna cena: {{UkupnaCena}} din
 	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
     	</div>
     </div>

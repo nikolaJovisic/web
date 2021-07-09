@@ -8,7 +8,7 @@ public class Artikal {
 	private BigDecimal cena;
 	private TipArtikla tip;
 	private Restoran restoran;
-	private int kolicina;
+	private String kolicina;
 	private String opis;
 	private String slika;
 	public String getNaziv() {
@@ -35,10 +35,10 @@ public class Artikal {
 	public void setRestoran(Restoran restoran) {
 		this.restoran = restoran;
 	}
-	public int getKolicina() {
+	public String getKolicina() {
 		return kolicina;
 	}
-	public void setKolicina(int kolicina) {
+	public void setKolicina(String kolicina) {
 		this.kolicina = kolicina;
 	}
 	public String getOpis() {
