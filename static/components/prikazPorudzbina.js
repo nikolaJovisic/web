@@ -18,6 +18,7 @@ Vue.component('prikazPorudzbina', {
 	},
 	computed: {
 
+
 		filtriranePorudzbine: function() {
 			if (this.porudzbine == null) return null;
 			tip_filter = this.tipFilter
@@ -25,7 +26,7 @@ Vue.component('prikazPorudzbina', {
 			return this.porudzbine.filter(function(row) {
 				tip = row.restoran.tip
 				status = row.status
-				return tip.includes(tip_filter) && status.includes(status_filter)
+				return tip.includes(tip_filter) && (status_filter === 'NijeDostavljena' ? !status.includes('Dostavljena') : status.includes(status_filter))
 			});
 		}
 
@@ -225,6 +226,7 @@ Vue.component('prikazPorudzbina', {
 				<option></option>
 				<option v-if="uloga != 'Dostavljac'">Obrada</option>
 				<option v-if="uloga != 'Dostavljac'">UPripremi</option>
+				<option v-if="uloga == 'Kupac'">NijeDostavljena</option>
 				<option>CekaDostavljaca</option>
 				<option>UTransportu</option>
 				<option v-if="uloga != 'Dostavljac'">Dostavljena</option>
