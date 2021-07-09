@@ -19,70 +19,87 @@ Vue.component('noviRestoran', {
 				event.target.submit();
 			}
 		},
-		
-		onChangeFileUpload ($event) {
+
+		onChangeFileUpload($event) {
 			this.file = this.$refs.file.files[0];
 			this.encodeImage(this.file)
-		  },
-		  encodeImage (input) {
-			if (input) {
-			  const reader = new FileReader()
-			  reader.onload = (e) => {
-				this.slika = e.target.result
-			  }
-			  reader.readAsDataURL(input)
-			}
-		  },
+		},
+		encodeImage(input) {
+	if(input) {
+		const reader = new FileReader()
+		reader.onload = (e) => {
+			this.slika = e.target.result
+		}
+		reader.readAsDataURL(input)
+	}
+},
 
-		checkForm: function(e) {
+	checkForm: function(e) {
+		e.preventDefault();
+		if (!this.naziv || !this.tip || !this.lokacija || !this.lokacija.geografskaDuzina || !this.lokacija.geografskaSirina ||
+			!this.lokacija.adresa || !this.lokacija.grad || !this.lokacija.drzava || !this.slika) {
+			alert("Morate popuniti sva polja")
 			e.preventDefault();
-			if (!this.naziv || !this.tip || !this.lokacija || !this.lokacija.geografskaDuzina || !this.lokacija.geografskaSirina ||
-				!this.lokacija.adresa || !this.lokacija.grad || !this.lokacija.drzava || !this.slika) {
-				alert("Morate popuniti sva polja")
-				e.preventDefault();
-			}
-			else {
-				axios
-					.post('/noviRestoran', {
-						naziv: this.naziv,
-						tip: this.tip,
-						lokacija: this.lokacija,
-						slika: this.slika
-					}, { params: { menadzer: this.menadzer } })
-					.then(response => (this.checkResponse(response, e)));
-				if (this.menadzeri.length === 0) {
-					alert("Trenutno nema slobodnih menadzera, kreirati novog koji će biti povezan sa ovim restoranom.")
-					this.$router.push('/registracija');
-					localStorage.setItem("aktuelniRestoran", this.naziv);			
-				}
+		}
+		else {
+			axios
+				.post('/noviRestoran', {
+					naziv: this.naziv,
+					tip: this.tip,
+					lokacija: this.lokacija,
+					slika: this.slika
+				}, { params: { menadzer: this.menadzer } })
+				.then(response => (this.checkResponse(response, e)));
+			if (this.menadzeri.length === 0) {
+				alert("Trenutno nema slobodnih menadzera, kreirati novog koji će biti povezan sa ovim restoranom.")
+				this.$router.push('/registracija');
+				localStorage.setItem("aktuelniRestoran", this.naziv);
 			}
 		}
+	}
 	},
+
 
 	mounted() {
-		this.lokacija = {};
-		this.lokacija.geografskaDuzina = null;
-		this.lokacija.geografskaSirina = null;
-		this.lokacija.adresa = null;
-		this.lokacija.grad = null;
-		this.lokacija.drzava = null;
+	
+
+	this.lokacija = {};
+	this.lokacija.geografskaDuzina = null;
+	this.lokacija.geografskaSirina = null;
+	this.lokacija.adresa = null;
+	this.lokacija.grad = null;
+	this.lokacija.drzava = null;
 
 
-		axios.get("/slobodniMenadzeri", {
-			headers: {
-			},
-			contentType: "application/json",
-			dataType: "json",
+	axios.get("/slobodniMenadzeri", {
+		headers: {
+		},
+		contentType: "application/json",
+		dataType: "json",
+	})
+		.then(response => {
+			if (response.data) {
+				this.menadzeri = response.data;
+			}
 		})
-			.then(response => {
-				if (response.data) {
-					this.menadzeri = response.data;
-				}
-			})
-			
-	},
+
+		this.$root.$on('longitude', (text) => {
+			this.lokacija.geografskaDuzina = text; 
+			this.$forceUpdate();
+			});
+		this.$root.$on('latitude', (text) => { 
+			this.lokacija.geografskaSirina = text;
+			this.$forceUpdate();});
+
+
+},
 
 	template: `
+	
+	
+	<div>   
+	<mapa/>
+	<div>
 	<form action="#/" method="post" @submit="checkForm">
 		<table>
 			<tr>
@@ -100,11 +117,11 @@ Vue.component('noviRestoran', {
 			</tr>
 			<tr>
 				<td>Geografska dužina</td>
-				<td><input v-model="lokacija.geografskaDuzina" type="text" name="geografskaDuzina"></td>
+				<td><input v-model="lokacija.geografskaDuzina" id = "gd"type="text"></td>
 			</tr>
 			<tr>
 				<td>Geografska širina</td>
-				<td><input v-model="lokacija.geografskaSirina" type="text" name="geografskaSirina"></td>
+				<td><input v-model="lokacija.geografskaSirina" id = "gs" type="text"></td>
 			</tr>
 			<tr>
 				<td>Adresa</td>
@@ -133,6 +150,8 @@ Vue.component('noviRestoran', {
 				<td><input type="submit" value="Registruj"></td>
 			</tr>
 		</table>
-	</form>             
+	</form>  
+	</div>          
+	</div>              
 `
 })
