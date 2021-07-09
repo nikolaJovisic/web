@@ -198,6 +198,28 @@ public class SparkAppMain {
 		get("/slobodniMenadzeri", (req, res) -> {
 			return gson.toJson(menadzerRepository.getSlobodniMenadzeriUsernames());
 		});
+		get("/sviKupciZaRestoran", (req, res) -> {
+			List<Kupac> kupci = new ArrayList<Kupac>();
+			String username = getUsername(req.queryParams("jwt"));
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return null;
+			Menadzer m = (Menadzer) korisnik;
+			Restoran restoran = restoranRepository.getOne(m.getRestoran().getNaziv());
+			for (Kupac kupac : kupacRepository.getAll())
+			{
+				for (Porudzbina porudzbina : kupac.getSvePorudzbine())
+				{
+					if (porudzbina.getRestoran().getNaziv().equals(restoran.getNaziv()))
+					{
+						kupci.add(kupac);
+						break;
+					}
+				}
+			}
+			
+			return gson.toJson(kupci);
+		});
 
 		get("/restoranPoNazivu", (req, res) -> {
 			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));

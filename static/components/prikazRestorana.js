@@ -11,10 +11,6 @@ Vue.component('prikazRestorana', {
 		}
 	},
 	methods: {
-		"proba": function proba() {
-			console.log("proba")
-			console.log(this.restoran)
-		  },
 		"sortTable": function sortTable(col) {
 			if (this.sortColumn === col) {
 				this.ascending = !this.ascending;
