@@ -114,6 +114,8 @@ public class SparkAppMain {
 			String jwt = req.queryParams("jwt");
 			String username = getUsername(jwt);
 			String nazivRestorana = menadzerRepository.getNazivRestorana(username);
+			if (restoranRepository.getArtikal(nazivRestorana, artikal.getNaziv()) != null)
+				return false;
 			restoranRepository.addArtikal(nazivRestorana, artikal);
 			return true;
 		});
@@ -222,7 +224,18 @@ public class SparkAppMain {
 		});
 
 		get("/restoranPoNazivu", (req, res) -> {
+			
 			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));
+		});
+		get("/restoranZaMenadzera", (req, res) -> {
+			String username = getUsername(req.queryParams("jwt"));
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return null;
+			Menadzer m = (Menadzer) korisnik;
+			Restoran restoran = restoranRepository.getOne(m.getRestoran().getNaziv());
+			
+			return gson.toJson(restoran);
 		});
 		
 		get("/svePonude", (req, res) -> {

@@ -75,7 +75,7 @@ Vue.component('noviArtikal', {
 						naziv: this.naziv,
 						cena: this.cena,
 						tip: this.tip,
-						slika: this.this.slika,
+						slika: this.slika,
 						opis: this.opis,
 						kolicina: this.kolicina,
 					},
@@ -104,7 +104,7 @@ Vue.component('noviArtikal', {
 		if (this.registracijaNovogArtikla === "false") {
 			this.editMode = true
 			axios
-				.post('/izmenaPodatakaArtikla', {}, { params: { naziv: this.naziv, jwt: this.jwt } })
+				.post('/izmenaPodatakaArtikla', {}, { params: { naziv: localStorage.getItem('nazivArtikla'), jwt: this.jwt } })
 				.then(response => (this.izmenaResponse(response)));
 		}
 	},
@@ -141,6 +141,10 @@ Vue.component('noviArtikal', {
 			<tr>
 				<td>Kolicina</td>
 				<td><input v-model="kolicina" type="text"></td>
+			</tr>
+			<tr>
+				<td>Slika:</td>
+				<td><img :src="slika"></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="Registruj"></td>

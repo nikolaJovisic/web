@@ -7,10 +7,15 @@ Vue.component('prikazRestorana', {
 			sortColumn: '',
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
-			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }]
+			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }, {name: "kolicina"}]
 		}
 	},
 	methods: {
+		izmeni: function(val) {
+			localStorage.setItem('registracijaNovogArtikla', false);
+			localStorage.setItem('nazivArtikla', val);
+			this.$router.push('/noviArtikal/')
+		},
 		"sortTable": function sortTable(col) {
 			if (this.sortColumn === col) {
 				this.ascending = !this.ascending;
@@ -111,13 +116,18 @@ Vue.component('prikazRestorana', {
 			<img :src="artikal.slika" /> 
 			</td>
 			<td v-if="role === 'Kupac'">
-				Kolicina: <input type="number" v-model="artikal.count" min="0"/>
+				Broj: <input type="number" v-model="artikal.count" min="0"/>
+			</td>
+			<td v-else-if="role === 'Menadzer'">
+				<button v-on:click="izmeni(artikal.naziv)">
+				Izmeni
+				</button>
 			</td>
 		   </tr>
 		 </tbody>
 	   </table>
 	   <div v-if="role === 'Kupac'">
-	   Ukupna cena: {{UkupnaCena}}
+	   Ukupna cena: {{UkupnaCena}} din
 	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
     	</div>
     </div>

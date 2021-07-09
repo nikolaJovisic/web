@@ -2,6 +2,7 @@ Vue.component('menadzer', {
 	data: function() {
 		return {
 			kupci: null,
+			restoran: null,
 			jwt: localStorage.getItem("jwt"),
 			ime: null
 		}
@@ -17,7 +18,12 @@ Vue.component('menadzer', {
 		odjava() {
 			localStorage.setItem('jwt', -1);
 			localStorage.setItem("role", "");
-		}
+		},
+		"prikazRestorana": function prikazRestorana(naziv) {
+
+			this.$router.push('/prikazRestorana/' + naziv)
+			
+		  }
 	},
 	mounted() {
 		axios.get("/sviKupciZaRestoran", {
@@ -32,6 +38,18 @@ Vue.component('menadzer', {
 					this.kupci = response.data;
 				}
 			})
+			axios.get("/restoranZaMenadzera", {
+				headers: {
+				},
+				 params: {jwt: this.jwt},
+				contentType: "application/json",
+				dataType: "json",
+			})
+				.then(response => {
+					if (response.data) {
+						this.restoran = response.data;
+					}
+				})
 
 	},
 	template: `
@@ -40,7 +58,8 @@ Vue.component('menadzer', {
 		
 	    <a href="/#/" v-on:click="odjava()">Odjava</a>   <br/>
 		<a href="/#/registracija" v-on:click="novi(false)">Pregled i izmena ličnih podataka</a> <br/>
-		<a href="/#/noviArtikal" v-on:click="noviArtikal(true)">Dodavanje artikla</a>
+		<a href="/#/noviArtikal" v-on:click="noviArtikal(true)">Dodavanje artikla</a> <br/>
+		<a v-on:click="prikazRestorana(restoran.naziv)">Prikaz restorana</a>
 		<prikazPorudzbina/><br/>
 		<h1>Prikaz ponuda:</h1>
 		<ponudePrikaz/>
