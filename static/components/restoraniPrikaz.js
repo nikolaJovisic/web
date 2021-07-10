@@ -170,6 +170,8 @@ Vue.component('restoraniPrikaz', {
 			   {{restoran.tip}}
 			</td>
 			<td>
+			{{restoran.lokacija.drzava}}<br>
+			{{restoran.lokacija.grad}}<br>
 			   {{restoran.lokacija.adresa}}<br>
 			   {{restoran.lokacija.geografskaDuzina}},
 			   {{restoran.lokacija.geografskaSirina}}
@@ -195,6 +197,8 @@ Vue.component('restoraniPrikaz', {
 			   {{restoran.tip}}
 			</td>
 			<td>
+			{{restoran.lokacija.drzava}}<br>
+			{{restoran.lokacija.grad}}<br>
 			   {{restoran.lokacija.adresa}}<br>
 			   {{restoran.lokacija.geografskaDuzina}},
 			   {{restoran.lokacija.geografskaSirina}}

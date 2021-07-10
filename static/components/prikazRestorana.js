@@ -122,15 +122,27 @@ Vue.component('prikazRestorana', {
     <div class="center">
 	<h1 >{{restoran.naziv}}</h1>
 	<img :src="restoran.slika" class="center"> <br/>
-    {{restoran.tip}} <br/>
+    <h3>Tip: {{restoran.tip}}</h3>
+	<h3>
     Status:
 	<span v-if="restoran.status"><label class="Otvoreno">Otvoren</label>
 	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Zatvori</button>
 	</span>
 	<span v-else><label class="Zatvoreno">Zatvoren</label>
 	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Otvori</button>
-	</span>
-	<br/>
+	</span></h3>
+	<h3 >
+	Lokacija:
+	{{restoran.lokacija.drzava}}, 
+			{{restoran.lokacija.grad}}, 
+			   {{restoran.lokacija.adresa}},
+			   Koordinate: 
+			   {{restoran.lokacija.geografskaDuzina}}, 
+			   {{restoran.lokacija.geografskaSirina}}</h3><h3 >
+			Ocena:
+			{{restoran.prosecnaOcena}}/5
+			
+			</h3>
 	<h1>Artikli:</h1>
     <table >
 		 <thead>
