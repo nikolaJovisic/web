@@ -155,7 +155,22 @@ public class KorisnikService {
 		}
 		return otkazanePordzbine;
 	}
+
+	public List<Korisnik> filterKupci(List<Kupac> unfiltered, String nameSearch, String surnameSearch,
+			String usernameSearch) {
+		List<Korisnik> filtered = new ArrayList<Korisnik>();
+		for (Kupac kupac : unfiltered)
+		{
+			Korisnik korisnik = (Korisnik)kupac;
+			if (korisnik.getIme().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
+					korisnik.getPrezime().toLowerCase().startsWith(surnameSearch.toLowerCase())&&
+					korisnik.getKorisnickoIme().toLowerCase().startsWith(usernameSearch.toLowerCase()))
+			{
+				filtered.add(korisnik);
+			}
+		}
+		return filtered;
 	
 	
-	
+	}
 }

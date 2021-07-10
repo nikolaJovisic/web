@@ -34,14 +34,28 @@ Vue.component('sviKorisnici', {
 	methods: {
 		"pretraga": function(e)
 		{
-			axios.get("/sviKorisnici",
-			{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
-				.then(response => {
-					if(response.data)
-					{ 
-						this.korisniciPrikaz = response.data;
-					}
-				})
+			if(this.prikazSumnjivih) {
+				axios.get("/sumnjiviKupci",
+				{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
+					.then(response => {
+						if(response.data)
+						{ 
+							this.sumnjiviKupci = response.data;
+							this.korisniciPrikaz = response.data;
+						}
+					})
+
+			} else {
+				axios.get("/sviKorisnici",
+				{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
+					.then(response => {
+						if(response.data)
+						{ 
+							this.korisnici = response.data;
+							this.korisniciPrikaz = response.data;
+						}
+					})
+			}
 		},
 
 		"sortTable": function sortTable(col) {
