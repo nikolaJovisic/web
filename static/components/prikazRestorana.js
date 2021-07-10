@@ -34,6 +34,16 @@ Vue.component('prikazRestorana', {
 				return 0;
 			  })
 		  },
+		  "promeniStatus": function promeniStatus()
+		  {
+			axios
+				.post('/promeniStatus', {}, { params: { naziv: this.restoran.naziv, jwt: this.jwt } })
+				.then(response => {
+					if (response.data) {
+						this.$router.go();
+					}
+				});
+		  },
 		  
 		  getUkupnaCena() {
 		  let sum = 0;
@@ -107,7 +117,14 @@ Vue.component('prikazRestorana', {
 	<h1 class="center">{{restoran.naziv}}</h1>
 	<img :src="restoran.slika" class="center"> <br/>
     {{restoran.tip}} <br/>
-    {{restoran.status}} <br/>
+    Status:
+	<span v-if="restoran.status">Otvoren
+	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Zatvori</button>
+	</span>
+	<span v-else>Zatvoren
+	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Otvori</button>
+	</span>
+	<br/>
     <table class="center">
 		 <thead>
 		   <tr>
@@ -138,7 +155,7 @@ Vue.component('prikazRestorana', {
 	   </table>
 	   <div v-if="role === 'Kupac'">
 	   Ukupna cena: {{UkupnaCena}} din
-	   <button v-on:click="posaljiPorudzbinu()">Poruči</button>
+	   <button v-on:click="posaljiPorudzbinu()" v-if="restoran.status">Poruči</button>
     	</div>
 		
 		<komentariPrikaz v-bind:restoran="restoran"></komentariPrikaz>
