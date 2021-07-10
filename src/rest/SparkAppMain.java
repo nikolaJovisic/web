@@ -53,9 +53,7 @@ import services.LocalDateAdapter;
 import services.PorudzbinaService;
 import services.RestoranService;
 
-
 public class SparkAppMain {
-	
 
 	private static Gson gson = new Gson();
 	private static KorisnikService korisnikService = new KorisnikService();
@@ -69,7 +67,7 @@ public class SparkAppMain {
 	private static RestoranService restoranService = new RestoranService();
 	private static PorudzbinaService porudzbinaService = new PorudzbinaService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-	
+
 	public static void main(String[] args) throws Exception {
 		port(8081);
 
@@ -101,7 +99,7 @@ public class SparkAppMain {
 		post("/registracija", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
-			if(!korisnikService.register(korisnik)) {
+			if (!korisnikService.register(korisnik)) {
 				return false;
 			}
 			String nazivRestorana = req.queryParams("restoran");
@@ -143,7 +141,7 @@ public class SparkAppMain {
 				return gson.toJson(unfiltered);
 			return gson.toJson(korisnikService.filterUsers(unfiltered, nameSearch, surnameSearch, usernameSearch));
 		});
-		
+
 		get("/sumnjiviKupci", (req, res) -> {
 			List<Kupac> unfiltered = korisnikService.getSumnjiviKupci();
 			String nameSearch = req.queryParams("nameSearch");
@@ -154,7 +152,7 @@ public class SparkAppMain {
 				return gson.toJson(unfiltered);
 			return gson.toJson(korisnikService.filterKupci(unfiltered, nameSearch, surnameSearch, usernameSearch));
 		});
-		
+
 		get("/sviRestorani", (req, res) -> {
 			List<Restoran> unfiltered = restoranRepository.getAll();
 			String nameSearch = req.queryParams("nameSearch");
@@ -163,11 +161,12 @@ public class SparkAppMain {
 			String ocenaSearch = req.queryParams("ocenaSearch");
 			String geografskaDuzina = req.queryParams("geografskaDuzina");
 			String geografskaSirina = req.queryParams("geografskaSirina");
-			
-			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null || geografskaDuzina == null || geografskaSirina ==null)
+
+			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null
+					|| geografskaDuzina == null || geografskaSirina == null)
 				return gson.toJson(unfiltered);
-			return gson.toJson(
-					restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch, geografskaDuzina, geografskaSirina));
+			return gson.toJson(restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch,
+					ocenaSearch, geografskaDuzina, geografskaSirina));
 
 		});
 		get("/sviRestoraniZaKomentarisanje", (req, res) -> {
@@ -178,16 +177,14 @@ public class SparkAppMain {
 			if (korisnik.getUloga() != Uloga.Kupac)
 				return null;
 			Kupac kupac = (Kupac) korisnik;
-			for (Restoran r : restoranRepository.getAll())
-			{
+			for (Restoran r : restoranRepository.getAll()) {
 				boolean zaKomentarisanje = true;
-				for (Komentar k : komentarRepository.getAll())
-				{
-					if (k.isOdobren() && k.getKupac().getKorisnickoIme().equals(kupac.getKorisnickoIme()) && k.getRestoran().getNaziv().equals(r.getNaziv()))
-					{
+				for (Komentar k : komentarRepository.getAll()) {
+					if (k.isOdobren() && k.getKupac().getKorisnickoIme().equals(kupac.getKorisnickoIme())
+							&& k.getRestoran().getNaziv().equals(r.getNaziv())) {
 						zaKomentarisanje = false;
 						break;
-					}					
+					}
 				}
 				if (zaKomentarisanje)
 					naziviRestorana.add(r.getNaziv());
@@ -196,9 +193,8 @@ public class SparkAppMain {
 		});
 
 		get("/svePorudzbine", (req, res) -> {
-			Gson gsonReg = new GsonBuilder()
-	                .setPrettyPrinting()
-	                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter()).create();
+			Gson gsonReg = new GsonBuilder().setPrettyPrinting()
+					.registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter()).create();
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			Korisnik korisnik = korisnikService.FindByID(username);
@@ -223,16 +219,18 @@ public class SparkAppMain {
 			} else {
 				unfiltered = porudzbineRepository.getAll();
 			}
-			
+
 			String nameSearch = req.queryParams("nameSearch");
 			String odSearch = req.queryParams("odSearch");
 			String doSearch = req.queryParams("doSearch");
 			String odDatumPorudzbine = req.queryParams("odDatumPorudzbine");
 			String doDatumPorudzbine = req.queryParams("doDatumPorudzbine");
-			
-			if (nameSearch == null || odSearch == null || doSearch == null || odDatumPorudzbine == null || doDatumPorudzbine == null)
+
+			if (nameSearch == null || odSearch == null || doSearch == null || odDatumPorudzbine == null
+					|| doDatumPorudzbine == null)
 				return gsonReg.toJson(unfiltered);
-			return gsonReg.toJson(porudzbinaService.filter(unfiltered, nameSearch, odSearch, doSearch, odDatumPorudzbine, doDatumPorudzbine));
+			return gsonReg.toJson(porudzbinaService.filter(unfiltered, nameSearch, odSearch, doSearch,
+					odDatumPorudzbine, doDatumPorudzbine));
 		});
 
 		get("/checkJWT", (req, res) -> {
@@ -254,22 +252,19 @@ public class SparkAppMain {
 				return null;
 			Menadzer m = (Menadzer) korisnik;
 			Restoran restoran = restoranRepository.getOne(m.getRestoran().getNaziv());
-			for (Kupac kupac : kupacRepository.getAll())
-			{
-				for (Porudzbina porudzbina : kupac.getSvePorudzbine())
-				{
-					if (porudzbina.getRestoran().getNaziv().equals(restoran.getNaziv()))
-					{
+			for (Kupac kupac : kupacRepository.getAll()) {
+				for (Porudzbina porudzbina : kupac.getSvePorudzbine()) {
+					if (porudzbina.getRestoran().getNaziv().equals(restoran.getNaziv())) {
 						kupci.add(kupac);
 						break;
 					}
 				}
 			}
-			
+
 			return gson.toJson(kupci);
 		});
 		get("/sviKomentari", (req, res) -> {
-			
+
 			String jwt = req.queryParams("jwt");
 			String nazivRestorana = req.queryParams("naziv");
 			if (jwt.equals("-1"))
@@ -278,8 +273,7 @@ public class SparkAppMain {
 			Korisnik korisnik = korisnikService.FindByID(username);
 			if (korisnik.getUloga() == Uloga.Administrator)
 				return gson.toJson(komentarRepository.getAll(nazivRestorana));
-			if (korisnik.getUloga() == Uloga.Menadzer)
-			{
+			if (korisnik.getUloga() == Uloga.Menadzer) {
 				Menadzer m = (Menadzer) korisnik;
 				if (m.getRestoran().getNaziv().equals(nazivRestorana))
 					return gson.toJson(komentarRepository.getAll(nazivRestorana));
@@ -288,7 +282,7 @@ public class SparkAppMain {
 		});
 
 		get("/restoranPoNazivu", (req, res) -> {
-			
+
 			return gson.toJson(restoranRepository.getOne(req.queryParams("naziv")));
 		});
 		get("/restoranZaMenadzera", (req, res) -> {
@@ -298,19 +292,19 @@ public class SparkAppMain {
 				return null;
 			Menadzer m = (Menadzer) korisnik;
 			Restoran restoran = restoranRepository.getOne(m.getRestoran().getNaziv());
-			
+
 			return gson.toJson(restoran);
 		});
-		
+
 		get("/svePonude", (req, res) -> {
 			return gson.toJson(ponudaRepository.getAll());
 		});
-		
+
 		get("/popust", (req, res) -> {
 			String jwt = req.queryParams("jwt");
 			if (jwt.equals("-1"))
 				return 0.0;
-			
+
 			String username = getUsername(req.queryParams("jwt"));
 			Korisnik korisnik = korisnikService.FindByID(username);
 			if (korisnik.getUloga() != Uloga.Kupac)
@@ -319,16 +313,14 @@ public class SparkAppMain {
 			double popust = kupac.getPopust();
 			return gson.toJson(popust);
 		});
-		
-		
-		
+
 		get("/porudzbinaZatrazena", (req, res) -> {
 			String auth = req.headers("Authorization");
 			String username = getUsername(auth);
 			String porudzbinaID = req.queryParams("porudzbinaID");
-			return ponudaRepository.contains(username+porudzbinaID);
+			return ponudaRepository.contains(username + porudzbinaID);
 		});
-		
+
 		post("/odobriPonudu", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().create();
 			Ponuda ponuda = gsonReg.fromJson(req.body(), Ponuda.class);
@@ -342,7 +334,7 @@ public class SparkAppMain {
 			porudzbinaService.updateKupci(porudzbineRepository.getOne(ponuda.getPorudzbinaID()));
 			return true;
 		});
-		
+
 		post("/odbijPonudu", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().create();
 			Ponuda ponuda = gsonReg.fromJson(req.body(), Ponuda.class);
@@ -397,7 +389,6 @@ public class SparkAppMain {
 			restoranRepository.update(naziv, restoran);
 			return true;
 		});
-		
 
 		post("/izmenaPodataka", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -405,7 +396,7 @@ public class SparkAppMain {
 			Korisnik korisnik = korisnikService.FindByID(username);
 			return gsonReg.toJson(korisnik);
 		});
-		
+
 		post("/obrada", (req, res) -> {
 			String username = getUsername(req.queryParams("jwt"));
 			String ID = req.queryParams("IDPorudzbine");
@@ -430,15 +421,14 @@ public class SparkAppMain {
 			if (p.getStatus() != StatusPorudzbine.Dostavljena)
 				return null;
 			Komentar komentar = null;
-			for (Komentar k : komentarRepository.getAll())
-			{
-				if (k.getKupac().getKorisnickoIme().equals(korisnik.getKorisnickoIme()) && k.getRestoran().getNaziv().equals(p.getRestoran().getNaziv()))
+			for (Komentar k : komentarRepository.getAll()) {
+				if (k.getKupac().getKorisnickoIme().equals(korisnik.getKorisnickoIme())
+						&& k.getRestoran().getNaziv().equals(p.getRestoran().getNaziv()))
 					komentar = k;
 			}
-			if (komentar == null)
-			{
+			if (komentar == null) {
 				String IDKomentar = komentarRepository.GetNewID();
-				komentarRepository.addOne(new Komentar(IDKomentar, (Kupac) korisnik,  p.getRestoran(), "", 0));
+				komentarRepository.addOne(new Komentar(IDKomentar, (Kupac) korisnik, p.getRestoran(), "", 0));
 				return IDKomentar;
 			}
 			return gson.toJson(komentar.getID());
@@ -451,11 +441,10 @@ public class SparkAppMain {
 				return null;
 			Kupac kupac = (Kupac) korisnik;
 			Komentar komentar = komentarRepository.getOne(ID);
-			if (komentar == null) 
+			if (komentar == null)
 				return false;
 			boolean belongsToKupac = false;
-			for (Porudzbina p : kupac.getSvePorudzbine())
-			{
+			for (Porudzbina p : kupac.getSvePorudzbine()) {
 				if (p.getRestoran().getNaziv().equals(komentar.getRestoran().getNaziv()))
 					belongsToKupac = true;
 			}
@@ -471,12 +460,11 @@ public class SparkAppMain {
 				return null;
 			Kupac kupac = (Kupac) korisnik;
 			Komentar komentar = komentarRepository.getOne(ID);
-			if (komentar == null) 
+			if (komentar == null)
 				return false;
 			Restoran restoran = komentar.getRestoran();
 			boolean belongsToKupac = false;
-			for (Porudzbina p : kupac.getSvePorudzbine())
-			{
+			for (Porudzbina p : kupac.getSvePorudzbine()) {
 				if (p.getRestoran().getNaziv().equals(komentar.getRestoran().getNaziv()))
 					belongsToKupac = true;
 			}
@@ -491,7 +479,7 @@ public class SparkAppMain {
 			komentarRepository.update(komentar.getID(), komentar);
 			restoran.updateOcene();
 			restoranRepository.update(restoran.getNaziv(), restoran);
-			
+
 			return true;
 		});
 		post("/pripremi", (req, res) -> {
@@ -509,7 +497,7 @@ public class SparkAppMain {
 			porudzbineRepository.update(ID, p);
 			return true;
 		});
-		
+
 		post("/zatraziPorudzbinu", (req, res) -> {
 
 			String username = getUsername(req.queryParams("jwt"));
@@ -520,12 +508,12 @@ public class SparkAppMain {
 			Porudzbina porudzbina = porudzbineRepository.getOne(ID);
 			if (porudzbina.getStatus() != StatusPorudzbine.CekaDostavljaca)
 				return false;
-			
+
 			Ponuda ponuda = new Ponuda(username, porudzbina.getID());
 			ponudaRepository.addOne(ponuda);
 			return true;
 		});
-		
+
 		post("/dostaviPorudzbinu", (req, res) -> {
 
 			String username = getUsername(req.queryParams("jwt"));
@@ -542,10 +530,7 @@ public class SparkAppMain {
 			dostavljacRepository.updatePorudzbinaStatusToDostavljena(porudzbina.getID());
 			return true;
 		});
-		
-		
-		
-		
+
 		post("/otkazi", (req, res) -> {
 
 			String username = getUsername(req.queryParams("jwt"));
@@ -574,7 +559,7 @@ public class SparkAppMain {
 			Kupac kupac = (Kupac) korisnikService.FindByID(username);
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
 			korpa.setKupac(kupac);
-			if(!korpa.checkCena(restoran)) {
+			if (!korpa.checkCena(restoran)) {
 				return false;
 			}
 			if (korpa.getCena() == 0)
@@ -625,8 +610,12 @@ public class SparkAppMain {
 
 		post("/noviRestoran", (req, res) -> {
 			Restoran restoran = new GsonBuilder().create().fromJson(req.body(), Restoran.class);
-			restoranRepository.addOne(restoran);
-			menadzerRepository.setRestoranForMenadzerUsername(restoran, req.queryParams("menadzer"));
+			if (!restoranRepository.addOne(restoran)) {
+				return false;
+			}
+			if (req.queryParams("menadzer") != null) {
+				menadzerRepository.setRestoranForMenadzerUsername(restoran, req.queryParams("menadzer"));
+			}
 			return true;
 		});
 
@@ -639,5 +628,5 @@ public class SparkAppMain {
 		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
 		return claims.getBody().getSubject();
 	}
-	
+
 }
