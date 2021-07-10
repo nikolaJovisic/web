@@ -16,29 +16,28 @@ Vue.component('registracija', {
 		}
 	},
 	methods: {
-		checkRegistrationResponse: function(response, event) {
+		checkRegistrationResponse: function(response, e) {
 			if (!response.data) {
 				alert("Neuspešna registracija.");
+				e.preventDefault();
 			}
 			else {
 				alert("Uspešno registrovan korisnik.");
-				if(!this.registracijaNovog) {
-					this.$router.push('/mainPage');
-					
+				if(jwt === "-1" || jwt === "-2") {
+					e.target.submit();
 				}
 				else {
-					event.target.submit();
+					this.$router.push('/mainPage');
 				}
 			}
 		},
 
-		checkEditResponse: function(response, event) {
+		checkEditResponse: function(response, e) {
 			if (!response.data) {
 				alert("Neuspešna izmena.");
 			}
 			else {
 				alert("Uspešna izmena.");
-				event.preventDefault();
 				this.$router.push('/mainPage');
 			}
 		},

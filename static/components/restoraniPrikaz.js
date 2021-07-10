@@ -129,8 +129,7 @@ Vue.component('restoraniPrikaz', {
 		<h3>Pretraga po mapi:</h3>
 		<mapa/>
 		<div>
-			<input v-model="geografskaDuzina"/>
-			<input v-model="geografskaSirina"/>
+			
 			Naziv:
 			<input type="text" v-model="nameSearch">
 			Lokacija:
@@ -166,6 +165,10 @@ Vue.component('restoraniPrikaz', {
 				<option>Otvoren</option>
 				<option>Zatvoren</option>
 			</select>
+			Geografska dužina (krug od 1km):
+			<input v-model="geografskaDuzina"/>
+			Geografska širina (krug od 1km):
+			<input v-model="geografskaSirina"/>
 		</div>
 		 <table id="table">
 		 <thead>

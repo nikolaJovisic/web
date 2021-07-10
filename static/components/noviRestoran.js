@@ -15,8 +15,13 @@ Vue.component('noviRestoran', {
 				alert("Neuspešna registracija.");
 			}
 			else {
-				alert("Uspešno registrovan restoran.");
-				event.target.submit();
+				if (this.menadzeri.length === 0) {
+					alert("Uspešno registrovan restoran. Međutim, trenutno nema slobodnih menadzera, kreirati novog koji će biti povezan sa ovim restoranom.")
+					this.$router.push('/registracija');
+					localStorage.setItem("aktuelniRestoran", this.naziv);
+				} else {
+					alert("Uspešno registrovan restoran.");
+				}
 			}
 		},
 
@@ -54,11 +59,7 @@ Vue.component('noviRestoran', {
 					slika: this.slika
 				}, { params: { menadzer: this.menadzer } })
 				.then(response => (this.checkResponse(response, e)));
-			if (this.menadzeri.length === 0) {
-				alert("Trenutno nema slobodnih menadzera, kreirati novog koji će biti povezan sa ovim restoranom.")
-				this.$router.push('/registracija');
-				localStorage.setItem("aktuelniRestoran", this.naziv);
-			}
+			
 		}
 	}
 	},
