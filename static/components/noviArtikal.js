@@ -17,10 +17,11 @@ Vue.component('noviArtikal', {
 		checkRegistrationResponse: function(response, event) {
 			if (!response.data) {
 				alert("Neuspešna registracija.");
+				event.preventDefault();
 			}
 			else {
 				alert("Uspešno registrovan artikal.");
-				event.target.submit();
+				event.preventDefault();
 			}
 		},
 		onChangeFileUpload ($event) {
@@ -49,8 +50,14 @@ Vue.component('noviArtikal', {
 
 		checkForm: function(e) {
 			e.preventDefault();
+			
+
 			if (!this.naziv || !this.cena || !this.tip || !this.slika) {
 				alert("Morate popuniti naziv, cenu, tip i sliku!")
+				e.preventDefault();
+			}
+			else if (isNaN(parseFloat(this.cena))) {
+				alert("Cena nije u dobrom formatu.");
 				e.preventDefault();
 			}
 			else if (this.registracijaNovogArtikla === "true") {

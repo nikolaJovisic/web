@@ -41,6 +41,10 @@ Vue.component('noviRestoran', {
 			alert("Morate popuniti sva polja")
 			e.preventDefault();
 		}
+		else if (isNaN(parseFloat(this.lokacija.geografskaDuzina)) || isNaN(parseFloat(this.lokacija.geografskaSirina))) {
+			alert("Koordinate nisu u dobrom formatu.");
+			e.preventDefault();
+		}
 		else {
 			axios
 				.post('/noviRestoran', {
