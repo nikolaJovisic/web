@@ -30,7 +30,7 @@ Vue.component('mapa', {
 			],
 			view: new ol.View({
 				center: ol.proj.fromLonLat([localStorage.getItem('longit'), localStorage.getItem('latit')]),
-				zoom: 13
+				zoom: 19
 			})
 		});
 		
