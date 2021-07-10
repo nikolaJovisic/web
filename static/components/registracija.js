@@ -23,7 +23,7 @@ Vue.component('registracija', {
 			}
 			else {
 				alert("Uspešno registrovan korisnik.");
-				if(jwt === "-1" || jwt === "-2") {
+				if(this.jwt === "-1" || this.jwt === "-2") {
 					e.target.submit();
 				}
 				else {
