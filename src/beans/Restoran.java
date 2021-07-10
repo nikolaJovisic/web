@@ -35,6 +35,12 @@ public class Restoran {
 	public boolean isStatus() {
 		return status;
 	}
+	
+	
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	public Lokacija getLokacija() {
 		return lokacija;
