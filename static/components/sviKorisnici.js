@@ -14,7 +14,8 @@ Vue.component('sviKorisnici', {
 			usernameSearch: '',
 			prikazSumnjivih: false,
 			tipFilter: '',
-			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}, {name: "blokiran"}]
+			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}, {name: "blokiran"}],
+			names: ["Korisnicko ime", "Ime", "Prezime", "Bodovi", "Blokiran"]
 		}
 	},
 	computed: {
@@ -38,7 +39,7 @@ Vue.component('sviKorisnici', {
 				.then(response => {
 					if(response.data)
 					{ 
-						this.korisnici = response.data;
+						this.korisniciPrikaz = response.data;
 					}
 				})
 		},
@@ -125,19 +126,20 @@ Vue.component('sviKorisnici', {
 	<div>
 		<div>
 		<div>
-			<input type="text" v-model="nameSearch">
-			<input type="text" v-model="surnameSearch">
-			<input type="text" v-model="usernameSearch">
+			<input type="text" placeholder="Korisničko ime" v-model="usernameSearch">
+			<input type="text" placeholder="Ime" v-model="nameSearch">
+			<input type="text" placeholder="Prezime" v-model="surnameSearch">
 			<button v-on:click="pretraga">Pretraga</button>
 		</div>
-			Filter:
+			Uloga:
 			<select name="uloga" v-model="ulogaFilter">
 			<option></option>
 			<option>Kupac</option>
 			<option>Administrator</option>
 			<option>Menadzer</option>
 			<option>Dostavljac</option>
-			</select>
+		</select>
+		Tip:
 			<select name="tip" v-model="tipFilter">
 			<option></option>
 			<option>Bronzani</option>
@@ -146,17 +148,16 @@ Vue.component('sviKorisnici', {
 			</select>
 		</div>
 		<div>
-			<button v-if="!prikazSumnjivih" v-on:click="prikaziSumnjive()">Prikaži samo sumnjive kupce </button>
-			<button v-else-if="prikazSumnjivih" v-on:click="prikaziSve()">Prikaži sve korisnike </button>
+			<button style="margin: 10px;" v-if="!prikazSumnjivih" v-on:click="prikaziSumnjive()">Prikaži samo sumnjive kupce </button>
+			<button style="margin: 10px;" v-else-if="prikazSumnjivih" v-on:click="prikaziSve()">Prikaži sve korisnike </button>
 		</div>
 		 <table id="table">
 		 <thead>
 		   <tr>
-			<th v-for="col in columns" v-on:click="sortTable(col.name)"> 
-				<div v-if="renderSakupljeniBodovi(col.name)">
-					{{col.name}}
-				</div> 
+			<th v-for="(col, index) in columns" v-on:click="sortTable(col.name)"> 
+					{{names[index]}}
 		   </th>
+		   <th/>
 		   </tr>
 		 </thead>
 		 <tbody>
@@ -169,6 +170,7 @@ Vue.component('sviKorisnici', {
 			<td v-if="moguceBlokirati(korisnik)">
 				<button v-on:click="blokiraj(korisnik)"> Blokiraj </button>
 			</td>
+			<td v-else=""/>
 		   </tr>
 		 </tbody>
 	   </table>
