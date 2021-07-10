@@ -93,7 +93,7 @@ Vue.component('komentariPrikaz', {
 	  <th v-if="uloga === 'Administrator' || uloga === 'Menadzer'">
 	  		Status
 	  </th>
-
+	<th/>
 	  </tr>
 	</thead>
 	<tbody>
@@ -113,11 +113,13 @@ Vue.component('komentariPrikaz', {
 	  <td v-else-if="uloga === 'Administrator' || uloga === 'Menadzer'">
 	  	Čeka odobravanje
 	  </td>
+	  <td>
 	  <span v-if="!komentar.odobren && uloga === 'Menadzer'">
 			<button v-on:click=odobriKomentar(komentar)>Odobri</button>
 			<button v-on:click=odbijKomentar(komentar)>Odbij</button>
 	  </span>
-	  </tr>
+</td>  
+	</tr>
 	</tbody>
   </table>
 	</div>
