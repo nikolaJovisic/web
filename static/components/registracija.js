@@ -16,23 +16,23 @@ Vue.component('registracija', {
 		}
 	},
 	methods: {
-		checkRegistrationResponse: function(response, event) {
+		checkRegistrationResponse: function(response, e) {
 			if (!response.data) {
 				alert("Neuspešna registracija.");
-				event.preventDefault();
+				e.preventDefault();
 			}
 			else {
 				alert("Uspešno registrovan korisnik.");
-				if(!this.registracijaNovog) {
-					event.target.submit();
+				if(jwt === "-1" || jwt === "-2") {
+					e.target.submit();
 				}
 				else {
-					event.preventDefault();
+					e.preventDefault();
 				}
 			}
 		},
 
-		checkEditResponse: function(response, event) {
+		checkEditResponse: function(response, e) {
 			if (!response.data) {
 				alert("Neuspešna izmena.");
 			}

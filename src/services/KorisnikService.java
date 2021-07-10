@@ -45,22 +45,18 @@ public class KorisnikService {
 		return retVal;
 	}
 
-	public void register(Korisnik korisnik) {
+	public boolean register(Korisnik korisnik) {
 		switch(korisnik.getUloga()) {
 		case Administrator:
-			administratorRepository.addOne(new Administrator(korisnik));
-			break;
+			return administratorRepository.addOne(new Administrator(korisnik));
 		case Dostavljac:
-			dostavljacRepository.addOne(new Dostavljac(korisnik));
-			break;
+			return dostavljacRepository.addOne(new Dostavljac(korisnik));
 		case Kupac:
-			kupacRepository.addOne(new Kupac(korisnik));
-			break;
+			return kupacRepository.addOne(new Kupac(korisnik));
 		case Menadzer:
-			menadzerRepository.addOne(new Menadzer(korisnik));
-			break;
+			return menadzerRepository.addOne(new Menadzer(korisnik));
 		default:
-			break;
+			return false;
 		}
 	}
 

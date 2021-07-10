@@ -101,7 +101,9 @@ public class SparkAppMain {
 		post("/registracija", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Korisnik korisnik = gsonReg.fromJson(req.body(), Korisnik.class);
-			korisnikService.register(korisnik);
+			if(!korisnikService.register(korisnik)) {
+				return false;
+			}
 			String nazivRestorana = req.queryParams("restoran");
 			System.out.println(nazivRestorana);
 			if (!nazivRestorana.equals("null")) {

@@ -22,7 +22,7 @@ public abstract class Repository<Entity, Key> {
 	private String filePath = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator
 			+ this.getClass().getSimpleName() + ".json";
 
-	protected abstract String getKey(Entity entity);
+	protected abstract Key getKey(Entity entity);
 
 	protected abstract Type getTokenType();
 
@@ -49,11 +49,7 @@ public abstract class Repository<Entity, Key> {
 		return filtriraniKupci;
 	}
 
-	public void addOne(Entity newEntity) {
-		List<LogicalEntity<Entity>> logicalEntites = getAllLogical();
-		logicalEntites.add(new LogicalEntity<Entity>(newEntity));
-		save(logicalEntites);
-	}
+	
 
 	public Entity getOne(Key key) {
 		for (Entity entity : getAll()) {
@@ -61,6 +57,16 @@ public abstract class Repository<Entity, Key> {
 				return entity;
 		}
 		return null;
+	}
+	
+	public boolean addOne(Entity newEntity) {
+		if(getOne(getKey(newEntity)) != null) {
+			return false;
+		}
+		List<LogicalEntity<Entity>> logicalEntites = getAllLogical();
+		logicalEntites.add(new LogicalEntity<Entity>(newEntity));
+		save(logicalEntites);
+		return true;
 	}
 	
 	public boolean contains(Key key) {
