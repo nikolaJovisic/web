@@ -287,11 +287,13 @@ public class SparkAppMain {
 		});
 		
 		get("/popust", (req, res) -> {
+			String jwt = req.queryParams("jwt");
+			if (jwt.equals("-1"))
+				return 0.0;
 			String username = getUsername(req.queryParams("jwt"));
 			System.out.println(username);
 			Kupac kupac = kupacRepository.getOne(username);
 			double popust = kupac.getPopust();
-			System.out.println(popust);
 			return gson.toJson(popust);
 		});
 		

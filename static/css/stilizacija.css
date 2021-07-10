@@ -47,6 +47,8 @@ a:focus {
     font-size: 100%;
     padding: 5px;
     color: #2e2e2e;
+    text-align: center;
+    vertical-align: middle;
   }
   table tr:nth-child(even) {
     background: #e6e6e6;

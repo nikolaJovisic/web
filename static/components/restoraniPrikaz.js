@@ -63,6 +63,12 @@ Vue.component('restoraniPrikaz', {
 			this.$router.push('/prikazRestorana/' + naziv)
 			
 		  }
+		  ,
+		  "prikazOcene": function prikazOcene(ocena) {
+
+			return (ocena >= 1) ? ocena + '/5' : 'Nije ocenjen'
+			
+		  }
 	},
 	
 	mounted() {
@@ -83,28 +89,42 @@ Vue.component('restoraniPrikaz', {
 	template: `
 	<div>
 		<div>
-			<input type="text" v-model="nameSearch" placeholder="Naziv">
-			<input type="text" v-model="locationSearch" placeholder="Lokacija">
-			<select name="ocenaSearch" v-model="tipSearch" placeholder="Tip">
-					<option value="" selected>Svi tipovi</option>
+			Naziv:
+			<input type="text" v-model="nameSearch">
+			Lokacija:
+			<input type="text" v-model="locationSearch">
+			Tip:
+			<select name="tipSearch" v-model="tipSearch">
+					<option></option>
 					<option>Italijanski</option>
 					<option>Kineski</option>
 					<option>Rostilj</option>
 			</select>
-			<select name="ocenaSearch" v-model="ocenaSearch" placeholder="Ocena">
-					<option value="" selected>Ocena</option>
+			Ocena
+			<select name="ocenaSearch" v-model="ocenaSearch">
+					<option></option>
 					<option>4-5</option>
 					<option>3-5</option>
 					<option>2-5</option>
 					<option>1-5</option>
 			</select>
+			<button v-on:click="pretraga">Pretraga</button>
+		</div>
+		<div>
+			Tip restorana:
+			<select name="tip" v-model="tipFilter">
+				<option></option>
+				<option>Italijanski</option>
+				<option>Kineski</option>
+				<option>Rostilj</option>
+			</select>
+			Status:
 			<select name="status" v-model="statusFilter">
-				<option value="" selected>Status</option>
+				<option></option>
 				<option>Otvoren</option>
 				<option>Zatvoren</option>
 			</select>
-			<button v-on:click="pretraga" style="margin: 0px 30px;">Pretraga</button>
-		</div> <br/>
+		</div>
 		 <table id="table">
 		 <thead>
 		   <tr>
@@ -120,6 +140,9 @@ Vue.component('restoraniPrikaz', {
 		   <th v-on:click="sortTable('lokacija.adresa')">
 				Lokacija
 		   </th>
+		   <th v-on:click="sortTable('prosecnaOcena')">
+				Prosečna ocena
+		   </th>
 		   </tr>
 		 </thead>
 		 <tbody>
@@ -134,7 +157,15 @@ Vue.component('restoraniPrikaz', {
 			   {{restoran.tip}}
 			</td>
 			<td>
-			   {{restoran.lokacija.adresa}}
+			   {{restoran.lokacija.adresa}}<br>
+			   {{restoran.lokacija.geografskaDuzina}},
+			   {{restoran.lokacija.geografskaSirina}}
+			</td>
+			<td v-if="restoran.prosecnaOcena >= 1">
+			   {{restoran.prosecnaOcena}}/5
+			</td>
+			<td v-else>
+			   Nije ocenjen
 			</td>
 		   </tr>
 		 </tbody>
