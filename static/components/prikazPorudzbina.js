@@ -250,10 +250,12 @@ Vue.component('prikazPorudzbina', {
 	template: `
 	<div>
 		<div>
-			<input type="text" v-model="nameSearch" v-if="uloga !== 'Menadzer'" >
-			<input type="number" v-model="odSearch">
-			<input type="number" v-model="doSearch">
+			<input type="text" v-model="nameSearch" placeholder="Ime restorana" v-if="uloga !== 'Menadzer'" >
+			<input type="number" v-model="odSearch" placeholder="Minimalna cena">
+			<input type="number" v-model="doSearch"placeholder="Maksimalna cena">
+			Od datuma:
 			<input v-model="odDatumPorudzbine" type="date">
+			Do datuma:
 			<input v-model="doDatumPorudzbine" type="date">
 			<button v-on:click="pretraga">Pretraga</button>
 		</div>

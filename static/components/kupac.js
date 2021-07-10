@@ -19,8 +19,9 @@ Vue.component('kupac', {
 		<h1>Dobro došli kupče!</h1>                
 		
 	    <a href="/#/" v-on:click="odjava()">Odjava</a>   <br/>
-		<a href="/#/registracija" v-on:click="novi(false)">Pregled i izmena ličnih podataka</a>
-		<a href="/#/restoraniPrikaz">Pregled restorana i narucivanje</a>
+		<a href="/#/registracija" v-on:click="novi(false)">Pregled i izmena ličnih podataka</a><br/>
+		<a href="/#/restoraniPrikaz">Pregled restorana i narucivanje</a><br/>
+		<h1>Prikaz svih porudzbina:</h1>
 		<prikazPorudzbina/><br/>
 	 </div>      
 		      

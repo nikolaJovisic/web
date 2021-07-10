@@ -139,6 +139,18 @@ public class SparkAppMain {
 				return gson.toJson(unfiltered);
 			return gson.toJson(korisnikService.filterUsers(unfiltered, nameSearch, surnameSearch, usernameSearch));
 		});
+		
+		get("/sumnjiviKupci", (req, res) -> {
+			List<Kupac> unfiltered = korisnikService.getSumnjiviKupci();
+			String nameSearch = req.queryParams("nameSearch");
+			String surnameSearch = req.queryParams("surnameSearch");
+			String usernameSearch = req.queryParams("usernameSearch");
+			System.out.println(nameSearch + surnameSearch + usernameSearch);
+			if (nameSearch == null || surnameSearch == null || usernameSearch == null)
+				return gson.toJson(unfiltered);
+			return gson.toJson(korisnikService.filterKupci(unfiltered, nameSearch, surnameSearch, usernameSearch));
+		});
+		
 		get("/sviRestorani", (req, res) -> {
 			List<Restoran> unfiltered = restoranRepository.getAll();
 			String nameSearch = req.queryParams("nameSearch");
@@ -301,9 +313,7 @@ public class SparkAppMain {
 			return gson.toJson(popust);
 		});
 		
-		get("/sumnjiviKupci", (req, res) -> {
-			return gson.toJson(korisnikService.getSumnjiviKupci());
-		});
+		
 		
 		get("/porudzbinaZatrazena", (req, res) -> {
 			String auth = req.headers("Authorization");

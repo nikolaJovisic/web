@@ -14,7 +14,8 @@ Vue.component('sviKorisnici', {
 			usernameSearch: '',
 			prikazSumnjivih: false,
 			tipFilter: '',
-			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}, {name: "blokiran"}]
+			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}],
+			names: ["Korisnicko ime", "Ime", "Prezime", "Bodovi"]
 		}
 	},
 	computed: {
@@ -33,14 +34,28 @@ Vue.component('sviKorisnici', {
 	methods: {
 		"pretraga": function(e)
 		{
-			axios.get("/sviKorisnici",
-			{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
-				.then(response => {
-					if(response.data)
-					{ 
-						this.korisnici = response.data;
-					}
-				})
+			if(this.prikazSumnjivih) {
+				axios.get("/sumnjiviKupci",
+				{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
+					.then(response => {
+						if(response.data)
+						{ 
+							this.sumnjiviKupci = response.data;
+							this.korisniciPrikaz = response.data;
+						}
+					})
+
+			} else {
+				axios.get("/sviKorisnici",
+				{ params: {nameSearch: this.nameSearch, surnameSearch: this.surnameSearch, usernameSearch: this.usernameSearch,}})
+					.then(response => {
+						if(response.data)
+						{ 
+							this.korisnici = response.data;
+							this.korisniciPrikaz = response.data;
+						}
+					})
+			}
 		},
 
 		"sortTable": function sortTable(col) {
@@ -123,21 +138,23 @@ Vue.component('sviKorisnici', {
 
 	template: `
 	<div>
+		<h1>Svi korisnici</h1>
 		<div>
 		<div>
-			<input type="text" v-model="nameSearch">
-			<input type="text" v-model="surnameSearch">
-			<input type="text" v-model="usernameSearch">
+			<input type="text" placeholder="Korisničko ime" v-model="usernameSearch">
+			<input type="text" placeholder="Ime" v-model="nameSearch">
+			<input type="text" placeholder="Prezime" v-model="surnameSearch">
 			<button v-on:click="pretraga">Pretraga</button>
 		</div>
-			Filter:
+			Uloga:
 			<select name="uloga" v-model="ulogaFilter">
 			<option></option>
 			<option>Kupac</option>
 			<option>Administrator</option>
 			<option>Menadzer</option>
 			<option>Dostavljac</option>
-			</select>
+		</select>
+		Tip:
 			<select name="tip" v-model="tipFilter">
 			<option></option>
 			<option>Bronzani</option>
@@ -146,29 +163,34 @@ Vue.component('sviKorisnici', {
 			</select>
 		</div>
 		<div>
-			<button v-if="!prikazSumnjivih" v-on:click="prikaziSumnjive()">Prikaži samo sumnjive kupce </button>
-			<button v-else-if="prikazSumnjivih" v-on:click="prikaziSve()">Prikaži sve korisnike </button>
+			<button style="margin: 10px;" v-if="!prikazSumnjivih" v-on:click="prikaziSumnjive()">Prikaži samo sumnjive kupce </button>
+			<button style="margin: 10px;" v-else-if="prikazSumnjivih" v-on:click="prikaziSve()">Prikaži sve korisnike </button>
 		</div>
 		 <table id="table">
 		 <thead>
 		   <tr>
-			<th v-for="col in columns" v-on:click="sortTable(col.name)"> 
-				<div v-if="renderSakupljeniBodovi(col.name)">
-					{{col.name}}
-				</div> 
+			<th v-for="(col, index) in columns" v-on:click="sortTable(col.name)" v-if="renderSakupljeniBodovi(col.name)" > 
+					{{names[index]}}
 		   </th>
+		   <th>
+			   Blokiranje
+</th>
 		   </tr>
 		 </thead>
 		 <tbody>
 		   <tr v-for="korisnik in filtriraniKorisnici">
-		   	<td v-for="col in columns">
-				<div v-if="renderSakupljeniBodovi(col.name)">
+		   	<td v-for="col in columns" v-if="renderSakupljeniBodovi(col.name)">
 			   		{{ korisnik[col.name] }}
-				</div> 
 			</td>
 			<td v-if="moguceBlokirati(korisnik)">
 				<button v-on:click="blokiraj(korisnik)"> Blokiraj </button>
 			</td>
+			<td v-else-if="korisnik.uloga !== 'Administrator' && !moguceBlokirati(korisnik)">
+				Korisnik blokiran.
+			</td>
+			<td v-else="">
+				Nemoguće blokrati.
+</td>
 		   </tr>
 		 </tbody>
 	   </table>
