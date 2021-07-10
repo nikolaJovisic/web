@@ -14,8 +14,8 @@ Vue.component('sviKorisnici', {
 			usernameSearch: '',
 			prikazSumnjivih: false,
 			tipFilter: '',
-			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}, {name: "blokiran"}],
-			names: ["Korisnicko ime", "Ime", "Prezime", "Bodovi", "Blokiran"]
+			columns: [{ name: "korisnickoIme" }, { name: "ime" }, { name: "prezime" }, {name: "sakupljeniBodovi"}],
+			names: ["Korisnicko ime", "Ime", "Prezime", "Bodovi"]
 		}
 	},
 	computed: {
@@ -124,6 +124,7 @@ Vue.component('sviKorisnici', {
 
 	template: `
 	<div>
+		<h1>Svi korisnici</h1>
 		<div>
 		<div>
 			<input type="text" placeholder="Korisničko ime" v-model="usernameSearch">
@@ -157,7 +158,9 @@ Vue.component('sviKorisnici', {
 			<th v-for="(col, index) in columns" v-on:click="sortTable(col.name)"> 
 					{{names[index]}}
 		   </th>
-		   <th/>
+		   <th>
+			   Blokiranje
+</th>
 		   </tr>
 		 </thead>
 		 <tbody>
@@ -170,7 +173,12 @@ Vue.component('sviKorisnici', {
 			<td v-if="moguceBlokirati(korisnik)">
 				<button v-on:click="blokiraj(korisnik)"> Blokiraj </button>
 			</td>
-			<td v-else=""/>
+			<td v-else-if="korisnik.uloga !== 'Administrator' && !moguceBlokirati(korisnik)">
+				Korisnik blokiran.
+			</td>
+			<td v-else="">
+				Nemoguće blokrati.
+</td>
 		   </tr>
 		 </tbody>
 	   </table>
