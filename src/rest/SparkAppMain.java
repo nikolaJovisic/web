@@ -159,10 +159,13 @@ public class SparkAppMain {
 			String locationSearch = req.queryParams("locationSearch");
 			String tipSearch = req.queryParams("tipSearch");
 			String ocenaSearch = req.queryParams("ocenaSearch");
-			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null)
+			String geografskaDuzina = req.queryParams("geografskaDuzina");
+			String geografskaSirina = req.queryParams("geografskaSirina");
+			
+			if (nameSearch == null || locationSearch == null || tipSearch == null || ocenaSearch == null || geografskaDuzina == null || geografskaSirina ==null)
 				return gson.toJson(unfiltered);
 			return gson.toJson(
-					restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch));
+					restoranService.FilterRestaurants(unfiltered, nameSearch, locationSearch, tipSearch, ocenaSearch, geografskaDuzina, geografskaSirina));
 
 		});
 		get("/sviRestoraniZaKomentarisanje", (req, res) -> {

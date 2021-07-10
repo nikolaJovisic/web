@@ -36,7 +36,14 @@ Vue.component('restoraniPrikaz', {
 		"pretraga": function(e)
 		{
 			axios.get("/sviRestorani",
-			{ params: {nameSearch: this.nameSearch, locationSearch: this.locationSearch, tipSearch: this.tipSearch, ocenaSearch: this.ocenaSearch}})
+			{ params: {
+				nameSearch: this.nameSearch,
+				locationSearch: this.locationSearch,
+				tipSearch: this.tipSearch,
+				ocenaSearch: this.ocenaSearch,
+				geografskaDuzina: this.geografskaDuzina,
+				geografskaSirina: this.geografskaSirina
+			}})
 				.then(response => {
 					if(response.data)
 					{ 
