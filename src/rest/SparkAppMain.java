@@ -41,6 +41,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import repositories.DostavljacRepository;
 import repositories.KomentarRepository;
 import repositories.KupacRepository;
 import repositories.MenadzerRepository;
@@ -63,6 +64,7 @@ public class SparkAppMain {
 	private static MenadzerRepository menadzerRepository = new MenadzerRepository();
 	private static PorudzbineRepository porudzbineRepository = new PorudzbineRepository();
 	private static KomentarRepository komentarRepository = new KomentarRepository();
+	private static DostavljacRepository dostavljacRepository = new DostavljacRepository();
 	private static PonudaRepository ponudaRepository = new PonudaRepository();
 	private static RestoranService restoranService = new RestoranService();
 	private static PorudzbinaService porudzbinaService = new PorudzbinaService();
@@ -204,7 +206,7 @@ public class SparkAppMain {
 				Dostavljac d = (Dostavljac) korisnik;
 				unfiltered = d.getPorudzbineZaDostavu();
 				for (Porudzbina p : porudzbineRepository.getAll()) {
-					if (p.getStatus() == StatusPorudzbine.CekaDostavljaca || p.getStatus() == StatusPorudzbine.UTransportu)
+					if (p.getStatus() == StatusPorudzbine.CekaDostavljaca)
 						unfiltered.add(p);
 				}
 			} else if (uloga == Uloga.Menadzer) {
@@ -328,6 +330,9 @@ public class SparkAppMain {
 			ponudaRepository.delete(ponuda.getKey());
 			Porudzbina porudzbina = porudzbineRepository.getOne(ponuda.getPorudzbinaID());
 			porudzbina.setStatus(StatusPorudzbine.UTransportu);
+			Dostavljac dostavljac = dostavljacRepository.getOne(ponuda.getDostavljacUsername());
+			dostavljac.dodajPorudzbinu(porudzbina);
+			dostavljacRepository.update(dostavljac.getKorisnickoIme(), dostavljac);
 			porudzbineRepository.update(porudzbina.getID(), porudzbina);
 			porudzbinaService.updateKupci(porudzbineRepository.getOne(ponuda.getPorudzbinaID()));
 			return true;
@@ -529,6 +534,7 @@ public class SparkAppMain {
 			porudzbina.setStatus(StatusPorudzbine.Dostavljena);
 			porudzbinaService.updateKupci(porudzbina);
 			porudzbineRepository.update(ID, porudzbina);
+			dostavljacRepository.updatePorudzbinaStatusToDostavljena(porudzbina.getID());
 			return true;
 		});
 		

@@ -87,9 +87,8 @@ Vue.component('prikazRestorana', {
 	}
 
 	},
-
-	mounted() {
-		self = this;
+	
+	beforeMount() {
 		axios.get("/restoranPoNazivu",
 			{ params: { naziv: this.$route.params.naziv } })
 			.then(response => {
@@ -98,9 +97,17 @@ Vue.component('prikazRestorana', {
 						response.data.dostupniArtikli[i].count = 0;
 					}
 					this.restoran = response.data;
-
+					localStorage.setItem('longit', this.restoran.lokacija.geografskaDuzina); 
+					localStorage.setItem('latit', this.restoran.lokacija.geografskaSirina);
 				}
 			})
+	
+	},
+	
+
+	mounted() {
+		self = this;
+		
 			
 		axios.get("/popust",
 			{ params: { jwt: this.jwt } })
@@ -113,7 +120,8 @@ Vue.component('prikazRestorana', {
 		for (let i = 0; i <  this.restoran.dostupniArtikli.length; ++i) {
 			restoran.dostupniArtikli[i].count = 0;
 		}
-
+		
+		
 			
 	},
 	
@@ -139,8 +147,16 @@ Vue.component('prikazRestorana', {
 			   Koordinate: 
 			   {{restoran.lokacija.geografskaDuzina}}, 
 			   {{restoran.lokacija.geografskaSirina}}</h3><h3 >
+			   
+			   
+			   
+			  <mapa> </mapa>
+			  
+			  
+			  
+			  
 			Ocena:
-			{{restoran.prosecnaOcena}}/5
+			{{restoran.prosecnaOcena === 0 ?'Nije ocenjen.' : restoran.prosecnaOcena}}
 			
 			</h3>
 	<h1>Artikli:</h1>

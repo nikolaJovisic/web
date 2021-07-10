@@ -24,5 +24,20 @@ public class Dostavljac extends Korisnik {
 	public void setPorudzbineZaDostavu(List<Porudzbina> porudzbineZaDostavu) {
 		this.porudzbineZaDostavu = porudzbineZaDostavu;
 	}
+
+	public void dodajPorudzbinu(Porudzbina porudzbina) {
+		porudzbineZaDostavu.add(porudzbina);
+	}
+
+	public void updatePorudzbinaStatusToDostavljena(String porudzbinaID) {
+		for(Porudzbina porudzbina: porudzbineZaDostavu) {
+			if(porudzbina.getID().equals(porudzbinaID)) {
+				porudzbina.setStatus(StatusPorudzbine.Dostavljena);
+				return;
+			}
+			
+		}
+		
+	}
 	
 }

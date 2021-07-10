@@ -4,6 +4,16 @@ Vue.component('mapa', {
 			
 		}
 	},
+	
+	props: {
+		lon: {
+			default: "19.83"
+		},
+		lat: {
+			default: "45.26"
+		}
+	
+	},
 
 
 	methods: {
@@ -19,7 +29,7 @@ Vue.component('mapa', {
 				})
 			],
 			view: new ol.View({
-				center: ol.proj.fromLonLat([19.83, 45.26]),
+				center: ol.proj.fromLonLat([localStorage.getItem('longit'), localStorage.getItem('latit')]),
 				zoom: 13
 			})
 		});

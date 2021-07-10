@@ -9,7 +9,9 @@ Vue.component('restoraniPrikaz', {
 			locationSearch: '',
 			tipSearch: '',
 			ocenaSearch: '',
-			statusFilter: ''
+			statusFilter: '',
+			geografskaDuzina: null,
+			geografskaSirina: null
 		}
 	},
 	computed: {
@@ -79,9 +81,28 @@ Vue.component('restoraniPrikaz', {
 			return (ocena >= 1) ? ocena + '/5' : 'Nije ocenjen'
 			
 		  }
+
+		  
+	},
+	
+	beforeMount() {
+					localStorage.setItem('longit', 19.83); 
+					localStorage.setItem('latit', 45.25);
+	
 	},
 	
 	mounted() {
+		
+		
+		this.$root.$on('longitude', (text) => {
+			this.geografskaDuzina = text; 
+			this.$forceUpdate();
+			});
+		this.$root.$on('latitude', (text) => { 
+			this.geografskaSirina = text;
+			this.$forceUpdate();});
+
+
 		axios.get("/sviRestorani",{
 			headers: {
 			  },
@@ -99,6 +120,9 @@ Vue.component('restoraniPrikaz', {
 	template: `
 	<div>
 		<div>
+			<mapa/>
+			<input v-model="geografskaDuzina"/>
+			<input v-model="geografskaSirina"/>
 			Naziv:
 			<input type="text" v-model="nameSearch">
 			Lokacija:

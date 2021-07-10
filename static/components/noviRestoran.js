@@ -58,6 +58,12 @@ Vue.component('noviRestoran', {
 		}
 	}
 	},
+	
+	beforeMount() {
+					localStorage.setItem('longit', 19.83); 
+					localStorage.setItem('latit', 45.25);
+	
+	},
 
 
 	mounted() {

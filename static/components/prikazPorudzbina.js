@@ -272,10 +272,10 @@ Vue.component('prikazPorudzbina', {
 				<option></option>
 				<option v-if="uloga != 'Dostavljac'">Obrada</option>
 				<option v-if="uloga != 'Dostavljac'">UPripremi</option>
-				<option v-if="uloga == 'Kupac'">NijeDostavljena</option>
+				<option v-if="uloga === 'Kupac' || uloga === 'Dostavljac'">NijeDostavljena</option>
 				<option>CekaDostavljaca</option>
 				<option>UTransportu</option>
-				<option v-if="uloga != 'Dostavljac'">Dostavljena</option>
+				<option>Dostavljena</option>
 				<option v-if="uloga != 'Dostavljac'">Otkazana</option>
 			</select>
 		</div>
