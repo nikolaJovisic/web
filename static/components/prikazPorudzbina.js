@@ -229,10 +229,22 @@ Vue.component('prikazPorudzbina', {
 		})
 			.then(response => {
 				if (response.data) {
+					console.log(response.data)
 					this.restoraniZaKomentarisanje = response.data;
-					this.ponude = response.data;
 				}
 			})
+			axios.get("/svePonude", {
+				params: {
+					jwt: sjwt
+				},
+				contentType: "application/json",
+				dataType: "json",
+			})
+				.then(response => {
+					if (response.data) {
+						this.ponude = response.data;
+					}
+				})
 	},
 
 	template: `

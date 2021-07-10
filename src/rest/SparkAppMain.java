@@ -167,10 +167,11 @@ public class SparkAppMain {
 					if (k.isOdobren() && k.getKupac().getKorisnickoIme().equals(kupac.getKorisnickoIme()) && k.getRestoran().getNaziv().equals(r.getNaziv()))
 					{
 						zaKomentarisanje = false;
-					}
-					if (zaKomentarisanje)
-						naziviRestorana.add(r.getNaziv());
+						break;
+					}					
 				}
+				if (zaKomentarisanje)
+					naziviRestorana.add(r.getNaziv());
 			}
 			return gson.toJson(naziviRestorana);
 		});

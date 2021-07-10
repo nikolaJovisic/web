@@ -48,8 +48,18 @@ Vue.component('restoraniPrikaz', {
 				this.ascending = true;
 				this.sortColumn = col;
 			  } 
+			  startval = col.slice()
 			var ascending = this.ascending;
 			this.restorani.sort(function(a, b) {
+				
+				if (startval === 'lokacija.adresa')
+				{
+					col = 'adresa'
+					a = a['lokacija']
+					b = b['lokacija']
+				}
+				console.log(a[col])
+				
 				if (a[col] > b[col]) {
 				  return ascending ? 1 : -1
 				} else if (a[col] < b[col]) {
