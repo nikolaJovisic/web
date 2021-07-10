@@ -119,8 +119,9 @@ Vue.component('restoraniPrikaz', {
 	
 	template: `
 	<div>
+		<h3>Pretraga po mapi:</h3>
+		<mapa/>
 		<div>
-			<mapa/>
 			<input v-model="geografskaDuzina"/>
 			<input v-model="geografskaSirina"/>
 			Naziv:

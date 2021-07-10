@@ -146,13 +146,13 @@ Vue.component('prikazRestorana', {
 			   {{restoran.lokacija.adresa}},
 			   Koordinate: 
 			   {{restoran.lokacija.geografskaDuzina}}, 
-			   {{restoran.lokacija.geografskaSirina}}</h3><h3 >
+			   {{restoran.lokacija.geografskaSirina}}</h3>
 			   
 			   
-			   
+			   <div>
 			  <mapa> </mapa>
-			  
-			  
+</div>
+			  <h3 >
 			  
 			  
 			Ocena:
