@@ -2,7 +2,7 @@ Vue.component('login', {
 	data: function() {
 		return {
 			korisnickoIme: null,
-			lozinka: null
+			lozinka: null,
 		}
 	},
 

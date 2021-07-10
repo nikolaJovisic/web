@@ -113,8 +113,8 @@ Vue.component('prikazRestorana', {
 	
 
 	template: `
-    <div>
-	<h1 class="center">{{restoran.naziv}}</h1>
+    <div class="center">
+	<h1 >{{restoran.naziv}}</h1>
 	<img :src="restoran.slika" class="center"> <br/>
     {{restoran.tip}} <br/>
     Status:
@@ -125,13 +125,15 @@ Vue.component('prikazRestorana', {
 	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Otvori</button>
 	</span>
 	<br/>
-    <table class="center">
+	<h1>Artikli:</h1>
+    <table >
 		 <thead>
 		   <tr>
 			<th v-for="col in columns" v-on:click="sortTable(col.name)"> 
 				{{col.name}}
 		   </th>
 		   <th>Slika</th>
+		<th/>
 		   </tr>
 		 </thead>
 		 <tbody>
@@ -157,7 +159,7 @@ Vue.component('prikazRestorana', {
 	   Ukupna cena: {{UkupnaCena}} din
 	   <button v-on:click="posaljiPorudzbinu()" v-if="restoran.status">Poruči</button>
     	</div>
-		
+		<h1>Komentari kupaca:</h1>
 		<komentariPrikaz v-bind:restoran="restoran"></komentariPrikaz>
     </div>
 	`
