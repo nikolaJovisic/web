@@ -42,11 +42,13 @@ Vue.component('login', {
 	template: `
 	<div>
 		<h1>Dobro došli!</h1>
-			<form @submit="checkForm" action="#/mainPage" method="post">
-				<input v-model="korisnickoIme" type="text" placeholder="Uneti korisničko ime" id="korisnickoIme" name="korisnickoIme">
-				<input v-model="lozinka" type="password" placeholder="Uneti lozinku" id="lozinka" name="lozinka">
-				<button type="submit">Prijava</button>
-				<a href="/#/registracija">Registracija</a>    </form>
+		<div>
+			<form @submit="checkForm" action="#/mainPage" method="post" class="center">
+				<input class="textinput" v-model="korisnickoIme" type="text" placeholder="Uneti korisničko ime" id="korisnickoIme" name="korisnickoIme"><br/>
+				<input class="textinput" v-model="lozinka" type="password" placeholder="Uneti lozinku" id="lozinka" name="lozinka"><br/>
+				<button class="textinput" type="submit">Prijava</button>
+				<a class="textinput" href="/#/registracija">Registracija</a>    </form>
+		</div>
 	</div>
 
 `

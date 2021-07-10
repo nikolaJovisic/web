@@ -5,8 +5,9 @@ Vue.component('home', {
 	
 	template: `
 	<div>
-	<login/> <br/>
-	<restoraniPrikaz/>
+	<login class="center"/> <br/>
+	<h2 class="center">Restorani iz kojih nudimo dostavu:</h2>
+	<restoraniPrikaz class="center"/>
 	</div>
 
 `

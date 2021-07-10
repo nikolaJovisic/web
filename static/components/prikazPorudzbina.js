@@ -268,7 +268,7 @@ Vue.component('prikazPorudzbina', {
 		<table id="table">
 		 <thead>
 		   <tr>
-		   <th>
+		   <th v-if="uloga === 'Menadzer'">
 				ID
 		   </th>
 		   <th v-if="uloga !== 'Menadzer'" v-on:click="sortTable('restoran.naziv')">
@@ -286,11 +286,13 @@ Vue.component('prikazPorudzbina', {
 		   <th>
 				Status
 		   </th>
+		   <th>
+		   </th>
 		   </tr>
 		 </thead>
 		 <tbody>
 		   <tr v-for="porudzbina in filtriranePorudzbine">
-		   <td >
+		   <td v-if="uloga === 'Menadzer'">
 			   {{porudzbina.ID}}
 			</td>
 		   	<td v-if="uloga !== 'Menadzer'">
@@ -311,36 +313,28 @@ Vue.component('prikazPorudzbina', {
 			<td>
 			   {{porudzbina.status}}
 			</td>
-			<td v-if="porudzbina.status === 'Obrada' && uloga === 'Menadzer'">
-			<button v-on:click="obradi(porudzbina)">
+
+
+			<td >
+			<a v-if="porudzbina.status === 'Obrada' && uloga === 'Menadzer'" v-on:click="obradi(porudzbina)">
 				Obradi
-			</button>
-			</td>
-			<td v-else-if="porudzbina.status === 'Obrada' && uloga === 'Kupac'">
-			<button v-on:click="otkazi(porudzbina)">
+</a>
+			<a v-else-if="porudzbina.status === 'Obrada' && uloga === 'Kupac'" v-on:click="otkazi(porudzbina)">
 				Otkaži
-			</button>
-			</td>
-			<td v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac' && zaKomentarisanje(porudzbina)">
-			<button v-on:click="oceni(porudzbina)">
+</a>
+			<a v-else-if="porudzbina.status === 'Dostavljena' && uloga === 'Kupac' && zaKomentarisanje(porudzbina)" v-on:click="oceni(porudzbina)">
 				Oceni
-			</button>
-			</td>
-			<td v-else-if="porudzbina.status === 'UPripremi' && uloga === 'Menadzer'">
-			<button v-on:click="pripremi(porudzbina)">
+</a>
+			<a v-else-if="porudzbina.status === 'UPripremi' && uloga === 'Menadzer'" v-on:click="pripremi(porudzbina)">
 				Pripremi
-			</button>
-			</td>
-			<td v-else-if="moguceZatraziti(porudzbina)">
-			<button v-on:click="zatrazi(porudzbina)">
+</a>
+			<a v-else-if="moguceZatraziti(porudzbina)" v-on:click="zatrazi(porudzbina)">
 				Zatraži
-			</button>
-			</td>
-			<td v-else-if="porudzbina.status === 'UTransportu' && uloga === 'Dostavljac'">
-			<button v-on:click="dostavi(porudzbina)">
+</a>
+			<a v-else-if="porudzbina.status === 'UTransportu' && uloga === 'Dostavljac'" v-on:click="dostavi(porudzbina)">
 				Obeleži kao dostavljenu
-			</button>
-			</td>
+</a>
+			</td>	
 			
 		   </tr>
 		 </tbody>

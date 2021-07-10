@@ -83,38 +83,28 @@ Vue.component('restoraniPrikaz', {
 	template: `
 	<div>
 		<div>
-			<input type="text" v-model="nameSearch">
-			<input type="text" v-model="locationSearch">
-			<select name="ocenaSearch" v-model="tipSearch">
-					<option></option>
+			<input type="text" v-model="nameSearch" placeholder="Naziv">
+			<input type="text" v-model="locationSearch" placeholder="Lokacija">
+			<select name="ocenaSearch" v-model="tipSearch" placeholder="Tip">
+					<option value="" selected>Svi tipovi</option>
 					<option>Italijanski</option>
 					<option>Kineski</option>
 					<option>Rostilj</option>
 			</select>
-			<select name="ocenaSearch" v-model="ocenaSearch">
-					<option></option>
+			<select name="ocenaSearch" v-model="ocenaSearch" placeholder="Ocena">
+					<option value="" selected>Ocena</option>
 					<option>4-5</option>
 					<option>3-5</option>
 					<option>2-5</option>
 					<option>1-5</option>
 			</select>
-			<button v-on:click="pretraga">Pretraga</button>
-		</div>
-		<div>
-			Tip restorana:
-			<select name="tip" v-model="tipFilter">
-				<option></option>
-				<option>Italijanski</option>
-				<option>Kineski</option>
-				<option>Rostilj</option>
-			</select>
-			Status:
 			<select name="status" v-model="statusFilter">
-				<option></option>
+				<option value="" selected>Status</option>
 				<option>Otvoren</option>
 				<option>Zatvoren</option>
 			</select>
-		</div>
+			<button v-on:click="pretraga" style="margin: 0px 30px;">Pretraga</button>
+		</div> <br/>
 		 <table id="table">
 		 <thead>
 		   <tr>
@@ -144,9 +134,7 @@ Vue.component('restoraniPrikaz', {
 			   {{restoran.tip}}
 			</td>
 			<td>
-			   {{restoran.lokacija.adresa}}<br>
-			   {{restoran.lokacija.geografskaDuzina}},
-			   {{restoran.lokacija.geografskaSirina}}
+			   {{restoran.lokacija.adresa}}
 			</td>
 		   </tr>
 		 </tbody>

@@ -110,8 +110,8 @@ Vue.component('registracija', {
 	},
 
 	template: `
-	<form action="#/" method="post" @submit="checkForm">
-		<table>
+	<form action="#/" method="post" @submit="checkForm" class="center">
+		<table class="smalltable">
 			<tr>
 				<td>Korisničko ime</td>
 				<td><input v-model="korisnickoIme" :disabled="editMode" type="text" name="korisnickoIme"></td>

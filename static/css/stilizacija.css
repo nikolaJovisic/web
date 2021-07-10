@@ -1,11 +1,10 @@
 
 html {
-    color: #421e00;
-    font-family: 'Georgia', serif;
+    color: #2e2e2e;
+    font-family : "Cambria";
 }
 
 a {
-    font-family: 'Georgia', serif;
     font-weight: 600;
     color: #0088d6;
     transition: .3s;
@@ -18,3 +17,85 @@ a:focus {
     outline: none;
     text-decoration: none;
 }
+
+.center 
+ {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .textinput
+ {
+    margin: 1px;
+ }
+
+ .margin
+ {
+    margin: 3px;
+ }
+
+ table {
+     margin: 10px;
+    background-color: solid rgba(255,255,255, 255);
+    width: 70%;
+    text-align: left;
+  }
+  table tbody td {
+    font-size: 100%;
+    padding: 5px;
+    color: #2e2e2e;
+  }
+  table tr:nth-child(even) {
+    background: #e6e6e6;
+  }
+  table thead {
+    background: #2e2e2e;
+  }
+  table thead th {
+    font-size: 150%;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin: 14px;
+    padding: 10px;
+  }
+
+  .smalltable {
+    width: 20%;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  button {
+    padding: 5px 25px;
+    cursor: pointer;
+    
+      border-radius: 5px;
+    font-weight: bold;
+      background-color: #2e2e2e;
+      border-color: #2e2e2e;
+      color: #ffffff;
+    
+      transition: all 0.3s;
+    
+    }
+
+    input[type="submit"] {
+        padding: 5px 25px;
+        cursor: pointer;
+        
+          border-radius: 5px;
+        font-weight: bold;
+          background-color: #2e2e2e;
+          border-color: #2e2e2e;
+          color: #ffffff;
+        
+          transition: all 0.3s;
+
+    }
+
+
+  
+  
