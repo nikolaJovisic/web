@@ -70,6 +70,14 @@ a:focus {
     justify-content: center;
     align-items: center;
   }
+  .Otvoreno
+  {
+    color: green;
+  }
+  .Zatvoreno
+  {
+    color: red;
+  }
   
   button {
     padding: 5px 25px;

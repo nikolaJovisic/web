@@ -66,10 +66,16 @@ Vue.component('prikazRestorana', {
 							artikli: mapa,
 							cena: this.UkupnaCena
 						}
-					, {params: {nazivRestorana: this.restoran.naziv, jwt: this.jwt}});
+					, {params: {nazivRestorana: this.restoran.naziv, jwt: this.jwt}})
+					.then(response => {
+						if (response.data)
+						{
+							alert("Porudžbina uspešno registrovana!");
+							this.$router.push("/mainPage");
+						}
+					});
 					
-		alert("Porudžbina uspešno registrovana!");
-		this.$router.push("/mainPage");
+		
 	}},
 	computed: {
 		UkupnaCena: function () {
@@ -118,10 +124,10 @@ Vue.component('prikazRestorana', {
 	<img :src="restoran.slika" class="center"> <br/>
     {{restoran.tip}} <br/>
     Status:
-	<span v-if="restoran.status">Otvoren
+	<span v-if="restoran.status"><label class="Otvoreno">Otvoren</label>
 	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Zatvori</button>
 	</span>
-	<span v-else>Zatvoren
+	<span v-else><label class="Zatvoreno">Zatvoren</label>
 	<button v-if="role === 'Menadzer'" v-on:click="promeniStatus()">Otvori</button>
 	</span>
 	<br/>

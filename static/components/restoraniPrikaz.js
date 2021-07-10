@@ -18,6 +18,7 @@ Vue.component('restoraniPrikaz', {
 			tip_filter = this.tipFilter
 			status_filter = this.statusFilter
 
+
 			return this.restorani.filter(function(row){
 				tip = row.tip
 				status = row.status ? 'Otvoren' : 'Zatvoren'
@@ -58,7 +59,6 @@ Vue.component('restoraniPrikaz', {
 					a = a['lokacija']
 					b = b['lokacija']
 				}
-				console.log(a[col])
 				
 				if (a[col] > b[col]) {
 				  return ascending ? 1 : -1
@@ -153,10 +153,13 @@ Vue.component('restoraniPrikaz', {
 		   <th v-on:click="sortTable('prosecnaOcena')">
 				Prosečna ocena
 		   </th>
+		   <th>
+				Status
+		   </th>
 		   </tr>
 		 </thead>
 		 <tbody>
-		   <tr v-for="restoran in filtriraniRestorani" v-on:click="prikazRestorana(restoran.naziv)">
+		   <tr v-for="restoran in filtriraniRestorani" v-on:click="prikazRestorana(restoran.naziv)" v-if="restoran.status">
 		   <td>
 		   <img :src="restoran.slika" /> 
 		   </td>
@@ -176,6 +179,34 @@ Vue.component('restoraniPrikaz', {
 			</td>
 			<td v-else>
 			   Nije ocenjen
+			</td>
+			<td class="Otvoreno">
+		   Otvoreno
+			</td>
+		   </tr>
+		   <tr v-for="restoran in filtriraniRestorani" v-on:click="prikazRestorana(restoran.naziv)" v-if="!restoran.status">
+		   <td>
+		   <img :src="restoran.slika" /> 
+		   </td>
+		   	<td>
+			   {{restoran.naziv}}
+			</td>
+			<td>
+			   {{restoran.tip}}
+			</td>
+			<td>
+			   {{restoran.lokacija.adresa}}<br>
+			   {{restoran.lokacija.geografskaDuzina}},
+			   {{restoran.lokacija.geografskaSirina}}
+			</td>
+			<td v-if="restoran.prosecnaOcena >= 1">
+			   {{restoran.prosecnaOcena}}/5
+			</td>
+			<td v-else>
+			   Nije ocenjen
+			</td>
+			<td class="Zatvoreno"> 
+		   Zatvoreno
 			</td>
 		   </tr>
 		 </tbody>
