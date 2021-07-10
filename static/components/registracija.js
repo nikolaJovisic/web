@@ -19,10 +19,16 @@ Vue.component('registracija', {
 		checkRegistrationResponse: function(response, event) {
 			if (!response.data) {
 				alert("Neuspešna registracija.");
+				event.preventDefault();
 			}
 			else {
 				alert("Uspešno registrovan korisnik.");
-				event.target.submit();
+				if(!this.registracijaNovog) {
+					event.target.submit();
+				}
+				else {
+					event.preventDefault();
+				}
 			}
 		},
 
@@ -37,7 +43,6 @@ Vue.component('registracija', {
 		},
 
 		checkForm: function(e) {
-			e.preventDefault();
 			if (!this.korisnickoIme || !this.lozinka || !this.ime || !this.prezime ||
 				!this.pol || !this.datumRodjenja || !this.uloga) {
 				alert("Morate popuniti sva polja")

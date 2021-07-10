@@ -37,9 +37,6 @@ Vue.component('login', {
 		localStorage.setItem("jwt", '-1');
 		localStorage.setItem("registracijaNovog", true);
 		localStorage.setItem("aktuelniRestoran", "null");
-		$('a').click(function (e) {
-			e.preventDefault();
-		});
 
 	},
 
