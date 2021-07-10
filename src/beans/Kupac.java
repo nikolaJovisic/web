@@ -27,6 +27,7 @@ public class Kupac extends Korisnik {
 		svePorudzbine = new ArrayList<Porudzbina>();
 		sakupljeniBodovi = 0;
 		korpa = new Korpa(this);
+		this.tip = new TipKupca(0);
 	}
 
 	public List<Porudzbina> getSvePorudzbine() {

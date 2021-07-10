@@ -572,6 +572,7 @@ public class SparkAppMain {
 			Kupac kupac = (Kupac) korisnikService.FindByID(username);
 			Korpa korpa = gson.fromJson(req.body(), Korpa.class);
 			korpa.setKupac(kupac);
+			System.out.println(gson.toJson(korpa));
 			if(!korpa.checkCena(restoran)) {
 				return false;
 			}

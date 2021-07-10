@@ -19,15 +19,15 @@ Vue.component('registracija', {
 		checkRegistrationResponse: function(response, event) {
 			if (!response.data) {
 				alert("Neuspešna registracija.");
-				event.preventDefault();
 			}
 			else {
 				alert("Uspešno registrovan korisnik.");
 				if(!this.registracijaNovog) {
-					event.target.submit();
+					this.$router.push('/mainPage');
+					
 				}
 				else {
-					event.preventDefault();
+					event.target.submit();
 				}
 			}
 		},
@@ -38,15 +38,17 @@ Vue.component('registracija', {
 			}
 			else {
 				alert("Uspešna izmena.");
+				event.preventDefault();
 				this.$router.push('/mainPage');
 			}
 		},
 
 		checkForm: function(e) {
+			e.preventDefault();
 			if (!this.korisnickoIme || !this.lozinka || !this.ime || !this.prezime ||
 				!this.pol || !this.datumRodjenja || !this.uloga) {
 				alert("Morate popuniti sva polja")
-				e.preventDefault();
+				
 			}
 			else if (localStorage.getItem('registracijaNovog') === "true"){
 				if(localStorage.getItem("aktuelniRestoran") !== "null") {

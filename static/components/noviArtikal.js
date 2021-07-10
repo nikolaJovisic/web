@@ -21,7 +21,7 @@ Vue.component('noviArtikal', {
 			}
 			else {
 				alert("Uspešno registrovan artikal.");
-				event.preventDefault();
+				this.$router.push('/mainPage');
 			}
 		},
 		onChangeFileUpload ($event) {
