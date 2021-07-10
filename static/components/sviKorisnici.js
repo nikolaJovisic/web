@@ -155,7 +155,7 @@ Vue.component('sviKorisnici', {
 		 <table id="table">
 		 <thead>
 		   <tr>
-			<th v-for="(col, index) in columns" v-on:click="sortTable(col.name)"> 
+			<th v-for="(col, index) in columns" v-on:click="sortTable(col.name)" v-if="renderSakupljeniBodovi(col.name)" > 
 					{{names[index]}}
 		   </th>
 		   <th>
@@ -165,10 +165,8 @@ Vue.component('sviKorisnici', {
 		 </thead>
 		 <tbody>
 		   <tr v-for="korisnik in filtriraniKorisnici">
-		   	<td v-for="col in columns">
-				<div v-if="renderSakupljeniBodovi(col.name)">
+		   	<td v-for="col in columns" v-if="renderSakupljeniBodovi(col.name)">
 			   		{{ korisnik[col.name] }}
-				</div> 
 			</td>
 			<td v-if="moguceBlokirati(korisnik)">
 				<button v-on:click="blokiraj(korisnik)"> Blokiraj </button>
