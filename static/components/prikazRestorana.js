@@ -104,8 +104,8 @@ Vue.component('prikazRestorana', {
 
 	template: `
     <div>
-	<img :src="restoran.slika"> <br/>
-    {{restoran.naziv}} <br/>
+	<h1 class="center">{{restoran.naziv}}</h1>
+	<img :src="restoran.slika" class="center"> <br/>
     {{restoran.tip}} <br/>
     {{restoran.status}} <br/>
     <table class="center">
