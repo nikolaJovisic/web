@@ -189,7 +189,7 @@ Vue.component('sviKorisnici', {
 				Korisnik blokiran.
 			</td>
 			<td v-else="">
-				Nemoguće blokrati.
+				Nemoguće blokirati.
 </td>
 		   </tr>
 		 </tbody>
