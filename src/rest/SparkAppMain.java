@@ -297,7 +297,24 @@ public class SparkAppMain {
 		});
 
 		get("/svePonude", (req, res) -> {
-			return gson.toJson(ponudaRepository.getAll());
+			
+			String username = getUsername(req.queryParams("jwt"));
+			Dostavljac d = dostavljacRepository.getOne(username);
+			Korisnik korisnik = korisnikService.FindByID(username);
+			if (korisnik.getUloga() == Uloga.Dostavljac)
+				return gson.toJson(ponudaRepository.getAll());
+			if (korisnik.getUloga() != Uloga.Menadzer)
+				return false;
+			
+			Menadzer menadzer = (Menadzer) korisnik;
+			List<Ponuda> ponude = new ArrayList<Ponuda>();
+			for (Ponuda p : ponudaRepository.getAll())
+			{
+				Porudzbina porudzbina = porudzbineRepository.getOne(p.getPorudzbinaID());
+				if (porudzbina.getRestoran().getNaziv().equals(menadzer.getRestoran().getNaziv()))
+					ponude.add(p);
+			}
+			return gson.toJson(ponude);
 		});
 
 		get("/popust", (req, res) -> {

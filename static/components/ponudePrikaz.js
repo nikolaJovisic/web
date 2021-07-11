@@ -3,7 +3,7 @@ Vue.component('ponudePrikaz', {
 		return {
 			ponude: null,
 			uloga: null,
-			jwt: null
+			jwt: window.localStorage.getItem('jwt')
 		}
 	},
 
@@ -23,9 +23,7 @@ Vue.component('ponudePrikaz', {
 		jwt = window.localStorage.getItem('jwt');
 		this.uloga = window.localStorage.getItem('role');
 		axios.get("/svePonude", {
-			headers: {
-				'Authorization': sjwt
-			},
+			params: { jwt: jwt },
 			contentType: "application/json",
 			dataType: "json",
 		})

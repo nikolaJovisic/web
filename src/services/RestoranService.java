@@ -15,6 +15,13 @@ public class RestoranService {
 		double radius = 1.0;
 		List<Restoran> filtered = new ArrayList<Restoran>();
 		double ocenaLowerBound = ocenaSearch.equals("") ? -1 : Double.parseDouble(ocenaSearch.split("-")[0]);
+		/*System.out.println("---");
+		System.out.println(nameSearch);
+		System.out.println(locationSearch);
+		System.out.println(tipSearch);
+		System.out.println(geografskaDuzina);
+		System.out.println(geografskaSirina);
+		System.out.println("---");*/
 		for (Restoran restoran :  unfiltered)
 		{
 			boolean withinLocation = (!geografskaDuzina.equals("") && !geografskaSirina.equals("")) ? isWithinLocation(restoran, Double.parseDouble(geografskaDuzina), Double.parseDouble(geografskaSirina), radius) : true;

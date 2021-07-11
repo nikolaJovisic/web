@@ -8,7 +8,7 @@ Vue.component('prikazRestorana', {
 			sortColumn: '',
 			role: localStorage.getItem("role"),
 			jwt: localStorage.getItem("jwt"),
-			columns: [{ name: "naziv" }, { name: "tip" },  { name: "cena" }, {name: "kolicina"}]
+			columns: [{ name: "naziv" }, { name: "tip" }, { name: "opis" },  { name: "cena" }, {name: "kolicina"}]
 		}
 	},
 	methods: {
@@ -147,8 +147,6 @@ Vue.component('prikazRestorana', {
 			   Koordinate: 
 			   {{restoran.lokacija.geografskaDuzina}}, 
 			   {{restoran.lokacija.geografskaSirina}}</h3>
-			   
-			   
 			   <div>
 			  <mapa> </mapa>
 </div>

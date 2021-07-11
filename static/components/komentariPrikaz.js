@@ -78,7 +78,7 @@ Vue.component('komentariPrikaz', {
 	
 	template: `
 	<div>
-	<table id="table">
+	<table>
 	<thead>
 	  <tr>
 	  <th>

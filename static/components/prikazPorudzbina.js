@@ -25,6 +25,7 @@ Vue.component('prikazPorudzbina', {
 			if (this.porudzbine == null) return null;
 			tip_filter = this.tipFilter
 			status_filter = this.statusFilter
+			
 			return this.porudzbine.filter(function(row) {
 				tip = row.restoran.tip
 				status = row.status
@@ -110,6 +111,7 @@ Vue.component('prikazPorudzbina', {
 		},
 
 		"nijeZatrazena": function nijeZatrazena(porudzbina) {
+			if (this.ponude.length == 0) this.ponude.length = 0;
 			for (let i = 0; i < this.ponude.length; ++i) {
 				if(this.ponude[i].porudzbinaID === porudzbina.ID) {
 					return false;
@@ -183,8 +185,15 @@ Vue.component('prikazPorudzbina', {
 				this.ascending = true;
 				this.sortColumn = col;
 			}
+			startval = col.slice()
 			var ascending = this.ascending;
 			this.porudzbine.sort(function(a, b) {
+				if (startval === 'restoran.naziv')
+				{
+					col = 'naziv'
+					a = a['restoran']
+					b = b['restoran']
+				}
 				if (a[col] > b[col]) {
 					return ascending ? 1 : -1
 				} else if (a[col] < b[col]) {

@@ -10,8 +10,8 @@ Vue.component('restoraniPrikaz', {
 			tipSearch: '',
 			ocenaSearch: '',
 			statusFilter: '',
-			geografskaDuzina: null,
-			geografskaSirina: null
+			geografskaDuzina: '',
+			geografskaSirina: ''
 		}
 	},
 	computed: {
